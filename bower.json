@@ -21,8 +21,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.0.8",
-    "moment": "~2.1.0"
+    "angular": "~1.0.8"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",
