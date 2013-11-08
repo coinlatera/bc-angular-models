@@ -1,0 +1,31 @@
+{
+  "name": "bc-angular-models",
+  "version": "0.0.1",
+  "homepage": "https://github.com/buttercoin/bc-angular-models",
+  "authors": [
+    "Brian <brian@buttercoin.com>"
+  ],
+  "description": "A collection of models for reuse across all Buttercoin projects",
+  "main": "dist/bc-angular-models.js",
+  "keywords": [
+    "buttercoin",
+    "angular",
+    "models"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.0.8"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.6.3",
+    "jquery": "2.0.3",
+  }
+}
+

@@ -1,4 +1,4 @@
 bc-angular-models
 =================
 
-Shared AngularJS models for buttercoin applications
+A collection of models for reuse across all Buttercoin projects
