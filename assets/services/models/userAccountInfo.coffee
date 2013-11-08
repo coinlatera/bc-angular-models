@@ -1,4 +1,4 @@
-angular.module 'bc.userAccountInfo', ['moment']
+angular.module 'bc.user-account-info', ['moment']
 .service 'UserAccountInfo', () ->
   class Address
     constructor: (@addressLine1, @addressLine2, @city, @region, @zipCode, @country) ->

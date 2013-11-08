@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",
-    "jquery": "2.0.3",
+    "jquery": "2.0.3"
   }
 }
 

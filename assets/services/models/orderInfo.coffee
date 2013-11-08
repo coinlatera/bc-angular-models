@@ -1,4 +1,4 @@
-angular.module 'bc.orderInfo', ['underscore']
+angular.module 'bc.order-info', ['underscore']
 .service 'OrderInfo', () ->
   class OrderInfo
     @upsert: (obj, msg) =>

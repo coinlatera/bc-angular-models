@@ -1,4 +1,4 @@
-angular.module 'bc.accountResource', []
+angular.module 'bc.account-resource', []
 .service 'AccountResource', () ->
   class ResourceInfo
     constructor: (@verificationType, @fileName, @docType, @docId, @docStatus, @userDisplayName, @email) ->
