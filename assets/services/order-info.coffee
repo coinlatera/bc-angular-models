@@ -1,4 +1,4 @@
-angular.module('bc.order-info', ['underscore']).service "OrderInfo", () ->
+angular.module('bc.order-info', []).service "OrderInfo", () ->
   class OrderInfo
     @upsert: (obj, msg) =>
       if obj

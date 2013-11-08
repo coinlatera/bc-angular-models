@@ -22,8 +22,7 @@
   ],
   "dependencies": {
     "angular": "~1.0.8",
-    "moment": "~2.1.0",
-    "underscore": "1.4.4"
+    "moment": "~2.1.0"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",
