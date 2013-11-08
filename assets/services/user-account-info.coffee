@@ -1,5 +1,4 @@
-angular.module 'bc.user-account-info', ['moment']
-.service 'UserAccountInfo', () ->
+angular.module('bc.user-account-info', ['moment']).service "UserAccountInfo", () ->
   class Address
     constructor: (@addressLine1, @addressLine2, @city, @region, @zipCode, @country) ->
 
@@ -24,7 +23,7 @@ angular.module 'bc.user-account-info', ['moment']
     constructor: (@accountId, @userDetails, @accountResources = []) ->
       @displayName = @fullName = @userDetails.firstName + " " + @userDetails.lastName
 
-      if @userDetails.middleName isnt ''
+      if @userDetails.middleName is not ''
         @fullName = @userDetails.firstName + " " + @userDetails.middleName + " " + @userDetails.lastName
 
     @FromMessage: (msg) ->
