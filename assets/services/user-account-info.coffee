@@ -21,12 +21,14 @@ angular.module('bc.user-account-info', []).service "UserAccountInfo", () ->
 
   class UserAccountInfo
     constructor: (@accountId, @userDetails, @accountResources = []) ->
-      @displayName = @fullName = @userDetails.firstName + " " + @userDetails.lastName
+      @displayName = @userDetails.firstName + " " + @userDetails.lastName
 
-      if @userDetails.middleName is not ''
+      if @userDetails.middleName is ''
+        @fullName = @userDetails.firstName + " " + @userDetails.lastName
+      else
         @fullName = @userDetails.firstName + " " + @userDetails.middleName + " " + @userDetails.lastName
 
   FromMessage: (msg) ->
     userDetails = UserDetails.FromMessage(msg.userDetails)
-    new UserAccountInfo(msg.accountId, userDetails, msg.accountResources)
+    new UserAccountInfo(msg.accountId, userDetails)
 

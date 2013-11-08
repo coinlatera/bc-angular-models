@@ -9,5 +9,76 @@
   </head>
   <body ng-controller="MainCtrl">
     <h1>Hello World</h1>
+    <h3>User Details</h3>
+    <table>
+      <thead>
+        <td>Key</td>
+        <td>Value</td>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Account ID: </td>
+          <td>{{userAccount.accountId}}</td>
+        </tr>
+        <tr>
+          <td>Display Name: </td>
+          <td>{{userAccount.displayName}}</td>
+        </tr>
+        <tr>
+          <td>Full Name: </td>
+          <td>{{userAccount.fullName}}</td>
+        </tr>
+        <tr>
+          <td>Birth Date: </td>
+          <td>{{userAccount.userDetails.displayDateOfBirth}}</td>
+        </tr>
+        <tr>
+          <td>Birth Country: </td>
+          <td>{{userAccount.userDetails.birthCountry}}</td>
+        </tr>
+        <tr>
+          <td>Address: </td>
+          <td>{{userAccount.userDetails.residencyAddress.toString()}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Account Resource</h3>
+    <table>
+      <thead>
+        <td>Key</td>
+        <td>Value</td>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Resource ID: </td>
+          <td>{{resource._id}}</td>
+        </tr>
+        <tr>
+          <td>Account ID: </td>
+          <td>{{resource.accountId}}</td>
+        </tr>
+        <tr>
+          <td>AWS Key: </td>
+          <td>{{resource.awsKey}}</td>
+        </tr>
+        <tr>
+          <td>Verification Type: </td>
+          <td>{{resource.resourceInfo.verificationType | uppercase}}</td>
+        </tr>
+        <tr>
+          <td>File Name: </td>
+          <td>{{resource.resourceInfo.fileName}}</td>
+        </tr>
+        <tr>
+          <td>Document Type: </td>
+          <td>{{resource.resourceInfo.docType}}</td>
+        </tr>
+        <tr>
+          <td>Document Status: </td>
+          <td>{{resource.displayStatus}}</td>
+        </tr>
+      </tbody>
+    </table>
   </body>
 </html>
