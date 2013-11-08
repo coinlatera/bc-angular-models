@@ -1,6 +1,6 @@
 angular.module('bc.order-info', []).service "OrderInfo", () ->
-  class OrderInfo
-    @upsert: (obj, msg) =>
+  OrderInfoHelper =
+    Upsert: (obj, msg) =>
       if obj
         obj.set_status(msg.order.status)
         obj.history = _(obj.history || []).concat
@@ -8,19 +8,11 @@ angular.module('bc.order-info', []).service "OrderInfo", () ->
           timestamp: (new Date().getTime)
         obj
       else
-        @fromMessage(msg)
+        OrderInfo.FromMessage(msg)
 
-    @fromMessage: (msg) =>
-      order = msg.order
-      status = order.status
-      if order.status?.status is 'reopened'
-        status = 'reopened'
-
-      order = new OrderInfo(order.id, order.accountId, order.offered, order.received, order.order_type, status, order.timestamp, msg._history)
-      @upsert(order, msg)
-
+  class OrderInfo
     constructor: (@id, @accountId, @offered, @received, @orderType, @status, @timestamp, @history) ->
-      @orignal_offered = @offered
+      @original_offered = @offered
       @original_received = @received
 
     set_status: (stat) =>
@@ -30,6 +22,17 @@ angular.module('bc.order-info', []).service "OrderInfo", () ->
         @offered = stat.offered
         @received = stat.received
       else
-        @offered = @orignal_offered
+        @offered = @original_offered
         @received = @original_received
+
+    @FromMessage: (msg) =>
+      order = msg.order
+      status = order.status
+      if order.status?.status is 'reopened'
+        status = 'reopened'
+
+      order = new OrderInfo(order.id, order.accountId, order.offered, order.received, order.order_type, status, order.timestamp, msg._history)
+      OrderInfoHelper.Upsert(order, msg)
+
+  OrderInfoHelper
 

@@ -27,8 +27,8 @@ angular.module('bc.account-resource', []).service "AccountResource", () ->
       else if @resourceInfo.docStatus is 'denied-final' then 'Denied (Final)'
       else 'Unknown'
 
-    @FromMessage: (msg) ->
-      resourceInfo = new ResourceInfo(msg.resourceInfo.verificationType, msg.resourceInfo.fileName, msg.resourceInfo.docType,
-                                      msg.resourceInfo.docId, msg.resourceInfo.docStatus, msg.resourceInfo.userDisplayName, msg.resourceInfo.email)
-      new AccountResource(msg._id, msg.accountId, msg.awsKey, msg.createdAt, msg.verifiedAt, msg.failedStep, resourceInfo)
+  FromMessage: (msg) ->
+    resourceInfo = new ResourceInfo(msg.resourceInfo.verificationType, msg.resourceInfo.fileName, msg.resourceInfo.docType,
+                                    msg.resourceInfo.docId, msg.resourceInfo.docStatus, msg.resourceInfo.userDisplayName, msg.resourceInfo.email)
+    new AccountResource(msg._id, msg.accountId, msg.awsKey, msg.createdAt, msg.verifiedAt, msg.failedStep, resourceInfo)
 

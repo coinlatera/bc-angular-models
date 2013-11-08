@@ -26,7 +26,7 @@ angular.module('bc.user-account-info', []).service "UserAccountInfo", () ->
       if @userDetails.middleName is not ''
         @fullName = @userDetails.firstName + " " + @userDetails.middleName + " " + @userDetails.lastName
 
-    @FromMessage: (msg) ->
-      userDetails = UserDetails.FromMessage(msg.userDetails)
-      new UserAccountInfo(msg.accountId, userDetails, msg.accountResources)
+  FromMessage: (msg) ->
+    userDetails = UserDetails.FromMessage(msg.userDetails)
+    new UserAccountInfo(msg.accountId, userDetails, msg.accountResources)
 
