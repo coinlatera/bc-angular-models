@@ -13,11 +13,22 @@ angular.module('bc.user-account-info', []).service "UserAccountInfo", () ->
 
   class UserDetails
     constructor: (@firstName = '', @middleName = '', @lastName = '', @dateOfBirth = '', @birthCountry = '', @residencyAddress) ->
+
+    day: ->
       birthMoment = moment(@dateOfBirth)
-      @day = birthMoment?.date() || ''
-      @year = birthMoment?.year() || ''
-      @month = birthMoment?.format("MMM") || ''
-      @displayDateOfBirth = birthMoment?.format("MM/DD/YYYY") or ''
+      birthMoment?.date() || ''
+
+    year: ->
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.year() || ''
+
+    month: ->
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.format("MMM") || ''
+
+    displayDateOfBirth: ->
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.format("MM/DD/YYYY") or ''
 
     @FromMessage: (msg) ->
       address = Address.FromMessage(msg?.residencyAddress)
@@ -25,12 +36,15 @@ angular.module('bc.user-account-info', []).service "UserAccountInfo", () ->
 
   class UserAccountInfo
     constructor: (@accountId = '', @userDetails) ->
-      @displayName = @userDetails.firstName + " " + @userDetails.lastName
 
+    displayName: ->
+      @userDetails.firstName + " " + @userDetails.lastName
+
+    fullName: ->
       if @userDetails.middleName is ''
-        @fullName = @userDetails.firstName + " " + @userDetails.lastName
+        @displayName()
       else
-        @fullName = @userDetails.firstName + " " + @userDetails.middleName + " " + @userDetails.lastName
+        @userDetails.firstName + " " + @userDetails.middleName + " " + @userDetails.lastName
 
   FromMessage: (msg) ->
     userDetails = UserDetails.FromMessage(msg?.userDetails)

@@ -155,19 +155,37 @@
     })();
     UserDetails = (function() {
       function UserDetails(firstName, middleName, lastName, dateOfBirth, birthCountry, residencyAddress) {
-        var birthMoment;
         this.firstName = firstName != null ? firstName : '';
         this.middleName = middleName != null ? middleName : '';
         this.lastName = lastName != null ? lastName : '';
         this.dateOfBirth = dateOfBirth != null ? dateOfBirth : '';
         this.birthCountry = birthCountry != null ? birthCountry : '';
         this.residencyAddress = residencyAddress;
-        birthMoment = moment(this.dateOfBirth);
-        this.day = (birthMoment != null ? birthMoment.date() : void 0) || '';
-        this.year = (birthMoment != null ? birthMoment.year() : void 0) || '';
-        this.month = (birthMoment != null ? birthMoment.format("MMM") : void 0) || '';
-        this.displayDateOfBirth = (birthMoment != null ? birthMoment.format("MM/DD/YYYY") : void 0) || '';
       }
+
+      UserDetails.prototype.day = function() {
+        var birthMoment;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? birthMoment.date() : void 0) || '';
+      };
+
+      UserDetails.prototype.year = function() {
+        var birthMoment;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? birthMoment.year() : void 0) || '';
+      };
+
+      UserDetails.prototype.month = function() {
+        var birthMoment;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? birthMoment.format("MMM") : void 0) || '';
+      };
+
+      UserDetails.prototype.displayDateOfBirth = function() {
+        var birthMoment;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? birthMoment.format("MM/DD/YYYY") : void 0) || '';
+      };
 
       UserDetails.FromMessage = function(msg) {
         var address;
@@ -182,13 +200,19 @@
       function UserAccountInfo(accountId, userDetails) {
         this.accountId = accountId != null ? accountId : '';
         this.userDetails = userDetails;
-        this.displayName = this.userDetails.firstName + " " + this.userDetails.lastName;
-        if (this.userDetails.middleName === '') {
-          this.fullName = this.userDetails.firstName + " " + this.userDetails.lastName;
-        } else {
-          this.fullName = this.userDetails.firstName + " " + this.userDetails.middleName + " " + this.userDetails.lastName;
-        }
       }
+
+      UserAccountInfo.prototype.displayName = function() {
+        return this.userDetails.firstName + " " + this.userDetails.lastName;
+      };
+
+      UserAccountInfo.prototype.fullName = function() {
+        if (this.userDetails.middleName === '') {
+          return this.displayName();
+        } else {
+          return this.userDetails.firstName + " " + this.userDetails.middleName + " " + this.userDetails.lastName;
+        }
+      };
 
       return UserAccountInfo;
 
