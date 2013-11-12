@@ -1,19 +1,20 @@
 angular.module('bc.account-resource', []).service "AccountResource", () ->
   class ResourceInfo
-    constructor: (@verificationType, @fileName, @docType, @docId, @docStatus, @userDisplayName, @email) ->
+    constructor: (@verificationType = '', @fileName = '', @docType = '', @docId = '', @docStatus = '', @userDisplayName = '', @email = '') ->
 
   class AccountResource
-    constructor: (@_id, @accountId, @awsKey, @createdAt, @verifiedAt, @failedStep, @resourceInfo) ->
+    constructor: (@_id = '', @accountId = '', @awsKey = '', @createdAt = '', @verifiedAt = '', @failedStep = '', @resourceInfo) ->
       @actionStatus = if @resourceInfo.docStatus == 'pending'
         @resourceInfo.docStatus + '-' + @resourceInfo.verificationType
       else
         @resourceInfo.docStatus
 
-      @imgResource = @resourceInfo.fileName.indexOf('.pdf') is -1
-      @pdfResource = @resourceInfo.fileName.indexOf('.pdf') isnt -1
+      empty = @resourceInfo.fileName is ''
+      @imgResource = not empty and @resourceInfo.fileName.indexOf('.pdf') is -1
+      @pdfResource = not empty and @resourceInfo.fileName.indexOf('.pdf') isnt -1
 
-      @identity = @resourceInfo.verificationType == 'identity'
-      @residency = @resourceInfo.verificationType == 'residency'
+      @identity = @resourceInfo.verificationType is 'identity'
+      @residency = @resourceInfo.verificationType is 'residency'
 
       @pending = @resourceInfo.docStatus is 'pending'
       @approved = @resourceInfo.docStatus is 'approved'
@@ -28,7 +29,8 @@ angular.module('bc.account-resource', []).service "AccountResource", () ->
       else 'Unknown'
 
   FromMessage: (msg) ->
-    resourceInfo = new ResourceInfo(msg.resourceInfo.verificationType, msg.resourceInfo.fileName, msg.resourceInfo.docType,
-                                    msg.resourceInfo.docId, msg.resourceInfo.docStatus, msg.resourceInfo.userDisplayName, msg.resourceInfo.email)
-    new AccountResource(msg._id, msg.accountId, msg.awsKey, msg.createdAt, msg.verifiedAt, msg.failedStep, resourceInfo)
+    msgResource = msg?.resourceInfo
+    resourceInfo = new ResourceInfo(msgResource?.verificationType, msgResource?.fileName, msgResource?.docType,
+                                    msgResource?.docId, msgResource?.docStatus, msgResource?.userDisplayName, msgResource?.email)
+    new AccountResource(msg?._id, msg?.accountId, msg?.awsKey, msg?.createdAt, msg?.verifiedAt, msg?.failedStep, resourceInfo)
 
