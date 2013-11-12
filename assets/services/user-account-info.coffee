@@ -13,7 +13,11 @@ angular.module('bc.user-account-info', []).service "UserAccountInfo", () ->
 
   class UserDetails
     constructor: (@firstName = '', @middleName = '', @lastName = '', @dateOfBirth = '', @birthCountry = '', @residencyAddress) ->
-      @displayDateOfBirth = moment(@dateOfBirth)?.format("MM/DD/YYYY") or ''
+      birthMoment = moment(@dateOfBirth)
+      @day = birthMoment?.date() || ''
+      @year = birthMoment?.year() || ''
+      @month = birthMoment?.format("MMM") || ''
+      @displayDateOfBirth = birthMoment?.format("MM/DD/YYYY") or ''
 
     @FromMessage: (msg) ->
       address = Address.FromMessage(msg?.residencyAddress)
