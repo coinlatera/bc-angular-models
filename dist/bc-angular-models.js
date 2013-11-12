@@ -155,13 +155,14 @@
     })();
     UserDetails = (function() {
       function UserDetails(firstName, middleName, lastName, dateOfBirth, birthCountry, residencyAddress) {
+        var _ref;
         this.firstName = firstName != null ? firstName : '';
         this.middleName = middleName != null ? middleName : '';
         this.lastName = lastName != null ? lastName : '';
         this.dateOfBirth = dateOfBirth != null ? dateOfBirth : '';
         this.birthCountry = birthCountry != null ? birthCountry : '';
         this.residencyAddress = residencyAddress;
-        this.displayDateOfBirth = moment(this.dateOfBirth).format("MM/DD/YYYY");
+        this.displayDateOfBirth = ((_ref = moment(this.dateOfBirth)) != null ? _ref.format("MM/DD/YYYY") : void 0) || '';
       }
 
       UserDetails.FromMessage = function(msg) {
