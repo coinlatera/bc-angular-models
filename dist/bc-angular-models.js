@@ -1,1 +1,200 @@
-(function(){angular.module("bc.angular-models",["bc.account-resource","bc.order-info","bc.user-account-info"])}).call(this),function(){angular.module("bc.account-resource",[]).service("AccountResource",function(){var a,b;return b=function(){function a(a,b,c,d,e,f,g){this.verificationType=a,this.fileName=b,this.docType=c,this.docId=d,this.docStatus=e,this.userDisplayName=f,this.email=g}return a}(),a=function(){function a(a,b,c,d,e,f,g){this._id=a,this.accountId=b,this.awsKey=c,this.createdAt=d,this.verifiedAt=e,this.failedStep=f,this.resourceInfo=g,this.actionStatus="pending"===this.resourceInfo.docStatus?this.resourceInfo.docStatus+"-"+this.resourceInfo.verificationType:this.resourceInfo.docStatus,this.imgResource=-1===this.resourceInfo.fileName.indexOf(".pdf"),this.pdfResource=-1!==this.resourceInfo.fileName.indexOf(".pdf"),this.identity="identity"===this.resourceInfo.verificationType,this.residency="residency"===this.resourceInfo.verificationType,this.pending="pending"===this.resourceInfo.docStatus,this.approved="approved"===this.resourceInfo.docStatus,this.denied="denied"===this.resourceInfo.docStatus||"denied-final"===this.resourceInfo.docStatus,this.verified=this.approved||this.denied,this.displayStatus="pending"===this.resourceInfo.docStatus?"Pending":"approved"===this.resourceInfo.docStatus?"Approved":"denied"===this.resourceInfo.docStatus?"Denied":"denied-final"===this.resourceInfo.docStatus?"Denied (Final)":"Unknown"}return a}(),{FromMessage:function(c){var d;return d=new b(c.resourceInfo.verificationType,c.resourceInfo.fileName,c.resourceInfo.docType,c.resourceInfo.docId,c.resourceInfo.docStatus,c.resourceInfo.userDisplayName,c.resourceInfo.email),new a(c._id,c.accountId,c.awsKey,c.createdAt,c.verifiedAt,c.failedStep,d)}}})}.call(this),function(){var a=function(a,b){return function(){return a.apply(b,arguments)}};angular.module("bc.order-info",[]).service("OrderInfo",function(){var b,c;return c={Upsert:function(a,c){return a?(a.set_status(c.order.status),a.history=_(a.history||[]).concat({event:c.order.status,timestamp:(new Date).getTime}),a):b.FromMessage(c)}},b=function(){function b(b,c,d,e,f,g,h,i){this.id=b,this.accountId=c,this.offered=d,this.received=e,this.orderType=f,this.status=g,this.timestamp=h,this.history=i,this.set_status=a(this.set_status,this),this.original_offered=this.offered,this.original_received=this.received}return b.prototype.set_status=function(a){return this.status=a,"reopened"===(null!=a?a.status:void 0)?(this.status="reopened",this.offered=a.offered,this.received=a.received):(this.offered=this.original_offered,this.received=this.original_received)},b.FromMessage=function(a){var d,e,f;return d=a.order,e=d.status,"reopened"===(null!=(f=d.status)?f.status:void 0)&&(e="reopened"),d=new b(d.id,d.accountId,d.offered,d.received,d.order_type,e,d.timestamp,a._history),c.Upsert(d,a)},b}.call(this),c})}.call(this),function(){angular.module("bc.user-account-info",[]).service("UserAccountInfo",function(){var a,b,c;return a=function(){function a(a,b,c,d,e,f){this.addressLine1=a,this.addressLine2=b,this.city=c,this.region=d,this.zipCode=e,this.country=f}return a.prototype.toString=function(){var a;return a=this.addressLine1,""!==this.addressLine2&&(a=a+" "+this.addressLine2),a+" "+this.city+" "+this.region+" "+this.zipCode},a.FromMessage=function(b){return new a(b.addressLine1,b.addressLine2,b.city,b.region,b.zipCode,b.country)},a}(),c=function(){function b(a,b,c,d,e,f){this.firstName=a,this.middleName=b,this.lastName=c,this.dateOfBirth=d,this.birthCountry=e,this.residencyAddress=f,this.displayDateOfBirth=moment(this.dateOfBirth).format("MM/DD/YYYY")}return b.FromMessage=function(c){var d;return d=a.FromMessage(c.residencyAddress),new b(c.firstName,c.middleName,c.lastName,c.dateOfBirth,c.birthCountry,d)},b}(),b=function(){function a(a,b,c){this.accountId=a,this.userDetails=b,this.accountResources=null!=c?c:[],this.displayName=this.userDetails.firstName+" "+this.userDetails.lastName,this.fullName=""===this.userDetails.middleName?this.userDetails.firstName+" "+this.userDetails.lastName:this.userDetails.firstName+" "+this.userDetails.middleName+" "+this.userDetails.lastName}return a}(),{FromMessage:function(a){var d;return d=c.FromMessage(a.userDetails),new b(a.accountId,d)}}})}.call(this);
+(function() {
+  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info']);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.account-resource', []).service("AccountResource", function() {
+    var AccountResource, ResourceInfo;
+    ResourceInfo = (function() {
+      function ResourceInfo(verificationType, fileName, docType, docId, docStatus, userDisplayName, email) {
+        this.verificationType = verificationType != null ? verificationType : '';
+        this.fileName = fileName != null ? fileName : '';
+        this.docType = docType != null ? docType : '';
+        this.docId = docId != null ? docId : '';
+        this.docStatus = docStatus != null ? docStatus : '';
+        this.userDisplayName = userDisplayName != null ? userDisplayName : '';
+        this.email = email != null ? email : '';
+      }
+
+      return ResourceInfo;
+
+    })();
+    AccountResource = (function() {
+      function AccountResource(_id, accountId, awsKey, createdAt, verifiedAt, failedStep, resourceInfo) {
+        var empty;
+        this._id = _id != null ? _id : '';
+        this.accountId = accountId != null ? accountId : '';
+        this.awsKey = awsKey != null ? awsKey : '';
+        this.createdAt = createdAt != null ? createdAt : '';
+        this.verifiedAt = verifiedAt != null ? verifiedAt : '';
+        this.failedStep = failedStep != null ? failedStep : '';
+        this.resourceInfo = resourceInfo;
+        this.actionStatus = this.resourceInfo.docStatus === 'pending' ? this.resourceInfo.docStatus + '-' + this.resourceInfo.verificationType : this.resourceInfo.docStatus;
+        empty = this.resourceInfo.fileName === '';
+        this.imgResource = !empty && this.resourceInfo.fileName.indexOf('.pdf') === -1;
+        this.pdfResource = !empty && this.resourceInfo.fileName.indexOf('.pdf') !== -1;
+        this.identity = this.resourceInfo.verificationType === 'identity';
+        this.residency = this.resourceInfo.verificationType === 'residency';
+        this.pending = this.resourceInfo.docStatus === 'pending';
+        this.approved = this.resourceInfo.docStatus === 'approved';
+        this.denied = this.resourceInfo.docStatus === 'denied' || this.resourceInfo.docStatus === 'denied-final';
+        this.verified = this.approved || this.denied;
+        this.displayStatus = this.resourceInfo.docStatus === 'pending' ? 'Pending' : this.resourceInfo.docStatus === 'approved' ? 'Approved' : this.resourceInfo.docStatus === 'denied' ? 'Denied' : this.resourceInfo.docStatus === 'denied-final' ? 'Denied (Final)' : 'Unknown';
+      }
+
+      return AccountResource;
+
+    })();
+    return {
+      FromMessage: function(msg) {
+        var msgResource, resourceInfo;
+        msgResource = msg != null ? msg.resourceInfo : void 0;
+        resourceInfo = new ResourceInfo(msgResource != null ? msgResource.verificationType : void 0, msgResource != null ? msgResource.fileName : void 0, msgResource != null ? msgResource.docType : void 0, msgResource != null ? msgResource.docId : void 0, msgResource != null ? msgResource.docStatus : void 0, msgResource != null ? msgResource.userDisplayName : void 0, msgResource != null ? msgResource.email : void 0);
+        return new AccountResource(msg != null ? msg._id : void 0, msg != null ? msg.accountId : void 0, msg != null ? msg.awsKey : void 0, msg != null ? msg.createdAt : void 0, msg != null ? msg.verifiedAt : void 0, msg != null ? msg.failedStep : void 0, resourceInfo);
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  angular.module('bc.order-info', []).service("OrderInfo", function() {
+    var OrderInfo, OrderInfoHelper,
+      _this = this;
+    OrderInfoHelper = {
+      Upsert: function(obj, msg) {
+        if (obj) {
+          obj.set_status(msg.order.status);
+          obj.history = _(obj.history || []).concat({
+            event: msg.order.status,
+            timestamp: new Date().getTime
+          });
+          return obj;
+        } else {
+          return OrderInfo.FromMessage(msg);
+        }
+      }
+    };
+    OrderInfo = (function() {
+      function OrderInfo(id, accountId, offered, received, orderType, status, timestamp, history) {
+        this.id = id;
+        this.accountId = accountId;
+        this.offered = offered;
+        this.received = received;
+        this.orderType = orderType;
+        this.status = status;
+        this.timestamp = timestamp;
+        this.history = history;
+        this.set_status = __bind(this.set_status, this);
+        this.original_offered = this.offered;
+        this.original_received = this.received;
+      }
+
+      OrderInfo.prototype.set_status = function(stat) {
+        this.status = stat;
+        if ((stat != null ? stat.status : void 0) === 'reopened') {
+          this.status = 'reopened';
+          this.offered = stat.offered;
+          return this.received = stat.received;
+        } else {
+          this.offered = this.original_offered;
+          return this.received = this.original_received;
+        }
+      };
+
+      OrderInfo.FromMessage = function(msg) {
+        var order, status, _ref;
+        order = msg.order;
+        status = order.status;
+        if (((_ref = order.status) != null ? _ref.status : void 0) === 'reopened') {
+          status = 'reopened';
+        }
+        order = new OrderInfo(order.id, order.accountId, order.offered, order.received, order.order_type, status, order.timestamp, msg._history);
+        return OrderInfoHelper.Upsert(order, msg);
+      };
+
+      return OrderInfo;
+
+    }).call(this);
+    return OrderInfoHelper;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.user-account-info', []).service("UserAccountInfo", function() {
+    var Address, UserAccountInfo, UserDetails;
+    Address = (function() {
+      function Address(addressLine1, addressLine2, city, region, zipCode, country) {
+        this.addressLine1 = addressLine1 != null ? addressLine1 : '';
+        this.addressLine2 = addressLine2 != null ? addressLine2 : '';
+        this.city = city != null ? city : '';
+        this.region = region != null ? region : '';
+        this.zipCode = zipCode != null ? zipCode : '';
+        this.country = country != null ? country : '';
+      }
+
+      Address.prototype.toString = function() {
+        var result;
+        result = this.addressLine1;
+        if (this.addressLine2 !== '') {
+          result = result + " " + this.addressLine2;
+        }
+        return result + " " + this.city + " " + this.region + " " + this.zipCode;
+      };
+
+      Address.FromMessage = function(msg) {
+        return new Address(msg != null ? msg.addressLine1 : void 0, msg != null ? msg.addressLine2 : void 0, msg != null ? msg.city : void 0, msg != null ? msg.region : void 0, msg != null ? msg.zipCode : void 0, msg != null ? msg.country : void 0);
+      };
+
+      return Address;
+
+    })();
+    UserDetails = (function() {
+      function UserDetails(firstName, middleName, lastName, dateOfBirth, birthCountry, residencyAddress) {
+        this.firstName = firstName != null ? firstName : '';
+        this.middleName = middleName != null ? middleName : '';
+        this.lastName = lastName != null ? lastName : '';
+        this.dateOfBirth = dateOfBirth != null ? dateOfBirth : '';
+        this.birthCountry = birthCountry != null ? birthCountry : '';
+        this.residencyAddress = residencyAddress;
+        this.displayDateOfBirth = moment(this.dateOfBirth).format("MM/DD/YYYY");
+      }
+
+      UserDetails.FromMessage = function(msg) {
+        var address;
+        address = Address.FromMessage(msg != null ? msg.residencyAddress : void 0);
+        return new UserDetails(msg != null ? msg.firstName : void 0, msg != null ? msg.middleName : void 0, msg != null ? msg.lastName : void 0, msg != null ? msg.dateOfBirth : void 0, msg != null ? msg.birthCountry : void 0, address);
+      };
+
+      return UserDetails;
+
+    })();
+    UserAccountInfo = (function() {
+      function UserAccountInfo(accountId, userDetails) {
+        this.accountId = accountId != null ? accountId : '';
+        this.userDetails = userDetails;
+        this.displayName = this.userDetails.firstName + " " + this.userDetails.lastName;
+        if (this.userDetails.middleName === '') {
+          this.fullName = this.userDetails.firstName + " " + this.userDetails.lastName;
+        } else {
+          this.fullName = this.userDetails.firstName + " " + this.userDetails.middleName + " " + this.userDetails.lastName;
+        }
+      }
+
+      return UserAccountInfo;
+
+    })();
+    return {
+      FromMessage: function(msg) {
+        var userDetails;
+        userDetails = UserDetails.FromMessage(msg != null ? msg.userDetails : void 0);
+        return new UserAccountInfo(msg != null ? msg.accountId : void 0, userDetails);
+      }
+    };
+  });
+
+}).call(this);
