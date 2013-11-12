@@ -85,7 +85,7 @@ module.exports = function (grunt) {
     uglify: {
       dist: {
         files: {
-          '<%= yeoman.dist %>/bc-angular-models.js': [
+          '<%= yeoman.dist %>/bc-angular-models.min.js': [
             '<%= yeoman.dist %>/bc-angular-models.js'
           ]
         }
