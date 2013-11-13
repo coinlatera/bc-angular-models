@@ -36,6 +36,9 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
 
   class UserAccountInfo
     constructor: (@userDetails, @accountResources = []) ->
+      # Approved status is highest priority - User needs only one approved resource to be considered approved
+      #  Otherwise, if no approved resources, any pending resource moves their status into pending
+      #  Finally, if no approved or pending resources, any previously denied resource makes them temporarily denied
       @idApproved = _.reduce @accountResources, (memo, resource) ->
         memo or (resource.identity and resource.approved)
       , false
@@ -56,7 +59,14 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
         memo or (resource.residency and resource.denied)
       , false
 
+      # Verified status requires approved resources for both ID and residency
+      #  Pending status with one or more pending resources, and implies not verified
+      #  Denied status with one or more denied resources, and implies not verified
+      #   Denied takes precedence over pending - Alert user to upload new resource
       @verified = @idApproved and @residencyApproved
+      @pending = @idPending or @residencyPending
+      @denied = @idDenied or @residencyDenied
+      @unverified = not @pending and not @verified
 
     displayName: ->
       @userDetails.firstName + " " + @userDetails.lastName

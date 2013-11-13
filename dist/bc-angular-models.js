@@ -219,6 +219,9 @@
           return memo || (resource.residency && resource.denied);
         }, false);
         this.verified = this.idApproved && this.residencyApproved;
+        this.pending = this.idPending || this.residencyPending;
+        this.denied = this.idDenied || this.residencyDenied;
+        this.unverified = !this.pending && !this.verified;
       }
 
       UserAccountInfo.prototype.displayName = function() {
