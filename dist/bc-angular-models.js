@@ -218,6 +218,7 @@
         this.residencyDenied = !this.residencyApproved && !this.residencyPending && _.reduce(this.accountResources, function(memo, resource) {
           return memo || (resource.residency && resource.denied);
         }, false);
+        this.verified = this.idApproved && this.residencyApproved;
       }
 
       UserAccountInfo.prototype.displayName = function() {

@@ -56,6 +56,8 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
         memo or (resource.residency and resource.denied)
       , false
 
+      @verified = @idApproved and @residencyApproved
+
     displayName: ->
       @userDetails.firstName + " " + @userDetails.lastName
 
