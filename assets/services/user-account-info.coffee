@@ -1,4 +1,4 @@
-angular.module('bc.user-account-info', []).service "UserAccountInfo", () ->
+angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAccountInfo", (AccountResource) ->
   class Address
     constructor: (@addressLine1 = '', @addressLine2 = '', @city = '', @region = '', @zipCode = '', @country = '') ->
 
@@ -35,7 +35,7 @@ angular.module('bc.user-account-info', []).service "UserAccountInfo", () ->
       new UserDetails(msg?.firstName, msg?.middleName, msg?.lastName, msg?.dateOfBirth, msg?.birthCountry, address)
 
   class UserAccountInfo
-    constructor: (@accountId = '', @userDetails) ->
+    constructor: (@accountId = '', @userDetails, @accountResources = []) ->
 
     displayName: ->
       @userDetails.firstName + " " + @userDetails.lastName
@@ -48,5 +48,7 @@ angular.module('bc.user-account-info', []).service "UserAccountInfo", () ->
 
   FromMessage: (msg) ->
     userDetails = UserDetails.FromMessage(msg?.userDetails)
-    new UserAccountInfo(msg?.accountId, userDetails)
+    accountResources = _.map msg?.accountResources or [], (resource) ->
+      AccountResource.FromMessage(resource)
+    new UserAccountInfo(msg?.accountId, userDetails, accountResources)
 

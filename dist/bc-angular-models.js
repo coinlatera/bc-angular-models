@@ -125,7 +125,7 @@
 }).call(this);
 
 (function() {
-  angular.module('bc.user-account-info', []).service("UserAccountInfo", function() {
+  angular.module('bc.user-account-info', ['bc.account-resource']).service("UserAccountInfo", function(AccountResource) {
     var Address, UserAccountInfo, UserDetails;
     Address = (function() {
       function Address(addressLine1, addressLine2, city, region, zipCode, country) {
@@ -197,9 +197,10 @@
 
     })();
     UserAccountInfo = (function() {
-      function UserAccountInfo(accountId, userDetails) {
+      function UserAccountInfo(accountId, userDetails, accountResources) {
         this.accountId = accountId != null ? accountId : '';
         this.userDetails = userDetails;
+        this.accountResources = accountResources != null ? accountResources : [];
       }
 
       UserAccountInfo.prototype.displayName = function() {
@@ -219,9 +220,12 @@
     })();
     return {
       FromMessage: function(msg) {
-        var userDetails;
+        var accountResources, userDetails;
         userDetails = UserDetails.FromMessage(msg != null ? msg.userDetails : void 0);
-        return new UserAccountInfo(msg != null ? msg.accountId : void 0, userDetails);
+        accountResources = _.map((msg != null ? msg.accountResources : void 0) || [], function(resource) {
+          return AccountResource.FromMessage(resource);
+        });
+        return new UserAccountInfo(msg != null ? msg.accountId : void 0, userDetails, accountResources);
       }
     };
   });

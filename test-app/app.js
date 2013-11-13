@@ -2,6 +2,22 @@ var app = angular.module('test-app', ['bc.angular-models']);
 
 app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo) {
 
+  var resourceMsg = {
+    _id: "11111111111111",
+    accountId: "12345678-abcd-efgh-ijkl-09876543",
+    awsKey: "12345678-abcd-efgh-ijkl-09876543_randomdigits_file.jpg",
+    createdAt: new Date().getTime(),
+    resourceInfo: {
+      verificationType: "identity",
+      fileName: "file.jpg",
+      docId: "",
+      docType: "Passport",
+      docStatus: "pending",
+      userDisplayName: "Walter White",
+      email: "walter@lospolloshermanos.com",
+    }
+  };
+
   var userMsg = {
     accountId: "12345678-abcd-efgh-ijkl-09876543",
     userDetails: {
@@ -18,28 +34,10 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
         zipCode: "87101",
         country: "United States"
       }
-    }
+    },
+    accountResources: [resourceMsg]
   };
   $scope.userAccount = UserAccountInfo.FromMessage(userMsg);
-
-  var resourceMsg = {
-    _id: "11111111111111",
-    accountId: "12345678-abcd-efgh-ijkl-09876543",
-    awsKey: "12345678-abcd-efgh-ijkl-09876543_randomdigits_file.jpg",
-    createdAt: new Date().getTime(),
-    resourceInfo: {
-      verificationType: "identity",
-      fileName: "file.jpg",
-      docId: "",
-      docType: "Passport",
-      docStatus: "pending",
-      userDisplayName: "Walter White",
-      email: "walter@lospolloshermanos.com",
-    }
-  };
-  $scope.resource = AccountResource.FromMessage(resourceMsg);
-
-
-
+  console.log('Agg');
 });
 

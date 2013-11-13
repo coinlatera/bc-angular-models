@@ -52,31 +52,31 @@
       <tbody>
         <tr>
           <td>Resource ID: </td>
-          <td>{{resource._id}}</td>
+          <td>{{userAccount.accountResources[0]._id}}</td>
         </tr>
         <tr>
           <td>Account ID: </td>
-          <td>{{resource.accountId}}</td>
+          <td>{{userAccount.accountResources[0].accountId}}</td>
         </tr>
         <tr>
           <td>AWS Key: </td>
-          <td>{{resource.awsKey}}</td>
+          <td>{{userAccount.accountResources[0].awsKey}}</td>
         </tr>
         <tr>
           <td>Verification Type: </td>
-          <td>{{resource.resourceInfo.verificationType | uppercase}}</td>
+          <td>{{userAccount.accountResources[0].resourceInfo.verificationType | uppercase}}</td>
         </tr>
         <tr>
           <td>File Name: </td>
-          <td>{{resource.resourceInfo.fileName}}</td>
+          <td>{{userAccount.accountResources[0].resourceInfo.fileName}}</td>
         </tr>
         <tr>
           <td>Document Type: </td>
-          <td>{{resource.resourceInfo.docType}}</td>
+          <td>{{userAccount.accountResources[0].resourceInfo.docType}}</td>
         </tr>
         <tr>
           <td>Document Status: </td>
-          <td>{{resource.displayStatus}}</td>
+          <td>{{userAccount.accountResources[0].displayStatus}}</td>
         </tr>
       </tbody>
     </table>
