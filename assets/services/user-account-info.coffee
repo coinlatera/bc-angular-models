@@ -35,7 +35,26 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       new UserDetails(msg?.firstName, msg?.middleName, msg?.lastName, msg?.dateOfBirth, msg?.birthCountry, address)
 
   class UserAccountInfo
-    constructor: (@accountId = '', @userDetails, @accountResources = []) ->
+    constructor: (@userDetails, @accountResources = []) ->
+      @idApproved = _.reduce @accountResources, (memo, resource) ->
+        memo or (resource.identity and resource.approved)
+      , false
+      @idPending = not @idApproved and _.reduce @accountResources, (memo, resource) ->
+        memo or (resource.identity and resource.pending)
+      , false
+      @idDenied = not @idApproved and not @idPending and _.reduce @accountResources, (memo, resource) ->
+        memo or (resource.identity and resource.denied)
+      , false
+
+      @residencyApproved = _.reduce @accountResources, (memo, resource) ->
+        memo or (resource.residency and resource.approved)
+      , false
+      @residencyPending = not @residencyApproved and _.reduce @accountResources, (memo, resource) -> 
+        memo or (resource.residency and resource.pending)
+      , false
+      @residencyDenied = not @residencyApproved and not @residencyPending and _.reduce @accountResources, (memo, resource) ->
+        memo or (resource.residency and resource.denied)
+      , false
 
     displayName: ->
       @userDetails.firstName + " " + @userDetails.lastName
@@ -50,5 +69,5 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
     userDetails = UserDetails.FromMessage(msg?.userDetails)
     accountResources = _.map msg?.accountResources or [], (resource) ->
       AccountResource.FromMessage(resource)
-    new UserAccountInfo(msg?.accountId, userDetails, accountResources)
+    new UserAccountInfo(userDetails, accountResources)
 

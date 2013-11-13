@@ -12,14 +12,12 @@
     <h3>User Details</h3>
     <table>
       <thead>
-        <td>Key</td>
-        <td>Value</td>
+        <tr>
+          <td>Key</td>
+          <td>Value</td>
+        </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Account ID: </td>
-          <td>{{userAccount.accountId}}</td>
-        </tr>
         <tr>
           <td>Display Name: </td>
           <td>{{userAccount.displayName()}}</td>
@@ -46,8 +44,10 @@
     <h3>Account Resource</h3>
     <table>
       <thead>
-        <td>Key</td>
-        <td>Value</td>
+        <tr>
+          <td>Key</td>
+          <td>Value</td>
+        </tr>
       </thead>
       <tbody>
         <tr>
@@ -77,6 +77,42 @@
         <tr>
           <td>Document Status: </td>
           <td>{{userAccount.accountResources[0].displayStatus}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Verification Info </h3>
+    <table>
+      <thead>
+        <tr>
+          <td>Key</td>
+          <td>Value</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ID Pending</td>
+	  <td>{{userAccount.idPending}}</td>
+        </tr>
+        <tr>
+          <td>ID Approved</td>
+	  <td>{{userAccount.idApproved}}</td>
+        </tr>
+        <tr>
+          <td>ID Denied</td>
+	  <td>{{userAccount.idDenied}}</td>
+        </tr>
+        <tr>
+          <td>Residency Pending</td>
+	  <td>{{userAccount.residencyPending}}</td>
+        </tr>
+        <tr>
+          <td>Residency Approved</td>
+	  <td>{{userAccount.residencyApproved}}</td>
+        </tr>
+        <tr>
+          <td>Residency Denied</td>
+	  <td>{{userAccount.residencyDenied}}</td>
         </tr>
       </tbody>
     </table>

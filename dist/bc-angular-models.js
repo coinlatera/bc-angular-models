@@ -197,10 +197,27 @@
 
     })();
     UserAccountInfo = (function() {
-      function UserAccountInfo(accountId, userDetails, accountResources) {
-        this.accountId = accountId != null ? accountId : '';
+      function UserAccountInfo(userDetails, accountResources) {
         this.userDetails = userDetails;
         this.accountResources = accountResources != null ? accountResources : [];
+        this.idApproved = _.reduce(this.accountResources, function(memo, resource) {
+          return memo || (resource.identity && resource.approved);
+        }, false);
+        this.idPending = !this.idApproved && _.reduce(this.accountResources, function(memo, resource) {
+          return memo || (resource.identity && resource.pending);
+        }, false);
+        this.idDenied = !this.idApproved && !this.idPending && _.reduce(this.accountResources, function(memo, resource) {
+          return memo || (resource.identity && resource.denied);
+        }, false);
+        this.residencyApproved = _.reduce(this.accountResources, function(memo, resource) {
+          return memo || (resource.residency && resource.approved);
+        }, false);
+        this.residencyPending = !this.residencyApproved && _.reduce(this.accountResources, function(memo, resource) {
+          return memo || (resource.residency && resource.pending);
+        }, false);
+        this.residencyDenied = !this.residencyApproved && !this.residencyPending && _.reduce(this.accountResources, function(memo, resource) {
+          return memo || (resource.residency && resource.denied);
+        }, false);
       }
 
       UserAccountInfo.prototype.displayName = function() {
@@ -225,7 +242,7 @@
         accountResources = _.map((msg != null ? msg.accountResources : void 0) || [], function(resource) {
           return AccountResource.FromMessage(resource);
         });
-        return new UserAccountInfo(msg != null ? msg.accountId : void 0, userDetails, accountResources);
+        return new UserAccountInfo(userDetails, accountResources);
       }
     };
   });
