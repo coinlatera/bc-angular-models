@@ -82,12 +82,16 @@
     </table>
 
     <h3>Verification Info </h3>
+    <strong>{{userAccount.displayVerificationStatus}}</strong>
+    <br />
+
     <div ng-show="userAccount.idPending">ID Pending</div>
     <div ng-show="userAccount.idApproved">ID Approved</div>
     <div ng-show="userAccount.idDenied">ID Denied</div>
     <div ng-show="userAccount.residencyPending">Residency Pending</div>
     <div ng-show="userAccount.residencyApproved">Residency Approved</div>
     <div ng-show="userAccount.residencyDenied">Residency Denied</div>
+    <br />
     <table>
       <tbody>
         <tr>

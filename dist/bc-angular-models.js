@@ -222,6 +222,7 @@
         this.pending = this.idPending || this.residencyPending;
         this.denied = this.idDenied || this.residencyDenied;
         this.unverified = !this.pending && !this.verified;
+        this.displayVerificationStatus = this.verified ? "Verified" : this.pending ? "Pending" : this.denied ? "Denied" : "Unverified";
       }
 
       UserAccountInfo.prototype.displayName = function() {
