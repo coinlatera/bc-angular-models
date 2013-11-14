@@ -66,7 +66,7 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       @verified = @idApproved and @residencyApproved
       @pending = @idPending or @residencyPending
       @denied = @idDenied or @residencyDenied
-      @unverified = not @pending and not @verified
+      @unverified = not @pending and not @verified and not @denied
 
       @displayVerificationStatus = if @verified then "Verified"
       else if @pending then "Pending"
