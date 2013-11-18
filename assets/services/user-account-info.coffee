@@ -88,3 +88,6 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       AccountResource.FromMessage(resource)
     new UserAccountInfo(userDetails, accountResources)
 
+  Empty: ->
+    this.FromMessage()
+

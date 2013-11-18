@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info']);
+  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message']);
 
 }).call(this);
 
@@ -52,6 +52,62 @@
         msgResource = msg != null ? msg.resourceInfo : void 0;
         resourceInfo = new ResourceInfo(msgResource != null ? msgResource.verificationType : void 0, msgResource != null ? msgResource.fileName : void 0, msgResource != null ? msgResource.docType : void 0, msgResource != null ? msgResource.docId : void 0, msgResource != null ? msgResource.docStatus : void 0, msgResource != null ? msgResource.userDisplayName : void 0, msgResource != null ? msgResource.email : void 0);
         return new AccountResource(msg != null ? msg._id : void 0, msg != null ? msg.accountId : void 0, msg != null ? msg.awsKey : void 0, msg != null ? msg.createdAt : void 0, msg != null ? msg.verifiedAt : void 0, msg != null ? msg.failedStep : void 0, resourceInfo);
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.error-message', []).service("ErrorMessage", function() {
+    var ErrorMessage, FieldError, ItemError;
+    ItemError = (function() {
+      function ItemError(error) {
+        this.errorType = "Item";
+        this.errorMessage = error;
+      }
+
+      return ItemError;
+
+    })();
+    FieldError = (function() {
+      function FieldError(fieldName, fieldErrors) {
+        this.errorType = "Field";
+        this.errorField = fieldName;
+        this.errorMessages = fieldErrors;
+      }
+
+      return FieldError;
+
+    })();
+    ErrorMessage = (function() {
+      function ErrorMessage(message) {
+        this.request = (message != null ? message.request : void 0) || {};
+        this.errors = ErrorMessage.ParseErrors(message != null ? message.errors : void 0) || [];
+      }
+
+      ErrorMessage.ParseErrors = function(serverError) {
+        var errorList;
+        if (typeof serverError === "string") {
+          return [new ItemError(serverError)];
+        }
+        if (typeof serverError === "object") {
+          errorList = [];
+          angular.forEach(serverError, function(error) {
+            return angular.forEach(error, function(fieldErrorList, fieldName) {
+              return this.push(new FieldError(fieldName, fieldErrorList));
+            }, this);
+          }, errorList);
+          return errorList;
+        }
+      };
+
+      return ErrorMessage;
+
+    })();
+    return {
+      FromMessage: function(msg) {
+        return new ErrorMessage(msg);
       }
     };
   });
@@ -248,6 +304,9 @@
           return AccountResource.FromMessage(resource);
         });
         return new UserAccountInfo(userDetails, accountResources);
+      },
+      Empty: function() {
+        return this.FromMessage();
       }
     };
   });

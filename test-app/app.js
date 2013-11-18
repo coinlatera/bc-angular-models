@@ -1,6 +1,6 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -68,6 +68,24 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
     accountResources: [resourceMsg1, resourceMsg2, resourceMsg3]
   };
   $scope.userAccount = UserAccountInfo.FromMessage(userMsg);
-  console.log('Agg');
+
+  var itemErrorMsg = {
+    _request_id: "0",
+    result: "REQUEST_ERROR",
+    request: {operation: "UPDATE_USER_ACCOUNT"},
+    errors: [
+      {"/userDetails/firstName": ["First name required"]},
+      {"/userDetails/residencyAddress/zipCode": ["Invalid ZipCode", "ZipCode must contain between 5 and 9 digits"]}
+    ]
+  };
+  $scope.itemErrorMessage = ErrorMessage.FromMessage(itemErrorMsg);
+
+  var fieldErrorMsg = {
+    _request_id: "1",
+    result: "REQUEST_ERROR",
+    request: {operation: "ADD_BANK_ACCOUNT"},
+    errors: "Bank account routing number not found"
+  };
+  $scope.fieldErrorMessage = ErrorMessage.FromMessage(fieldErrorMsg);
 });
 
