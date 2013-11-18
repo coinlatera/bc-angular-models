@@ -81,7 +81,7 @@
       </tbody>
     </table>
 
-    <h3>Verification Info </h3>
+    <h3>Verification Info</h3>
     <strong>{{userAccount.displayVerificationStatus}}</strong>
     <br />
 
@@ -109,6 +109,23 @@
         <tr>
           <td><strong>Unverified</strong></td>
 	  <td><strong>{{userAccount.unverified}}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Error Message</h3>
+    <table>
+      <tbody>
+        <tr>
+          <td>Item Error Message: </td>
+	  <td>{{itemErrorMessage.errors[0].toString()}}</td>
+	</tr>
+	  <td>Field Error Messages: </td>
+          <td></td>
+	</tr>
+        <tr ng-repeat="error in fieldErrorMessage.errors">
+          <td> -- {{error.errorField}}</td>
+          <td>{{error.toString()}}</td>
         </tr>
       </tbody>
     </table>

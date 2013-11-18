@@ -69,7 +69,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
   };
   $scope.userAccount = UserAccountInfo.FromMessage(userMsg);
 
-  var itemErrorMsg = {
+  var fieldErrorMsg = {
     _request_id: "0",
     result: "REQUEST_ERROR",
     request: {operation: "UPDATE_USER_ACCOUNT"},
@@ -78,14 +78,14 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
       {"/userDetails/residencyAddress/zipCode": ["Invalid ZipCode", "ZipCode must contain between 5 and 9 digits"]}
     ]
   };
-  $scope.itemErrorMessage = ErrorMessage.FromMessage(itemErrorMsg);
+  $scope.fieldErrorMessage = ErrorMessage.FromMessage(fieldErrorMsg);
 
-  var fieldErrorMsg = {
+  var itemErrorMsg = {
     _request_id: "1",
     result: "REQUEST_ERROR",
     request: {operation: "ADD_BANK_ACCOUNT"},
     errors: "Bank account routing number not found"
   };
-  $scope.fieldErrorMessage = ErrorMessage.FromMessage(fieldErrorMsg);
+  $scope.itemErrorMessage = ErrorMessage.FromMessage(itemErrorMsg);
 });
 

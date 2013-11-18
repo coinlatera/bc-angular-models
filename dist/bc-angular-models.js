@@ -65,6 +65,9 @@
       function ItemError(error) {
         this.errorType = "Item";
         this.errorMessage = error;
+        this.toString = function() {
+          return this.errorMessage;
+        };
       }
 
       return ItemError;
@@ -75,6 +78,9 @@
         this.errorType = "Field";
         this.errorField = fieldName;
         this.errorMessages = fieldErrors;
+        this.toString = function() {
+          return this.errorMessages.join(', ');
+        };
       }
 
       return FieldError;

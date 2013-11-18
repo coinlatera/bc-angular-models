@@ -4,11 +4,15 @@ angular.module('bc.error-message', []).service "ErrorMessage", ->
       @errorType = "Item"
       @errorMessage = error
 
+      @toString = -> @errorMessage
+
   class FieldError
     constructor: (fieldName, fieldErrors) ->
       @errorType = "Field"
       @errorField = fieldName
       @errorMessages = fieldErrors
+
+      @toString = -> @errorMessages.join(', ')
 
   class ErrorMessage
     constructor: (message) ->
