@@ -36,6 +36,9 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
 
   class UserAccountInfo
     constructor: (@userDetails, @accountResources = []) ->
+      @ensureVerificationStatus()
+
+    ensureVerificationStatus : ->
       # Approved status is highest priority - User needs only one approved resource to be considered approved
       #  Otherwise, if no approved resources, any pending resource moves their status into pending
       #  Finally, if no approved or pending resources, any previously denied resource makes them temporarily denied
@@ -48,6 +51,7 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       @idDenied = not @idApproved and not @idPending and _.reduce @accountResources, (memo, resource) ->
         memo or (resource.identity and resource.denied)
       , false
+      @idUnverified = not @idApproved and not @idPending and not @idDenied
 
       @residencyApproved = _.reduce @accountResources, (memo, resource) ->
         memo or (resource.residency and resource.approved)
@@ -58,20 +62,28 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       @residencyDenied = not @residencyApproved and not @residencyPending and _.reduce @accountResources, (memo, resource) ->
         memo or (resource.residency and resource.denied)
       , false
+      @residencyUnverified = not @residencyApproved and not @residencyPending and not @residencyDenied
 
       # Verified status requires approved resources for both ID and residency
-      #  Pending status with one or more pending resources, and implies not verified
+      @verified = @idApproved and @residencyApproved
+
+      # Unverified status when not resource is found for one or both types
+      @unverified = @idUnverified or @residencyUnverified
+
+      #  Pending status with one or more pending resources and no denied resources
       #  Denied status with one or more denied resources, and implies not verified
       #   Denied takes precedence over pending - Alert user to upload new resource
-      @verified = @idApproved and @residencyApproved
-      @pending = @idPending or @residencyPending
-      @denied = @idDenied or @residencyDenied
-      @unverified = not @pending and not @verified and not @denied
+      @denied = not @unverified and (@idDenied or @residencyDenied)
+      @pending = not @verified and not @unverified and not @denied
 
       @displayVerificationStatus = if @verified then "Verified"
       else if @pending then "Pending"
       else if @denied then "Denied"
       else "Unverified"
+
+    addAccountResource: (resource) ->
+      @accountResources.push(resource)
+      @ensureVerificationStatus()
 
     displayName: ->
       @userDetails.firstName + " " + @userDetails.lastName

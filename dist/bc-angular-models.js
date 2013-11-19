@@ -262,6 +262,10 @@
       function UserAccountInfo(userDetails, accountResources) {
         this.userDetails = userDetails;
         this.accountResources = accountResources != null ? accountResources : [];
+        this.ensureVerificationStatus();
+      }
+
+      UserAccountInfo.prototype.ensureVerificationStatus = function() {
         this.idApproved = _.reduce(this.accountResources, function(memo, resource) {
           return memo || (resource.identity && resource.approved);
         }, false);
@@ -271,6 +275,7 @@
         this.idDenied = !this.idApproved && !this.idPending && _.reduce(this.accountResources, function(memo, resource) {
           return memo || (resource.identity && resource.denied);
         }, false);
+        this.idUnverified = !this.idApproved && !this.idPending && !this.idDenied;
         this.residencyApproved = _.reduce(this.accountResources, function(memo, resource) {
           return memo || (resource.residency && resource.approved);
         }, false);
@@ -280,12 +285,18 @@
         this.residencyDenied = !this.residencyApproved && !this.residencyPending && _.reduce(this.accountResources, function(memo, resource) {
           return memo || (resource.residency && resource.denied);
         }, false);
+        this.residencyUnverified = !this.residencyApproved && !this.residencyPending && !this.residencyDenied;
         this.verified = this.idApproved && this.residencyApproved;
-        this.pending = this.idPending || this.residencyPending;
-        this.denied = this.idDenied || this.residencyDenied;
-        this.unverified = !this.pending && !this.verified && !this.denied;
-        this.displayVerificationStatus = this.verified ? "Verified" : this.pending ? "Pending" : this.denied ? "Denied" : "Unverified";
-      }
+        this.unverified = this.idUnverified || this.residencyUnverified;
+        this.denied = !this.unverified && (this.idDenied || this.residencyDenied);
+        this.pending = !this.verified && !this.unverified && !this.denied;
+        return this.displayVerificationStatus = this.verified ? "Verified" : this.pending ? "Pending" : this.denied ? "Denied" : "Unverified";
+      };
+
+      UserAccountInfo.prototype.addAccountResource = function(resource) {
+        this.accountResources.push(resource);
+        return this.ensureVerificationStatus();
+      };
 
       UserAccountInfo.prototype.displayName = function() {
         return this.userDetails.firstName + " " + this.userDetails.lastName;

@@ -1,6 +1,6 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage) {
+app.controller('MainCtrl', function MainCtrl ($scope, $timeout, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -87,5 +87,15 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
     errors: "Bank account routing number not found"
   };
   $scope.itemErrorMessage = ErrorMessage.FromMessage(itemErrorMsg);
+
+  /*
+  $timeout(function() {
+    $scope.userAccount.addAccountResource(AccountResource.FromMessage(resourceMsg1));
+    $scope.userAccount.addAccountResource(AccountResource.FromMessage(resourceMsg2));
+  }, 4000);
+  $timeout(function() {
+    $scope.userAccount.addAccountResource(AccountResource.FromMessage(resourceMsg3));
+  }, 8000);
+  */
 });
 
