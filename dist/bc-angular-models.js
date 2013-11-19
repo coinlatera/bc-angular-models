@@ -1,1 +1,240 @@
-(function(){angular.module("bc.angular-models",["bc.account-resource","bc.order-info","bc.user-account-info","bc.transaction-info"])}).call(this),function(){angular.module("bc.account-resource",[]).service("AccountResource",function(){var a,b;return b=function(){function a(a,b,c,d,e,f,g){this.verificationType=a,this.fileName=b,this.docType=c,this.docId=d,this.docStatus=e,this.userDisplayName=f,this.email=g}return a}(),a=function(){function a(a,b,c,d,e,f,g){this._id=a,this.accountId=b,this.awsKey=c,this.createdAt=d,this.verifiedAt=e,this.failedStep=f,this.resourceInfo=g,this.actionStatus="pending"===this.resourceInfo.docStatus?this.resourceInfo.docStatus+"-"+this.resourceInfo.verificationType:this.resourceInfo.docStatus,this.imgResource=-1===this.resourceInfo.fileName.indexOf(".pdf"),this.pdfResource=-1!==this.resourceInfo.fileName.indexOf(".pdf"),this.identity="identity"===this.resourceInfo.verificationType,this.residency="residency"===this.resourceInfo.verificationType,this.pending="pending"===this.resourceInfo.docStatus,this.approved="approved"===this.resourceInfo.docStatus,this.denied="denied"===this.resourceInfo.docStatus||"denied-final"===this.resourceInfo.docStatus,this.verified=this.approved||this.denied,this.displayStatus="pending"===this.resourceInfo.docStatus?"Pending":"approved"===this.resourceInfo.docStatus?"Approved":"denied"===this.resourceInfo.docStatus?"Denied":"denied-final"===this.resourceInfo.docStatus?"Denied (Final)":"Unknown"}return a}(),{FromMessage:function(c){var d;return d=new b(c.resourceInfo.verificationType,c.resourceInfo.fileName,c.resourceInfo.docType,c.resourceInfo.docId,c.resourceInfo.docStatus,c.resourceInfo.userDisplayName,c.resourceInfo.email),new a(c._id,c.accountId,c.awsKey,c.createdAt,c.verifiedAt,c.failedStep,d)}}})}.call(this),function(){var a=function(a,b){return function(){return a.apply(b,arguments)}};angular.module("bc.order-info",[]).service("OrderInfo",function(){var b,c;return c={Upsert:function(a,c){return a?(a.set_status(c.order.status),a.history=_(a.history||[]).concat({event:c.order.status,timestamp:(new Date).getTime}),a):b.FromMessage(c)}},b=function(){function b(b,c,d,e,f,g,h,i){this.id=b,this.accountId=c,this.offered=d,this.received=e,this.orderType=f,this.status=g,this.timestamp=h,this.history=i,this.set_status=a(this.set_status,this),this.original_offered=this.offered,this.original_received=this.received}return b.prototype.set_status=function(a){return this.status=a,"reopened"===(null!=a?a.status:void 0)?(this.status="reopened",this.offered=a.offered,this.received=a.received):(this.offered=this.original_offered,this.received=this.original_received)},b.FromMessage=function(a){var d,e,f;return d=a.order,e=d.status,"reopened"===(null!=(f=d.status)?f.status:void 0)&&(e="reopened"),d=new b(d.id,d.accountId,d.offered,d.received,d.order_type,e,d.timestamp,a._history),c.Upsert(d,a)},b}.call(this),c})}.call(this),function(){angular.module("bc.transaction-info",[]).service("TransactionInfo",function(){var a,b;return b={Upsert:function(b,c){return b?(b.status=c.status,b.history=_(b.history||[]).concat({event:c.status,timestamp:(new Date).getTime}),b):a.FromMessage(c)}},a=function(){function a(a,b,c,d,e,f){this.id=a,this.type=b,this.fundingSourceId=c,this.orderType=d,this.status=e,this.history=f}return a.FromMessage=function(c){var d;return d=new a(c._id,c._type,c.fundingSourceId,c.amount,c.status,c._history),b.Upsert(d,c)},a}.call(this),b})}.call(this),function(){angular.module("bc.user-account-info",[]).service("UserAccountInfo",function(){var a,b,c;return a=function(){function a(a,b,c,d,e,f){this.addressLine1=a,this.addressLine2=b,this.city=c,this.region=d,this.zipCode=e,this.country=f}return a.prototype.toString=function(){var a;return a=this.addressLine1,""!==this.addressLine2&&(a=a+" "+this.addressLine2),a+" "+this.city+" "+this.region+" "+this.zipCode},a.FromMessage=function(b){return new a(b.addressLine1,b.addressLine2,b.city,b.region,b.zipCode,b.country)},a}(),c=function(){function b(a,b,c,d,e,f){this.firstName=a,this.middleName=b,this.lastName=c,this.dateOfBirth=d,this.birthCountry=e,this.residencyAddress=f,this.displayDateOfBirth=moment(this.dateOfBirth).format("MM/DD/YYYY")}return b.FromMessage=function(c){var d;return d=a.FromMessage(c.residencyAddress),new b(c.firstName,c.middleName,c.lastName,c.dateOfBirth,c.birthCountry,d)},b}(),b=function(){function a(a,b,c){this.accountId=a,this.userDetails=b,this.accountResources=null!=c?c:[],this.displayName=this.userDetails.firstName+" "+this.userDetails.lastName,this.fullName=""===this.userDetails.middleName?this.userDetails.firstName+" "+this.userDetails.lastName:this.userDetails.firstName+" "+this.userDetails.middleName+" "+this.userDetails.lastName}return a}(),{FromMessage:function(a){var d;return d=c.FromMessage(a.userDetails),new b(a.accountId,d)}}})}.call(this);
+(function() {
+  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.transaction-info']);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.account-resource', []).service("AccountResource", function() {
+    var AccountResource, ResourceInfo;
+    ResourceInfo = (function() {
+      function ResourceInfo(verificationType, fileName, docType, docId, docStatus, userDisplayName, email) {
+        this.verificationType = verificationType;
+        this.fileName = fileName;
+        this.docType = docType;
+        this.docId = docId;
+        this.docStatus = docStatus;
+        this.userDisplayName = userDisplayName;
+        this.email = email;
+      }
+
+      return ResourceInfo;
+
+    })();
+    AccountResource = (function() {
+      function AccountResource(_id, accountId, awsKey, createdAt, verifiedAt, failedStep, resourceInfo) {
+        this._id = _id;
+        this.accountId = accountId;
+        this.awsKey = awsKey;
+        this.createdAt = createdAt;
+        this.verifiedAt = verifiedAt;
+        this.failedStep = failedStep;
+        this.resourceInfo = resourceInfo;
+        this.actionStatus = this.resourceInfo.docStatus === 'pending' ? this.resourceInfo.docStatus + '-' + this.resourceInfo.verificationType : this.resourceInfo.docStatus;
+        this.imgResource = this.resourceInfo.fileName.indexOf('.pdf') === -1;
+        this.pdfResource = this.resourceInfo.fileName.indexOf('.pdf') !== -1;
+        this.identity = this.resourceInfo.verificationType === 'identity';
+        this.residency = this.resourceInfo.verificationType === 'residency';
+        this.pending = this.resourceInfo.docStatus === 'pending';
+        this.approved = this.resourceInfo.docStatus === 'approved';
+        this.denied = this.resourceInfo.docStatus === 'denied' || this.resourceInfo.docStatus === 'denied-final';
+        this.verified = this.approved || this.denied;
+        this.displayStatus = this.resourceInfo.docStatus === 'pending' ? 'Pending' : this.resourceInfo.docStatus === 'approved' ? 'Approved' : this.resourceInfo.docStatus === 'denied' ? 'Denied' : this.resourceInfo.docStatus === 'denied-final' ? 'Denied (Final)' : 'Unknown';
+      }
+
+      return AccountResource;
+
+    })();
+    return {
+      FromMessage: function(msg) {
+        var resourceInfo;
+        resourceInfo = new ResourceInfo(msg.resourceInfo.verificationType, msg.resourceInfo.fileName, msg.resourceInfo.docType, msg.resourceInfo.docId, msg.resourceInfo.docStatus, msg.resourceInfo.userDisplayName, msg.resourceInfo.email);
+        return new AccountResource(msg._id, msg.accountId, msg.awsKey, msg.createdAt, msg.verifiedAt, msg.failedStep, resourceInfo);
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  angular.module('bc.order-info', []).service("OrderInfo", function() {
+    var OrderInfo, OrderInfoHelper,
+      _this = this;
+    OrderInfoHelper = {
+      Upsert: function(obj, msg) {
+        if (obj) {
+          obj.set_status(msg.order.status);
+          obj.history = _(obj.history || []).concat({
+            event: msg.order.status,
+            timestamp: new Date().getTime
+          });
+          return obj;
+        } else {
+          return OrderInfo.FromMessage(msg);
+        }
+      }
+    };
+    OrderInfo = (function() {
+      function OrderInfo(id, accountId, offered, received, orderType, status, timestamp, history) {
+        this.id = id;
+        this.accountId = accountId;
+        this.offered = offered;
+        this.received = received;
+        this.orderType = orderType;
+        this.status = status;
+        this.timestamp = timestamp;
+        this.history = history;
+        this.set_status = __bind(this.set_status, this);
+        this.original_offered = this.offered;
+        this.original_received = this.received;
+      }
+
+      OrderInfo.prototype.set_status = function(stat) {
+        this.status = stat;
+        if ((stat != null ? stat.status : void 0) === 'reopened') {
+          this.status = 'reopened';
+          this.offered = stat.offered;
+          return this.received = stat.received;
+        } else {
+          this.offered = this.original_offered;
+          return this.received = this.original_received;
+        }
+      };
+
+      OrderInfo.FromMessage = function(msg) {
+        var order, status, _ref;
+        order = msg.order;
+        status = order.status;
+        if (((_ref = order.status) != null ? _ref.status : void 0) === 'reopened') {
+          status = 'reopened';
+        }
+        order = new OrderInfo(order.id, order.accountId, order.offered, order.received, order.order_type, status, order.timestamp, msg._history);
+        return OrderInfoHelper.Upsert(order, msg);
+      };
+
+      return OrderInfo;
+
+    }).call(this);
+    return OrderInfoHelper;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.transaction-info', []).service("TransactionInfo", function() {
+    var TransactionInfo, TransactionInfoHelper,
+      _this = this;
+    TransactionInfoHelper = {
+      Upsert: function(obj, msg) {
+        if (obj) {
+          obj.status = msg.status;
+          obj.history = _(obj.history || []).concat({
+            event: msg.status,
+            timestamp: new Date().getTime
+          });
+          return obj;
+        } else {
+          return TransactionInfo.FromMessage(msg);
+        }
+      }
+    };
+    TransactionInfo = (function() {
+      function TransactionInfo(id, type, fundingSourceId, orderType, status, history) {
+        this.id = id;
+        this.type = type;
+        this.fundingSourceId = fundingSourceId;
+        this.orderType = orderType;
+        this.status = status;
+        this.history = history;
+      }
+
+      TransactionInfo.FromMessage = function(msg) {
+        var transaction;
+        transaction = new TransactionInfo(msg._id, msg._type, msg.fundingSourceId, msg.amount, msg.status, msg._history);
+        return TransactionInfoHelper.Upsert(transaction, msg);
+      };
+
+      return TransactionInfo;
+
+    }).call(this);
+    return TransactionInfoHelper;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.user-account-info', []).service("UserAccountInfo", function() {
+    var Address, UserAccountInfo, UserDetails;
+    Address = (function() {
+      function Address(addressLine1, addressLine2, city, region, zipCode, country) {
+        this.addressLine1 = addressLine1;
+        this.addressLine2 = addressLine2;
+        this.city = city;
+        this.region = region;
+        this.zipCode = zipCode;
+        this.country = country;
+      }
+
+      Address.prototype.toString = function() {
+        var result;
+        result = this.addressLine1;
+        if (this.addressLine2 !== '') {
+          result = result + " " + this.addressLine2;
+        }
+        return result + " " + this.city + " " + this.region + " " + this.zipCode;
+      };
+
+      Address.FromMessage = function(msg) {
+        return new Address(msg.addressLine1, msg.addressLine2, msg.city, msg.region, msg.zipCode, msg.country);
+      };
+
+      return Address;
+
+    })();
+    UserDetails = (function() {
+      function UserDetails(firstName, middleName, lastName, dateOfBirth, birthCountry, residencyAddress) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.birthCountry = birthCountry;
+        this.residencyAddress = residencyAddress;
+        this.displayDateOfBirth = moment(this.dateOfBirth).format("MM/DD/YYYY");
+      }
+
+      UserDetails.FromMessage = function(msg) {
+        var address;
+        address = Address.FromMessage(msg.residencyAddress);
+        return new UserDetails(msg.firstName, msg.middleName, msg.lastName, msg.dateOfBirth, msg.birthCountry, address);
+      };
+
+      return UserDetails;
+
+    })();
+    UserAccountInfo = (function() {
+      function UserAccountInfo(accountId, userDetails, accountResources) {
+        this.accountId = accountId;
+        this.userDetails = userDetails;
+        this.accountResources = accountResources != null ? accountResources : [];
+        this.displayName = this.userDetails.firstName + " " + this.userDetails.lastName;
+        if (this.userDetails.middleName === '') {
+          this.fullName = this.userDetails.firstName + " " + this.userDetails.lastName;
+        } else {
+          this.fullName = this.userDetails.firstName + " " + this.userDetails.middleName + " " + this.userDetails.lastName;
+        }
+      }
+
+      return UserAccountInfo;
+
+    })();
+    return {
+      FromMessage: function(msg) {
+        var userDetails;
+        userDetails = UserDetails.FromMessage(msg.userDetails);
+        return new UserAccountInfo(msg.accountId, userDetails);
+      }
+    };
+  });
+
+}).call(this);
