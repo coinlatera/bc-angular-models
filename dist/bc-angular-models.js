@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message']);
+  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info']);
 
 }).call(this);
 
@@ -182,6 +182,48 @@
 
     }).call(this);
     return OrderInfoHelper;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.transaction-info', []).service("TransactionInfo", function() {
+    var TransactionInfo, TransactionInfoHelper,
+      _this = this;
+    TransactionInfoHelper = {
+      Upsert: function(obj, msg) {
+        if (obj) {
+          obj.status = msg.status;
+          obj.history = _(obj.history || []).concat({
+            event: msg.status,
+            timestamp: new Date().getTime
+          });
+          return obj;
+        } else {
+          return TransactionInfo.FromMessage(msg);
+        }
+      }
+    };
+    TransactionInfo = (function() {
+      function TransactionInfo(id, type, fundingSourceId, orderType, status, history) {
+        this.id = id;
+        this.type = type;
+        this.fundingSourceId = fundingSourceId;
+        this.orderType = orderType;
+        this.status = status;
+        this.history = history;
+      }
+
+      TransactionInfo.FromMessage = function(msg) {
+        var transaction;
+        transaction = new TransactionInfo(msg._id, msg._type, msg.fundingSourceId, msg.amount, msg.status, msg._history);
+        return TransactionInfoHelper.Upsert(transaction, msg);
+      };
+
+      return TransactionInfo;
+
+    }).call(this);
+    return TransactionInfoHelper;
   });
 
 }).call(this);
