@@ -7,10 +7,10 @@ angular.module('bc.error-message', []).service "ErrorMessage", ->
       @toString = -> @errorMessage
 
   class FieldError
-    constructor: (fieldName, fieldErrors) ->
+    constructor: (fieldName = '', fieldErrors = []) ->
       @errorType = "Field"
-      @errorField = fieldName
       @errorMessages = fieldErrors
+      @errorFieldId = fieldName.split('/').pop() or ''
 
       @toString = -> @errorMessages.join(', ')
 

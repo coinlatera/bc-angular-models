@@ -75,9 +75,15 @@
     })();
     FieldError = (function() {
       function FieldError(fieldName, fieldErrors) {
+        if (fieldName == null) {
+          fieldName = '';
+        }
+        if (fieldErrors == null) {
+          fieldErrors = [];
+        }
         this.errorType = "Field";
-        this.errorField = fieldName;
         this.errorMessages = fieldErrors;
+        this.errorFieldId = fieldName.split('/').pop() || '';
         this.toString = function() {
           return this.errorMessages.join(', ');
         };
