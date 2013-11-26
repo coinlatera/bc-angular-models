@@ -98,20 +98,19 @@
         this.errors = ErrorMessage.ParseErrors(message != null ? message.errors : void 0) || [];
       }
 
-      ErrorMessage.ParseErrors = function(serverError) {
+      ErrorMessage.ParseErrors = function(serverErrors) {
         var errorList;
-        if (typeof serverError === "string") {
-          return [new ItemError(serverError)];
-        }
-        if (typeof serverError === "object") {
-          errorList = [];
-          angular.forEach(serverError, function(error) {
+        errorList = [];
+        angular.forEach(serverErrors, function(error) {
+          if (typeof error === "string") {
+            return this.push(new ItemError(error));
+          } else if (typeof serverErrors === "object") {
             return angular.forEach(error, function(fieldErrorList, fieldName) {
               return this.push(new FieldError(fieldName, fieldErrorList));
             }, this);
-          }, errorList);
-          return errorList;
-        }
+          }
+        }, errorList);
+        return errorList;
       };
 
       return ErrorMessage;

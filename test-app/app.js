@@ -84,7 +84,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, $timeout, OrderInfo, Accou
     _request_id: "1",
     result: "REQUEST_ERROR",
     request: {operation: "ADD_BANK_ACCOUNT"},
-    errors: "Bank account routing number not found"
+    errors: ["Bank account routing number not found"]
   };
   $scope.itemErrorMessage = ErrorMessage.FromMessage(itemErrorMsg);
 

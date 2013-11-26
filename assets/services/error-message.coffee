@@ -19,17 +19,17 @@ angular.module('bc.error-message', []).service "ErrorMessage", ->
       @request = message?.request or {}
       @errors = ErrorMessage.ParseErrors(message?.errors) or []
 
-    @ParseErrors = (serverError) ->
-      if typeof serverError is "string"
-        return [ new ItemError(serverError) ]
-      if typeof serverError is "object"
-        errorList = []
-        angular.forEach serverError, (error) ->
+    @ParseErrors = (serverErrors) ->
+      errorList = []
+      angular.forEach serverErrors, (error) ->
+        if typeof error is "string"
+          @push new ItemError(error)
+        else if typeof serverErrors is "object"
           angular.forEach error, (fieldErrorList, fieldName) ->
-            this.push new FieldError(fieldName, fieldErrorList)
-          , this
-        , errorList
-        return errorList
+            @push new FieldError(fieldName, fieldErrorList)
+          , @
+      , errorList
+      errorList
 
   FromMessage: (msg) ->
     new ErrorMessage(msg)
