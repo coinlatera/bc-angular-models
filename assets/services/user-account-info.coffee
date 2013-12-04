@@ -26,6 +26,14 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       birthMoment = moment(@dateOfBirth)
       birthMoment?.format("MMM") || ''
 
+    dayPad: ->
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.format("DD") || ''
+
+    monthPad: ->
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.format("MMM - MM") || ''
+
     displayDateOfBirth: ->
       birthMoment = moment(@dateOfBirth)
       birthMoment?.format("MM/DD/YYYY") or ''

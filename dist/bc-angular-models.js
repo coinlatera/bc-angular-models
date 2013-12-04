@@ -290,6 +290,18 @@
         return (birthMoment != null ? birthMoment.format("MMM") : void 0) || '';
       };
 
+      UserDetails.prototype.dayPad = function() {
+        var birthMoment;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? birthMoment.format("DD") : void 0) || '';
+      };
+
+      UserDetails.prototype.monthPad = function() {
+        var birthMoment;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? birthMoment.format("MMM - MM") : void 0) || '';
+      };
+
       UserDetails.prototype.displayDateOfBirth = function() {
         var birthMoment;
         birthMoment = moment(this.dateOfBirth);
