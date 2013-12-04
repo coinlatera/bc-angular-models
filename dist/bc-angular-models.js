@@ -1,5 +1,26 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info']);
+  angular.module('bc.angular-models', ['bc.capitalize', 'bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info']);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.capitalize', []).filter('capitalize', function() {
+    return function(input) {
+      var result;
+      if (input == null) {
+        input = "";
+      }
+      result = "";
+      if (typeof input === "string") {
+        result = input.charAt(0).toUpperCase() + input.slice(1);
+      } else if (input === true) {
+        result = "True";
+      } else if (input === false) {
+        result = "False";
+      }
+      return result;
+    };
+  });
 
 }).call(this);
 
