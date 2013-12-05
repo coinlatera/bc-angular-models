@@ -353,7 +353,12 @@
       };
 
       UserAccountInfo.prototype.addAccountResource = function(resource) {
-        this.accountResources.push(resource);
+        this.accountResources[resource.id] = resource;
+        return this.ensureVerificationStatus();
+      };
+
+      UserAccountInfo.prototype.deleteAccountResource = function(resourceId) {
+        delete this.accountResources[resourceId];
         return this.ensureVerificationStatus();
       };
 
