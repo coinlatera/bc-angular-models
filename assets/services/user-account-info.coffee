@@ -43,7 +43,7 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       new UserDetails(msg?.firstName, msg?.middleName, msg?.lastName, msg?.dateOfBirth, msg?.birthCountry, address)
 
   class UserAccountInfo
-    constructor: (@userDetails, @accountResources = []) ->
+    constructor: (@userDetails, @accountResources = {}) ->
       @ensureVerificationStatus()
 
     ensureVerificationStatus : ->
@@ -104,8 +104,10 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
 
   FromMessage: (msg) ->
     userDetails = UserDetails.FromMessage(msg?.userDetails)
-    accountResources = _.map msg?.accountResources or [], (resource) ->
-      AccountResource.FromMessage(resource)
+    accountResources = {}
+    angular.forEach msg?.accountResources or [], (resource) ->
+      @[resource._id] = AccountResource.FromMessage(resource)
+    , accountResources
     new UserAccountInfo(userDetails, accountResources)
 
   Empty: ->

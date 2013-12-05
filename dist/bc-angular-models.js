@@ -320,7 +320,7 @@
     UserAccountInfo = (function() {
       function UserAccountInfo(userDetails, accountResources) {
         this.userDetails = userDetails;
-        this.accountResources = accountResources != null ? accountResources : [];
+        this.accountResources = accountResources != null ? accountResources : {};
         this.ensureVerificationStatus();
       }
 
@@ -376,9 +376,10 @@
       FromMessage: function(msg) {
         var accountResources, userDetails;
         userDetails = UserDetails.FromMessage(msg != null ? msg.userDetails : void 0);
-        accountResources = _.map((msg != null ? msg.accountResources : void 0) || [], function(resource) {
-          return AccountResource.FromMessage(resource);
-        });
+        accountResources = {};
+        angular.forEach((msg != null ? msg.accountResources : void 0) || [], function(resource) {
+          return this[resource._id] = AccountResource.FromMessage(resource);
+        }, accountResources);
         return new UserAccountInfo(userDetails, accountResources);
       },
       Empty: function() {
