@@ -353,7 +353,7 @@
       };
 
       UserAccountInfo.prototype.addAccountResource = function(resource) {
-        this.accountResources[resource.id] = resource;
+        this.accountResources[resource._id] = resource;
         return this.ensureVerificationStatus();
       };
 

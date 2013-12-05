@@ -90,7 +90,7 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       else "Unverified"
 
     addAccountResource: (resource) ->
-      @accountResources[resource.id] = resource
+      @accountResources[resource._id] = resource
       @ensureVerificationStatus()
 
     deleteAccountResource: (resourceId) ->
