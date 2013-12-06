@@ -15,28 +15,28 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
     constructor: (@firstName = '', @middleName = '', @lastName = '', @dateOfBirth = '', @birthCountry = '', @residencyAddress) ->
 
     day: ->
-      birthMoment = moment(@dateOfBirth).utc()
-      birthMoment?.date() || ''
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.utc()?.date() || ''
 
     year: ->
-      birthMoment = moment(@dateOfBirth).utc()
-      birthMoment?.year() || ''
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.utc()?.year() || ''
 
     month: ->
-      birthMoment = moment(@dateOfBirth).utc()
-      birthMoment?.format("MMM") || ''
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.utc()?.format("MMM") || ''
 
     dayPad: ->
-      birthMoment = moment(@dateOfBirth).utc()
-      birthMoment?.format("DD") || ''
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.utc()?.format("DD") || ''
 
     monthPad: ->
-      birthMoment = moment(@dateOfBirth).utc()
-      birthMoment?.format("MMM - MM") || ''
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.utc()?.format("MMM - MM") || ''
 
     displayDateOfBirth: ->
-      birthMoment = moment(@dateOfBirth).utc()
-      birthMoment?.format("MM/DD/YYYY") or ''
+      birthMoment = moment(@dateOfBirth)
+      birthMoment?.utc()?.format("MM/DD/YYYY") or ''
 
     @FromMessage: (msg) ->
       address = Address.FromMessage(msg?.residencyAddress)
