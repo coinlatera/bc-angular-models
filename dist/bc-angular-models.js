@@ -274,37 +274,37 @@
 
       UserDetails.prototype.day = function() {
         var birthMoment;
-        birthMoment = moment(this.dateOfBirth);
+        birthMoment = moment(this.dateOfBirth).utc();
         return (birthMoment != null ? birthMoment.date() : void 0) || '';
       };
 
       UserDetails.prototype.year = function() {
         var birthMoment;
-        birthMoment = moment(this.dateOfBirth);
+        birthMoment = moment(this.dateOfBirth).utc();
         return (birthMoment != null ? birthMoment.year() : void 0) || '';
       };
 
       UserDetails.prototype.month = function() {
         var birthMoment;
-        birthMoment = moment(this.dateOfBirth);
+        birthMoment = moment(this.dateOfBirth).utc();
         return (birthMoment != null ? birthMoment.format("MMM") : void 0) || '';
       };
 
       UserDetails.prototype.dayPad = function() {
         var birthMoment;
-        birthMoment = moment(this.dateOfBirth);
+        birthMoment = moment(this.dateOfBirth).utc();
         return (birthMoment != null ? birthMoment.format("DD") : void 0) || '';
       };
 
       UserDetails.prototype.monthPad = function() {
         var birthMoment;
-        birthMoment = moment(this.dateOfBirth);
+        birthMoment = moment(this.dateOfBirth).utc();
         return (birthMoment != null ? birthMoment.format("MMM - MM") : void 0) || '';
       };
 
       UserDetails.prototype.displayDateOfBirth = function() {
         var birthMoment;
-        birthMoment = moment(this.dateOfBirth);
+        birthMoment = moment(this.dateOfBirth).utc();
         return (birthMoment != null ? birthMoment.format("MM/DD/YYYY") : void 0) || '';
       };
 
