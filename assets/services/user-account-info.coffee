@@ -15,27 +15,27 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
     constructor: (@firstName = '', @middleName = '', @lastName = '', @dateOfBirth = '', @birthCountry = '', @residencyAddress) ->
 
     day: ->
-      birthMoment = moment(@dateOfBirth)
+      birthMoment = moment(@dateOfBirth).utc()
       birthMoment?.date() || ''
 
     year: ->
-      birthMoment = moment(@dateOfBirth)
+      birthMoment = moment(@dateOfBirth).utc()
       birthMoment?.year() || ''
 
     month: ->
-      birthMoment = moment(@dateOfBirth)
+      birthMoment = moment(@dateOfBirth).utc()
       birthMoment?.format("MMM") || ''
 
     dayPad: ->
-      birthMoment = moment(@dateOfBirth)
+      birthMoment = moment(@dateOfBirth).utc()
       birthMoment?.format("DD") || ''
 
     monthPad: ->
-      birthMoment = moment(@dateOfBirth)
+      birthMoment = moment(@dateOfBirth).utc()
       birthMoment?.format("MMM - MM") || ''
 
     displayDateOfBirth: ->
-      birthMoment = moment(@dateOfBirth)
+      birthMoment = moment(@dateOfBirth).utc()
       birthMoment?.format("MM/DD/YYYY") or ''
 
     @FromMessage: (msg) ->
