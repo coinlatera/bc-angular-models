@@ -273,39 +273,39 @@
       }
 
       UserDetails.prototype.day = function() {
-        var birthMoment;
-        birthMoment = moment(this.dateOfBirth).utc();
-        return (birthMoment != null ? birthMoment.date() : void 0) || '';
+        var birthMoment, _ref;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.date() : void 0 : void 0) || '';
       };
 
       UserDetails.prototype.year = function() {
-        var birthMoment;
-        birthMoment = moment(this.dateOfBirth).utc();
-        return (birthMoment != null ? birthMoment.year() : void 0) || '';
+        var birthMoment, _ref;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.year() : void 0 : void 0) || '';
       };
 
       UserDetails.prototype.month = function() {
-        var birthMoment;
-        birthMoment = moment(this.dateOfBirth).utc();
-        return (birthMoment != null ? birthMoment.format("MMM") : void 0) || '';
+        var birthMoment, _ref;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MMM") : void 0 : void 0) || '';
       };
 
       UserDetails.prototype.dayPad = function() {
-        var birthMoment;
-        birthMoment = moment(this.dateOfBirth).utc();
-        return (birthMoment != null ? birthMoment.format("DD") : void 0) || '';
+        var birthMoment, _ref;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("DD") : void 0 : void 0) || '';
       };
 
       UserDetails.prototype.monthPad = function() {
-        var birthMoment;
-        birthMoment = moment(this.dateOfBirth).utc();
-        return (birthMoment != null ? birthMoment.format("MMM - MM") : void 0) || '';
+        var birthMoment, _ref;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MMM - MM") : void 0 : void 0) || '';
       };
 
       UserDetails.prototype.displayDateOfBirth = function() {
-        var birthMoment;
-        birthMoment = moment(this.dateOfBirth).utc();
-        return (birthMoment != null ? birthMoment.format("MM/DD/YYYY") : void 0) || '';
+        var birthMoment, _ref;
+        birthMoment = moment(this.dateOfBirth);
+        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MM/DD/YYYY") : void 0 : void 0) || '';
       };
 
       UserDetails.FromMessage = function(msg) {
