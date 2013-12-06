@@ -94,17 +94,25 @@
     })();
     ErrorMessage = (function() {
       function ErrorMessage(message) {
+        var _ref;
         this.request = (message != null ? message.request : void 0) || {};
-        this.errors = ErrorMessage.ParseErrors(message != null ? message.errors : void 0) || [];
+        if ((message != null ? message.result : void 0) === "REQUEST_ERROR") {
+          this.errors = ErrorMessage.ParseErrors(message != null ? message.errors : void 0) || [];
+        } else {
+          this.errors = ErrorMessage.ParseErrors(message != null ? (_ref = message.data) != null ? _ref.errors : void 0 : void 0) || [];
+        }
       }
 
       ErrorMessage.ParseErrors = function(serverErrors) {
         var errorList;
+        if (serverErrors == null) {
+          serverErrors = [];
+        }
         errorList = [];
         angular.forEach(serverErrors, function(error) {
           if (typeof error === "string") {
             return this.push(new ItemError(error));
-          } else if (typeof serverErrors === "object") {
+          } else if (typeof error === "object") {
             return angular.forEach(error, function(fieldErrorList, fieldName) {
               return this.push(new FieldError(fieldName, fieldErrorList));
             }, this);

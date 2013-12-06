@@ -88,6 +88,33 @@ app.controller('MainCtrl', function MainCtrl ($scope, $timeout, OrderInfo, Accou
   };
   $scope.itemErrorMessage = ErrorMessage.FromMessage(itemErrorMsg);
 
+  var nodeFieldErrorMsg = {
+    config: {
+      data: { someData: "Test submission" },
+      method: "POST",
+      url: "/testurl"
+    },
+    data: {
+      errors: [
+        { "errorField": ["Test message error response"] },
+        { "anotherField": ["Test field error", "Something went wrong with field"] }
+      ]
+    },
+    header: function() {}
+  };
+  $scope.nodeFieldErrorMessage = ErrorMessage.FromMessage(nodeFieldErrorMsg);
+
+  var nodeItemErrorMsg = {
+    config: {
+      data: { someData: "Test submission" },
+      method: "POST",
+      url: "/testurl"
+    },
+    data: { errors: ["Test message error response"] },
+    header: function() {}
+  };
+  $scope.nodeItemErrorMessage = ErrorMessage.FromMessage(nodeItemErrorMsg);
+
   /*
   $timeout(function() {
     $scope.userAccount.addAccountResource(AccountResource.FromMessage(resourceMsg1));

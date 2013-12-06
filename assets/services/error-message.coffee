@@ -17,14 +17,17 @@ angular.module('bc.error-message', []).service "ErrorMessage", ->
   class ErrorMessage
     constructor: (message) ->
       @request = message?.request or {}
-      @errors = ErrorMessage.ParseErrors(message?.errors) or []
+      if message?.result is "REQUEST_ERROR"
+        @errors = ErrorMessage.ParseErrors(message?.errors) or []
+      else
+        @errors = ErrorMessage.ParseErrors(message?.data?.errors) or []
 
-    @ParseErrors = (serverErrors) ->
+    @ParseErrors = (serverErrors = []) ->
       errorList = []
       angular.forEach serverErrors, (error) ->
         if typeof error is "string"
           @push new ItemError(error)
-        else if typeof serverErrors is "object"
+        else if typeof error is "object"
           angular.forEach error, (fieldErrorList, fieldName) ->
             @push new FieldError(fieldName, fieldErrorList)
           , @

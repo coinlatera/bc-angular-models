@@ -121,7 +121,7 @@
       </tbody>
     </table>
 
-    <h3>Error Message</h3>
+    <h3>Appserver Error Message</h3>
     <table>
       <tbody>
         <tr>
@@ -132,6 +132,24 @@
           <td></td>
 	</tr>
         <tr ng-repeat="error in fieldErrorMessage.errors">
+          <td> -- {{error.errorFieldId}}</td>
+          <td>{{error.toString()}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Node Server Error Message</h3>
+    <table>
+      <tbody>
+        <tr>
+          <td>Item Error Message: </td>
+	  <td>{{nodeItemErrorMessage.errors[0].toString()}}</td>
+        </tr>
+        <tr>
+	  <td>Field Error Messages: </td>
+	  <td></td>
+        </tr>
+        <tr ng-repeat="error in nodeFieldErrorMessage.errors">
           <td> -- {{error.errorFieldId}}</td>
           <td>{{error.toString()}}</td>
         </tr>
