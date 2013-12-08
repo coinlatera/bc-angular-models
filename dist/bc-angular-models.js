@@ -242,163 +242,165 @@
 }).call(this);
 
 (function() {
-  angular.module('bc.user-account-info', ['bc.account-resource']).service("UserAccountInfo", function(AccountResource) {
-    var Address, UserAccountInfo, UserDetails;
-    Address = (function() {
-      function Address(addressLine1, addressLine2, city, region, zipCode, country) {
-        this.addressLine1 = addressLine1 != null ? addressLine1 : '';
-        this.addressLine2 = addressLine2 != null ? addressLine2 : '';
-        this.city = city != null ? city : '';
-        this.region = region != null ? region : '';
-        this.zipCode = zipCode != null ? zipCode : '';
-        this.country = country != null ? country : '';
-      }
-
-      Address.prototype.toString = function() {
-        var result;
-        result = this.addressLine1;
-        if (this.addressLine2 !== '') {
-          result = result + " " + this.addressLine2;
+  angular.module('bc.user-account-info', ['bc.account-resource']).service("UserAccountInfo", [
+    'AccountResource', function(AccountResource) {
+      var Address, UserAccountInfo, UserDetails;
+      Address = (function() {
+        function Address(addressLine1, addressLine2, city, region, zipCode, country) {
+          this.addressLine1 = addressLine1 != null ? addressLine1 : '';
+          this.addressLine2 = addressLine2 != null ? addressLine2 : '';
+          this.city = city != null ? city : '';
+          this.region = region != null ? region : '';
+          this.zipCode = zipCode != null ? zipCode : '';
+          this.country = country != null ? country : '';
         }
-        return result + " " + this.city + " " + this.region + " " + this.zipCode;
-      };
 
-      Address.FromMessage = function(msg) {
-        return new Address(msg != null ? msg.addressLine1 : void 0, msg != null ? msg.addressLine2 : void 0, msg != null ? msg.city : void 0, msg != null ? msg.region : void 0, msg != null ? msg.zipCode : void 0, msg != null ? msg.country : void 0);
-      };
+        Address.prototype.toString = function() {
+          var result;
+          result = this.addressLine1;
+          if (this.addressLine2 !== '') {
+            result = result + " " + this.addressLine2;
+          }
+          return result + " " + this.city + " " + this.region + " " + this.zipCode;
+        };
 
-      return Address;
+        Address.FromMessage = function(msg) {
+          return new Address(msg != null ? msg.addressLine1 : void 0, msg != null ? msg.addressLine2 : void 0, msg != null ? msg.city : void 0, msg != null ? msg.region : void 0, msg != null ? msg.zipCode : void 0, msg != null ? msg.country : void 0);
+        };
 
-    })();
-    UserDetails = (function() {
-      function UserDetails(firstName, middleName, lastName, dateOfBirth, birthCountry, residencyAddress) {
-        this.firstName = firstName != null ? firstName : '';
-        this.middleName = middleName != null ? middleName : '';
-        this.lastName = lastName != null ? lastName : '';
-        this.dateOfBirth = dateOfBirth != null ? dateOfBirth : '';
-        this.birthCountry = birthCountry != null ? birthCountry : '';
-        this.residencyAddress = residencyAddress;
-      }
+        return Address;
 
-      UserDetails.prototype.day = function() {
-        var birthMoment, _ref;
-        birthMoment = moment(this.dateOfBirth);
-        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.date() : void 0 : void 0) || '';
-      };
+      })();
+      UserDetails = (function() {
+        function UserDetails(firstName, middleName, lastName, dateOfBirth, birthCountry, residencyAddress) {
+          this.firstName = firstName != null ? firstName : '';
+          this.middleName = middleName != null ? middleName : '';
+          this.lastName = lastName != null ? lastName : '';
+          this.dateOfBirth = dateOfBirth != null ? dateOfBirth : '';
+          this.birthCountry = birthCountry != null ? birthCountry : '';
+          this.residencyAddress = residencyAddress;
+        }
 
-      UserDetails.prototype.year = function() {
-        var birthMoment, _ref;
-        birthMoment = moment(this.dateOfBirth);
-        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.year() : void 0 : void 0) || '';
-      };
+        UserDetails.prototype.day = function() {
+          var birthMoment, _ref;
+          birthMoment = moment(this.dateOfBirth);
+          return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.date() : void 0 : void 0) || '';
+        };
 
-      UserDetails.prototype.month = function() {
-        var birthMoment, _ref;
-        birthMoment = moment(this.dateOfBirth);
-        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MMM") : void 0 : void 0) || '';
-      };
+        UserDetails.prototype.year = function() {
+          var birthMoment, _ref;
+          birthMoment = moment(this.dateOfBirth);
+          return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.year() : void 0 : void 0) || '';
+        };
 
-      UserDetails.prototype.dayPad = function() {
-        var birthMoment, _ref;
-        birthMoment = moment(this.dateOfBirth);
-        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("DD") : void 0 : void 0) || '';
-      };
+        UserDetails.prototype.month = function() {
+          var birthMoment, _ref;
+          birthMoment = moment(this.dateOfBirth);
+          return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MMM") : void 0 : void 0) || '';
+        };
 
-      UserDetails.prototype.monthPad = function() {
-        var birthMoment, _ref;
-        birthMoment = moment(this.dateOfBirth);
-        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MMM - MM") : void 0 : void 0) || '';
-      };
+        UserDetails.prototype.dayPad = function() {
+          var birthMoment, _ref;
+          birthMoment = moment(this.dateOfBirth);
+          return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("DD") : void 0 : void 0) || '';
+        };
 
-      UserDetails.prototype.displayDateOfBirth = function() {
-        var birthMoment, _ref;
-        birthMoment = moment(this.dateOfBirth);
-        return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MM/DD/YYYY") : void 0 : void 0) || '';
-      };
+        UserDetails.prototype.monthPad = function() {
+          var birthMoment, _ref;
+          birthMoment = moment(this.dateOfBirth);
+          return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MMM - MM") : void 0 : void 0) || '';
+        };
 
-      UserDetails.FromMessage = function(msg) {
-        var address;
-        address = Address.FromMessage(msg != null ? msg.residencyAddress : void 0);
-        return new UserDetails(msg != null ? msg.firstName : void 0, msg != null ? msg.middleName : void 0, msg != null ? msg.lastName : void 0, msg != null ? msg.dateOfBirth : void 0, msg != null ? msg.birthCountry : void 0, address);
-      };
+        UserDetails.prototype.displayDateOfBirth = function() {
+          var birthMoment, _ref;
+          birthMoment = moment(this.dateOfBirth);
+          return (birthMoment != null ? (_ref = birthMoment.utc()) != null ? _ref.format("MM/DD/YYYY") : void 0 : void 0) || '';
+        };
 
-      return UserDetails;
+        UserDetails.FromMessage = function(msg) {
+          var address;
+          address = Address.FromMessage(msg != null ? msg.residencyAddress : void 0);
+          return new UserDetails(msg != null ? msg.firstName : void 0, msg != null ? msg.middleName : void 0, msg != null ? msg.lastName : void 0, msg != null ? msg.dateOfBirth : void 0, msg != null ? msg.birthCountry : void 0, address);
+        };
 
-    })();
-    UserAccountInfo = (function() {
-      function UserAccountInfo(userDetails, accountResources) {
-        this.userDetails = userDetails;
-        this.accountResources = accountResources != null ? accountResources : {};
-        this.ensureVerificationStatus();
-      }
+        return UserDetails;
 
-      UserAccountInfo.prototype.ensureVerificationStatus = function() {
-        this.idApproved = _.reduce(this.accountResources, function(memo, resource) {
-          return memo || (resource.identity && resource.approved);
-        }, false);
-        this.idPending = !this.idApproved && _.reduce(this.accountResources, function(memo, resource) {
-          return memo || (resource.identity && resource.pending);
-        }, false);
-        this.idDenied = !this.idApproved && !this.idPending && _.reduce(this.accountResources, function(memo, resource) {
-          return memo || (resource.identity && resource.denied);
-        }, false);
-        this.idUnverified = !this.idApproved && !this.idPending && !this.idDenied;
-        this.residencyApproved = _.reduce(this.accountResources, function(memo, resource) {
-          return memo || (resource.residency && resource.approved);
-        }, false);
-        this.residencyPending = !this.residencyApproved && _.reduce(this.accountResources, function(memo, resource) {
-          return memo || (resource.residency && resource.pending);
-        }, false);
-        this.residencyDenied = !this.residencyApproved && !this.residencyPending && _.reduce(this.accountResources, function(memo, resource) {
-          return memo || (resource.residency && resource.denied);
-        }, false);
-        this.residencyUnverified = !this.residencyApproved && !this.residencyPending && !this.residencyDenied;
-        this.verified = this.idApproved && this.residencyApproved;
-        this.unverified = this.idUnverified || this.residencyUnverified;
-        this.denied = !this.unverified && (this.idDenied || this.residencyDenied);
-        this.pending = !this.verified && !this.unverified && !this.denied;
-        return this.displayVerificationStatus = this.verified ? "Verified" : this.pending ? "Pending" : this.denied ? "Denied" : "Unverified";
-      };
+      })();
+      UserAccountInfo = (function() {
+        function UserAccountInfo(userDetails, accountResources) {
+          this.userDetails = userDetails;
+          this.accountResources = accountResources != null ? accountResources : {};
+          this.ensureVerificationStatus();
+        }
 
-      UserAccountInfo.prototype.addAccountResource = function(resource) {
-        this.accountResources[resource._id] = resource;
-        return this.ensureVerificationStatus();
-      };
+        UserAccountInfo.prototype.ensureVerificationStatus = function() {
+          this.idApproved = _.reduce(this.accountResources, function(memo, resource) {
+            return memo || (resource.identity && resource.approved);
+          }, false);
+          this.idPending = !this.idApproved && _.reduce(this.accountResources, function(memo, resource) {
+            return memo || (resource.identity && resource.pending);
+          }, false);
+          this.idDenied = !this.idApproved && !this.idPending && _.reduce(this.accountResources, function(memo, resource) {
+            return memo || (resource.identity && resource.denied);
+          }, false);
+          this.idUnverified = !this.idApproved && !this.idPending && !this.idDenied;
+          this.residencyApproved = _.reduce(this.accountResources, function(memo, resource) {
+            return memo || (resource.residency && resource.approved);
+          }, false);
+          this.residencyPending = !this.residencyApproved && _.reduce(this.accountResources, function(memo, resource) {
+            return memo || (resource.residency && resource.pending);
+          }, false);
+          this.residencyDenied = !this.residencyApproved && !this.residencyPending && _.reduce(this.accountResources, function(memo, resource) {
+            return memo || (resource.residency && resource.denied);
+          }, false);
+          this.residencyUnverified = !this.residencyApproved && !this.residencyPending && !this.residencyDenied;
+          this.verified = this.idApproved && this.residencyApproved;
+          this.unverified = this.idUnverified || this.residencyUnverified;
+          this.denied = !this.unverified && (this.idDenied || this.residencyDenied);
+          this.pending = !this.verified && !this.unverified && !this.denied;
+          return this.displayVerificationStatus = this.verified ? "Verified" : this.pending ? "Pending" : this.denied ? "Denied" : "Unverified";
+        };
 
-      UserAccountInfo.prototype.deleteAccountResource = function(resourceId) {
-        delete this.accountResources[resourceId];
-        return this.ensureVerificationStatus();
-      };
+        UserAccountInfo.prototype.addAccountResource = function(resource) {
+          this.accountResources[resource._id] = resource;
+          return this.ensureVerificationStatus();
+        };
 
-      UserAccountInfo.prototype.displayName = function() {
-        return this.userDetails.firstName + " " + this.userDetails.lastName;
-      };
+        UserAccountInfo.prototype.deleteAccountResource = function(resourceId) {
+          delete this.accountResources[resourceId];
+          return this.ensureVerificationStatus();
+        };
 
-      UserAccountInfo.prototype.fullName = function() {
-        if (this.userDetails.middleName === '') {
-          return this.displayName();
-        } else {
-          return this.userDetails.firstName + " " + this.userDetails.middleName + " " + this.userDetails.lastName;
+        UserAccountInfo.prototype.displayName = function() {
+          return this.userDetails.firstName + " " + this.userDetails.lastName;
+        };
+
+        UserAccountInfo.prototype.fullName = function() {
+          if (this.userDetails.middleName === '') {
+            return this.displayName();
+          } else {
+            return this.userDetails.firstName + " " + this.userDetails.middleName + " " + this.userDetails.lastName;
+          }
+        };
+
+        return UserAccountInfo;
+
+      })();
+      return {
+        FromMessage: function(msg) {
+          var accountResources, userDetails;
+          userDetails = UserDetails.FromMessage(msg != null ? msg.userDetails : void 0);
+          accountResources = {};
+          angular.forEach((msg != null ? msg.accountResources : void 0) || [], function(resource) {
+            return this[resource._id] = AccountResource.FromMessage(resource);
+          }, accountResources);
+          return new UserAccountInfo(userDetails, accountResources);
+        },
+        Empty: function() {
+          return this.FromMessage();
         }
       };
-
-      return UserAccountInfo;
-
-    })();
-    return {
-      FromMessage: function(msg) {
-        var accountResources, userDetails;
-        userDetails = UserDetails.FromMessage(msg != null ? msg.userDetails : void 0);
-        accountResources = {};
-        angular.forEach((msg != null ? msg.accountResources : void 0) || [], function(resource) {
-          return this[resource._id] = AccountResource.FromMessage(resource);
-        }, accountResources);
-        return new UserAccountInfo(userDetails, accountResources);
-      },
-      Empty: function() {
-        return this.FromMessage();
-      }
-    };
-  });
+    }
+  ]);
 
 }).call(this);
