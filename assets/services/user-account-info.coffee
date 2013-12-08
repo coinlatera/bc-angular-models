@@ -1,4 +1,4 @@
-angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAccountInfo", (AccountResource) ->
+angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAccountInfo", ['AccountResource', (AccountResource) ->
   class Address
     constructor: (@addressLine1 = '', @addressLine2 = '', @city = '', @region = '', @zipCode = '', @country = '') ->
 
@@ -116,4 +116,4 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
 
   Empty: ->
     this.FromMessage()
-
+  ]
