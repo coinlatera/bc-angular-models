@@ -45,7 +45,11 @@
                 return roles.push(role.displayRole());
               }
             });
-            return roles.join(', ');
+            if (roles.length === 0) {
+              return "None";
+            } else {
+              return roles.join(', ');
+            }
           };
         }
 
@@ -54,6 +58,7 @@
       })();
       accessLevel = {
         AccessLevels: {
+          InvalidAccessLevel: AdminRole.Roles.InvalidUserRole,
           RestrictedOnly: AdminRole.Roles.RestrictedUserRole,
           StandardOnly: AdminRole.Roles.StandardUserRole,
           AdminOnly: AdminRole.Roles.AdminUserRole,

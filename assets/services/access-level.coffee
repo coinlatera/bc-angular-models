@@ -31,7 +31,7 @@ angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['Ad
           role = AdminRole.FromRoleValue(roleValue)
           if @allowedRole(role)
             roles.push role.displayRole()
-        roles.join(', ')
+        if roles.length is 0 then "None" else roles.join(', ')
 
   # ACCESS LEVELS
   # Access levels are attributed to resources. They are defined by a list of
@@ -41,10 +41,11 @@ angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['Ad
   # can be combined together (or with other roles) using the OR operator as well.
   accessLevel =
     AccessLevels:
-      RestrictedOnly    : AdminRole.Roles.RestrictedUserRole
-      StandardOnly      : AdminRole.Roles.StandardUserRole
-      AdminOnly         : AdminRole.Roles.AdminUserRole
-      SuperOnly         : AdminRole.Roles.SuperUserRole
+      InvalidAccessLevel   : AdminRole.Roles.InvalidUserRole
+      RestrictedOnly       : AdminRole.Roles.RestrictedUserRole
+      StandardOnly         : AdminRole.Roles.StandardUserRole
+      AdminOnly            : AdminRole.Roles.AdminUserRole
+      SuperOnly            : AdminRole.Roles.SuperUserRole
 
     FromAccessLevelValue: (accessLevelValue) ->
       new AccessLevel(accessLevelValue)
