@@ -1,4 +1,4 @@
-angular.module('bc.order-info', []).service "OrderInfo", () ->
+angular.module('bc.order-info', []).service "OrderInfo", ->
   OrderInfoHelper =
     Upsert: (obj, msg) =>
       if obj

@@ -1,4 +1,4 @@
-angular.module('bc.transaction-info', []).service "TransactionInfo", () ->
+angular.module('bc.transaction-info', []).service "TransactionInfo", ->
   TransactionInfoHelper =
     Upsert: (obj, msg) =>
       if obj

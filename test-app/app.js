@@ -1,6 +1,6 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AccessLevel) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -121,5 +121,10 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
   }, $scope.allRoles);
   $scope.invalidRoleValue = AdminRole.MaxRoleValue << 2;
   $scope.invalidRole = AdminRole.FromRoleValue($scope.invalidRoleValue);
+
+  $scope.allAccessLevels = [];
+  angular.forEach(AccessLevel.AccessLevels, function(accessLevel, accessLevelKey) {
+    this.push(AccessLevel.FromAccessLevelValue(accessLevel));
+  }, $scope.allAccessLevels);
 });
 

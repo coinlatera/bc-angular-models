@@ -1,23 +1,30 @@
 angular.module('bc.admin-role', []).service "AdminRole", ->
   class AdminRole
-    constructor: (@roleValue) ->
-      if @roleValue >= (Model.MaxRoleValue << 1)
-        @roleValue = 0
+    constructor: (@value) ->
+      if @value >= (adminRole.MaxRoleValue << 1)
+        @value = 0
 
       @displayRole = ->
-        if @roleValue is Model.Roles.RestrictedUserRole
+        if @value is adminRole.Roles.RestrictedUserRole
           'Restricted User'
-        else if @roleValue is Model.Roles.StandardUserRole
+        else if @value is adminRole.Roles.StandardUserRole
           'Standard User'
-        else if @roleValue is Model.Roles.AdminUserRole
+        else if @value is adminRole.Roles.AdminUserRole
           'Admin User'
-        else if @roleValue is Model.Roles.SuperUserRole
+        else if @value is adminRole.Roles.SuperUserRole
           'Super User'
         else
           'Unknown Role'
 
-
-  Model =
+  # ADMIN USER ROLES
+  # Admin user roles are attributed to an admin user. They define a category of
+  # users who can only access the resources that are allowed to their role.
+  # A basic role is a number with all its bit to 0 except for one. The position
+  # of the bit defines the role.
+  #
+  # We can define roles that are made of of serveral roles. To do that
+  # we merge the roles using the OR binary operator "|".
+  adminRole =
     Roles:
       InvalidUserRole    : 0
       RestrictedUserRole : 1 << 0
@@ -28,7 +35,7 @@ angular.module('bc.admin-role', []).service "AdminRole", ->
     FromRoleValue: (roleValue) ->
       new AdminRole(roleValue)
 
-  Model.MaxRoleValue = Model.Roles.SuperUserRole
+  adminRole.MaxRoleValue = adminRole.Roles.SuperUserRole
 
-  Model
+  adminRole
 

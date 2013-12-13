@@ -1,5 +1,75 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info', 'bc.admin-role']);
+  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info', 'bc.admin-role', 'bc.access-level']);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.access-level', ['bc.admin-role']).service("AccessLevel", [
+    'AdminRole', function(AdminRole) {
+      var AccessLevel, accessLevel;
+      AccessLevel = (function() {
+        function AccessLevel(value) {
+          this.value = value;
+          this.displayAccessLevel = function() {
+            if (this.value === accessLevel.AccessLevels.RestrictedOnly) {
+              return 'Restricted Only';
+            } else if (this.value === accessLevel.AccessLevels.StandardOnly) {
+              return 'Standard Only';
+            } else if (this.value === accessLevel.AccessLevels.AdminOnly) {
+              return 'Admin Only';
+            } else if (this.value === accessLevel.AccessLevels.SuperOnly) {
+              return 'Super Only';
+            } else if (this.value === accessLevel.AccessLevels.Super) {
+              return 'Super';
+            } else if (this.value === accessLevel.AccessLevels.Admin) {
+              return 'Admin';
+            } else if (this.value === accessLevel.AccessLevels.Standard) {
+              return 'Standard';
+            } else if (this.value === accessLevel.AccessLevels.Restricted) {
+              return 'Restricted';
+            } else {
+              return 'Unknown Access Level';
+            }
+          };
+          this.allowedRole = function(role) {
+            return this.value & role.value;
+          };
+          this.displayAllowedRoles = function() {
+            var roles,
+              _this = this;
+            roles = [];
+            angular.forEach(AdminRole.Roles, function(roleValue) {
+              var role;
+              role = AdminRole.FromRoleValue(roleValue);
+              if (_this.allowedRole(role)) {
+                return roles.push(role.displayRole());
+              }
+            });
+            return roles.join(', ');
+          };
+        }
+
+        return AccessLevel;
+
+      })();
+      accessLevel = {
+        AccessLevels: {
+          RestrictedOnly: AdminRole.Roles.RestrictedUserRole,
+          StandardOnly: AdminRole.Roles.StandardUserRole,
+          AdminOnly: AdminRole.Roles.AdminUserRole,
+          SuperOnly: AdminRole.Roles.SuperUserRole
+        },
+        FromAccessLevelValue: function(accessLevelValue) {
+          return new AccessLevel(accessLevelValue);
+        }
+      };
+      accessLevel.AccessLevels.Super = accessLevel.AccessLevels.SuperOnly;
+      accessLevel.AccessLevels.Admin = accessLevel.AccessLevels.Super | accessLevel.AccessLevels.AdminOnly;
+      accessLevel.AccessLevels.Standard = accessLevel.AccessLevels.Admin | accessLevel.AccessLevels.StandardOnly;
+      accessLevel.AccessLevels.Restricted = accessLevel.AccessLevels.Standard | accessLevel.AccessLevels.RestrictedOnly;
+      return accessLevel;
+    }
+  ]);
 
 }).call(this);
 
@@ -60,21 +130,21 @@
 
 (function() {
   angular.module('bc.admin-role', []).service("AdminRole", function() {
-    var AdminRole, Model;
+    var AdminRole, adminRole;
     AdminRole = (function() {
-      function AdminRole(roleValue) {
-        this.roleValue = roleValue;
-        if (this.roleValue >= (Model.MaxRoleValue << 1)) {
-          this.roleValue = 0;
+      function AdminRole(value) {
+        this.value = value;
+        if (this.value >= (adminRole.MaxRoleValue << 1)) {
+          this.value = 0;
         }
         this.displayRole = function() {
-          if (this.roleValue === Model.Roles.RestrictedUserRole) {
+          if (this.value === adminRole.Roles.RestrictedUserRole) {
             return 'Restricted User';
-          } else if (this.roleValue === Model.Roles.StandardUserRole) {
+          } else if (this.value === adminRole.Roles.StandardUserRole) {
             return 'Standard User';
-          } else if (this.roleValue === Model.Roles.AdminUserRole) {
+          } else if (this.value === adminRole.Roles.AdminUserRole) {
             return 'Admin User';
-          } else if (this.roleValue === Model.Roles.SuperUserRole) {
+          } else if (this.value === adminRole.Roles.SuperUserRole) {
             return 'Super User';
           } else {
             return 'Unknown Role';
@@ -85,7 +155,7 @@
       return AdminRole;
 
     })();
-    Model = {
+    adminRole = {
       Roles: {
         InvalidUserRole: 0,
         RestrictedUserRole: 1 << 0,
@@ -97,8 +167,8 @@
         return new AdminRole(roleValue);
       }
     };
-    Model.MaxRoleValue = Model.Roles.SuperUserRole;
-    return Model;
+    adminRole.MaxRoleValue = adminRole.Roles.SuperUserRole;
+    return adminRole;
   });
 
 }).call(this);
