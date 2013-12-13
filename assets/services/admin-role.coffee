@@ -36,6 +36,7 @@ angular.module('bc.admin-role', []).service "AdminRole", ->
       new AdminRole(roleValue)
 
   adminRole.MaxRoleValue = adminRole.Roles.SuperUserRole
+  adminRole.InvalidRole = adminRole.FromRoleValue(adminRole.InvalidUserRole)
 
   adminRole
 
