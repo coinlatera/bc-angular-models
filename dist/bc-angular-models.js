@@ -168,7 +168,7 @@
       }
     };
     adminRole.MaxRoleValue = adminRole.Roles.SuperUserRole;
-    adminRole.InvalidRole = adminRole.FromRoleValue(adminRole.InvalidUserRole);
+    adminRole.InvalidRole = adminRole.FromRoleValue(adminRole.Roles.InvalidUserRole);
     return adminRole;
   });
 
