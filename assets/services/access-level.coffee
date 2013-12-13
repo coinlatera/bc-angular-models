@@ -11,14 +11,14 @@ angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['Ad
           'Admin Only'
         else if @value is accessLevel.AccessLevels.SuperOnly
           'Super Only'
-        else if @value is accessLevel.AccessLevels.Super
-          'Super'
-        else if @value is accessLevel.AccessLevels.Admin
-          'Admin'
-        else if @value is accessLevel.AccessLevels.Standard
-          'Standard'
-        else if @value is accessLevel.AccessLevels.Restricted
-          'Restricted'
+        else if @value is accessLevel.AccessLevels.SuperOrAbove
+          'Super or Above'
+        else if @value is accessLevel.AccessLevels.AdminOrAbove
+          'Admin or Above'
+        else if @value is accessLevel.AccessLevels.StandardOrAbove
+          'Standard or Above'
+        else if @value is accessLevel.AccessLevels.Unrestricted
+          'Unrestricted'
         else
           'Unknown Access Level'
 
@@ -49,10 +49,10 @@ angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['Ad
     FromAccessLevelValue: (accessLevelValue) ->
       new AccessLevel(accessLevelValue)
 
-  accessLevel.AccessLevels.Super        = accessLevel.AccessLevels.SuperOnly
-  accessLevel.AccessLevels.Admin        = accessLevel.AccessLevels.Super | accessLevel.AccessLevels.AdminOnly
-  accessLevel.AccessLevels.Standard     = accessLevel.AccessLevels.Admin | accessLevel.AccessLevels.StandardOnly
-  accessLevel.AccessLevels.Restricted   = accessLevel.AccessLevels.Standard | accessLevel.AccessLevels.RestrictedOnly
+  accessLevel.AccessLevels.SuperOrAbove        = accessLevel.AccessLevels.SuperOnly
+  accessLevel.AccessLevels.AdminOrAbove        = accessLevel.AccessLevels.SuperOrAbove | accessLevel.AccessLevels.AdminOnly
+  accessLevel.AccessLevels.StandardOrAbove     = accessLevel.AccessLevels.AdminOrAbove | accessLevel.AccessLevels.StandardOnly
+  accessLevel.AccessLevels.Unrestricted        = accessLevel.AccessLevels.StandardOrAbove | accessLevel.AccessLevels.RestrictedOnly
 
   accessLevel
 ]

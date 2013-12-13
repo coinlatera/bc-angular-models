@@ -19,14 +19,14 @@
               return 'Admin Only';
             } else if (this.value === accessLevel.AccessLevels.SuperOnly) {
               return 'Super Only';
-            } else if (this.value === accessLevel.AccessLevels.Super) {
-              return 'Super';
-            } else if (this.value === accessLevel.AccessLevels.Admin) {
-              return 'Admin';
-            } else if (this.value === accessLevel.AccessLevels.Standard) {
-              return 'Standard';
-            } else if (this.value === accessLevel.AccessLevels.Restricted) {
-              return 'Restricted';
+            } else if (this.value === accessLevel.AccessLevels.SuperOrAbove) {
+              return 'Super or Above';
+            } else if (this.value === accessLevel.AccessLevels.AdminOrAbove) {
+              return 'Admin or Above';
+            } else if (this.value === accessLevel.AccessLevels.StandardOrAbove) {
+              return 'Standard or Above';
+            } else if (this.value === accessLevel.AccessLevels.Unrestricted) {
+              return 'Unrestricted';
             } else {
               return 'Unknown Access Level';
             }
@@ -63,10 +63,10 @@
           return new AccessLevel(accessLevelValue);
         }
       };
-      accessLevel.AccessLevels.Super = accessLevel.AccessLevels.SuperOnly;
-      accessLevel.AccessLevels.Admin = accessLevel.AccessLevels.Super | accessLevel.AccessLevels.AdminOnly;
-      accessLevel.AccessLevels.Standard = accessLevel.AccessLevels.Admin | accessLevel.AccessLevels.StandardOnly;
-      accessLevel.AccessLevels.Restricted = accessLevel.AccessLevels.Standard | accessLevel.AccessLevels.RestrictedOnly;
+      accessLevel.AccessLevels.SuperOrAbove = accessLevel.AccessLevels.SuperOnly;
+      accessLevel.AccessLevels.AdminOrAbove = accessLevel.AccessLevels.SuperOrAbove | accessLevel.AccessLevels.AdminOnly;
+      accessLevel.AccessLevels.StandardOrAbove = accessLevel.AccessLevels.AdminOrAbove | accessLevel.AccessLevels.StandardOnly;
+      accessLevel.AccessLevels.Unrestricted = accessLevel.AccessLevels.StandardOrAbove | accessLevel.AccessLevels.RestrictedOnly;
       return accessLevel;
     }
   ]);
@@ -168,6 +168,7 @@
       }
     };
     adminRole.MaxRoleValue = adminRole.Roles.SuperUserRole;
+    adminRole.InvalidRole = adminRole.FromRoleValue(adminRole.InvalidUserRole);
     return adminRole;
   });
 
