@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info']);
+  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info', 'bc.admin-role']);
 
 }).call(this);
 
@@ -54,6 +54,51 @@
         return new AccountResource(msg != null ? msg._id : void 0, msg != null ? msg.accountId : void 0, msg != null ? msg.awsKey : void 0, msg != null ? msg.createdAt : void 0, msg != null ? msg.verifiedAt : void 0, msg != null ? msg.failedStep : void 0, resourceInfo);
       }
     };
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.admin-role', []).service("AdminRole", function() {
+    var AdminRole, Model;
+    AdminRole = (function() {
+      function AdminRole(roleValue) {
+        this.roleValue = roleValue;
+        if (this.roleValue >= (Model.MaxRoleValue << 1)) {
+          this.roleValue = 0;
+        }
+        this.displayRole = function() {
+          if (this.roleValue === Model.Roles.RestrictedUserRole) {
+            return 'Restricted User';
+          } else if (this.roleValue === Model.Roles.StandardUserRole) {
+            return 'Standard User';
+          } else if (this.roleValue === Model.Roles.AdminUserRole) {
+            return 'Admin User';
+          } else if (this.roleValue === Model.Roles.SuperUserRole) {
+            return 'Super User';
+          } else {
+            return 'Unknown Role';
+          }
+        };
+      }
+
+      return AdminRole;
+
+    })();
+    Model = {
+      Roles: {
+        InvalidUserRole: 0,
+        RestrictedUserRole: 1 << 0,
+        StandardUserRole: 1 << 1,
+        AdminUserRole: 1 << 2,
+        SuperUserRole: 1 << 3
+      },
+      FromRoleValue: function(roleValue) {
+        return new AdminRole(roleValue);
+      }
+    };
+    Model.MaxRoleValue = Model.Roles.SuperUserRole;
+    return Model;
   });
 
 }).call(this);

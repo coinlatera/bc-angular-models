@@ -155,5 +155,19 @@
         </tr>
       </tbody>
     </table>
+
+    <h3>Admin Roles</h3>
+    <table>
+      <tbody>
+        <tr ng-repeat="role in allRoles">
+          <td>Raw value: {{role.roleValue}}</td>
+          <td>{{role.displayRole()}}</td>
+        </tr>
+        <tr>
+          <td>Invalid value: {{invalidRoleValue}}</td>
+          <td>{{invalidRole.displayRole()}}</td>
+        </tr>
+      </tbody>
+    </table>
   </body>
 </html>

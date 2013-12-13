@@ -1,6 +1,6 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
-app.controller('MainCtrl', function MainCtrl ($scope, $timeout, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -115,14 +115,11 @@ app.controller('MainCtrl', function MainCtrl ($scope, $timeout, OrderInfo, Accou
   };
   $scope.nodeItemErrorMessage = ErrorMessage.FromMessage(nodeItemErrorMsg);
 
-  /*
-  $timeout(function() {
-    $scope.userAccount.addAccountResource(AccountResource.FromMessage(resourceMsg1));
-    $scope.userAccount.addAccountResource(AccountResource.FromMessage(resourceMsg2));
-  }, 4000);
-  $timeout(function() {
-    $scope.userAccount.addAccountResource(AccountResource.FromMessage(resourceMsg3));
-  }, 8000);
-  */
+  $scope.allRoles = [];
+  angular.forEach(AdminRole.Roles, function (roleValue, roleName) {
+    this.push(AdminRole.FromRoleValue(roleValue));
+  }, $scope.allRoles);
+  $scope.invalidRoleValue = AdminRole.MaxRoleValue << 2;
+  $scope.invalidRole = AdminRole.FromRoleValue($scope.invalidRoleValue);
 });
 
