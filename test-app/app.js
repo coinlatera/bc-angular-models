@@ -1,5 +1,6 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
+app.constant('CONFIG', { debug: true });
 app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AccessLevel) {
 
   var resourceMsg1 = {

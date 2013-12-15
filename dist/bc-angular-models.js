@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info', 'bc.admin-role', 'bc.access-level']);
+  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info', 'bc.admin-role', 'bc.access-level', 'bc.logger']);
 
 }).call(this);
 
@@ -251,6 +251,23 @@
       }
     };
   });
+
+}).call(this);
+
+(function() {
+  var __slice = [].slice;
+
+  angular.module('bc.logger', []).service('logger', [
+    'CONFIG', function(CONFIG) {
+      return this.log = function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        if (CONFIG.debug) {
+          return console.log(args);
+        }
+      };
+    }
+  ]);
 
 }).call(this);
 
