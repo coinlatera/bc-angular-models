@@ -27,8 +27,7 @@ angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['Ad
 
       @displayAllowedRoles = ->
         roles = []
-        angular.forEach AdminRole.Roles, (roleValue) =>
-          role = AdminRole.FromRoleValue(roleValue)
+        angular.forEach AdminRole.Roles, (role) =>
           if @allowedRole(role)
             roles.push role.displayRole
         if roles.length is 0 then "None" else roles.join(', ')
@@ -41,11 +40,11 @@ angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['Ad
   # can be combined together (or with other roles) using the OR operator as well.
   accessLevel =
     AccessLevels:
-      InvalidAccessLevel   : AdminRole.Roles.InvalidUserRole
-      RestrictedOnly       : AdminRole.Roles.RestrictedUserRole
-      StandardOnly         : AdminRole.Roles.StandardUserRole
-      AdminOnly            : AdminRole.Roles.AdminUserRole
-      SuperOnly            : AdminRole.Roles.SuperUserRole
+      InvalidAccessLevel   : AdminRole.RoleValues.InvalidUserRoleValue
+      RestrictedOnly       : AdminRole.RoleValues.RestrictedUserRoleValue
+      StandardOnly         : AdminRole.RoleValues.StandardUserRoleValue
+      AdminOnly            : AdminRole.RoleValues.AdminUserRoleValue
+      SuperOnly            : AdminRole.RoleValues.SuperUserRoleValue
 
     FromAccessLevelValue: (accessLevelValue) ->
       new AccessLevel(accessLevelValue)

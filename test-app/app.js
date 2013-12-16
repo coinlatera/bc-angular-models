@@ -117,8 +117,8 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
   $scope.nodeItemErrorMessage = ErrorMessage.FromMessage(nodeItemErrorMsg);
 
   $scope.allRoles = [];
-  angular.forEach(AdminRole.Roles, function (roleValue, roleName) {
-    this.push(AdminRole.FromRoleValue(roleValue));
+  angular.forEach(AdminRole.Roles, function (role, roleName) {
+    this.push(role);
   }, $scope.allRoles);
   $scope.invalidRoleValue = AdminRole.MaxRoleValue << 2;
   $scope.invalidRole = AdminRole.FromRoleValue($scope.invalidRoleValue);

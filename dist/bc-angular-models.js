@@ -18,9 +18,7 @@
             var roles,
               _this = this;
             roles = [];
-            angular.forEach(AdminRole.Roles, function(roleValue) {
-              var role;
-              role = AdminRole.FromRoleValue(roleValue);
+            angular.forEach(AdminRole.Roles, function(role) {
               if (_this.allowedRole(role)) {
                 return roles.push(role.displayRole);
               }
@@ -38,11 +36,11 @@
       })();
       accessLevel = {
         AccessLevels: {
-          InvalidAccessLevel: AdminRole.Roles.InvalidUserRole,
-          RestrictedOnly: AdminRole.Roles.RestrictedUserRole,
-          StandardOnly: AdminRole.Roles.StandardUserRole,
-          AdminOnly: AdminRole.Roles.AdminUserRole,
-          SuperOnly: AdminRole.Roles.SuperUserRole
+          InvalidAccessLevel: AdminRole.RoleValues.InvalidUserRoleValue,
+          RestrictedOnly: AdminRole.RoleValues.RestrictedUserRoleValue,
+          StandardOnly: AdminRole.RoleValues.StandardUserRoleValue,
+          AdminOnly: AdminRole.RoleValues.AdminUserRoleValue,
+          SuperOnly: AdminRole.RoleValues.SuperUserRoleValue
         },
         FromAccessLevelValue: function(accessLevelValue) {
           return new AccessLevel(accessLevelValue);
@@ -157,31 +155,37 @@
     var AdminRole, adminRole;
     AdminRole = (function() {
       function AdminRole(value) {
-        this.value = value != null ? value : adminRole.Roles.InvalidUserRole;
+        this.value = value != null ? value : adminRole.RoleValues.InvalidUserRoleValue;
         this.value = Number(this.value);
         if (this.value >= (adminRole.MaxRoleValue << 1)) {
           this.value = 0;
         }
-        this.displayRole = this.value === adminRole.Roles.InvalidUserRole ? 'Invalid Role' : this.value === adminRole.Roles.RestrictedUserRole ? 'Restricted User' : this.value === adminRole.Roles.StandardUserRole ? 'Standard User' : this.value === adminRole.Roles.AdminUserRole ? 'Admin User' : this.value === adminRole.Roles.SuperUserRole ? 'Super User' : 'Unknown Role';
+        this.displayRole = this.value === adminRole.RoleValues.InvalidUserRoleValue ? 'Invalid Role' : this.value === adminRole.RoleValues.RestrictedUserRoleValue ? 'Restricted User' : this.value === adminRole.RoleValues.StandardUserRoleValue ? 'Standard User' : this.value === adminRole.RoleValues.AdminUserRoleValue ? 'Admin User' : this.value === adminRole.RoleValues.SuperUserRoleValue ? 'Super User' : 'Unknown Role';
       }
 
       return AdminRole;
 
     })();
     adminRole = {
-      Roles: {
-        InvalidUserRole: 0,
-        RestrictedUserRole: 1 << 0,
-        StandardUserRole: 1 << 1,
-        AdminUserRole: 1 << 2,
-        SuperUserRole: 1 << 3
+      RoleValues: {
+        InvalidUserRoleValue: 0,
+        RestrictedUserRoleValue: 1 << 0,
+        StandardUserRoleValue: 1 << 1,
+        AdminUserRoleValue: 1 << 2,
+        SuperUserRoleValue: 1 << 3
       },
       FromRoleValue: function(roleValue) {
         return new AdminRole(roleValue);
       }
     };
-    adminRole.MaxRoleValue = adminRole.Roles.SuperUserRole;
-    adminRole.InvalidRole = adminRole.FromRoleValue(adminRole.Roles.InvalidUserRole);
+    adminRole.MaxRoleValue = adminRole.RoleValues.SuperUserRoleValue;
+    adminRole.Roles = {
+      InvalidUserRole: adminRole.FromRoleValue(adminRole.RoleValues.InvalidUserRoleValue),
+      RestrictedUserRole: adminRole.FromRoleValue(adminRole.RoleValues.RestrictedUserRoleValue),
+      StandardUserRole: adminRole.FromRoleValue(adminRole.RoleValues.StandardUserRoleValue),
+      AdminUserRole: adminRole.FromRoleValue(adminRole.RoleValues.AdminUserRoleValue),
+      SuperUserRole: adminRole.FromRoleValue(adminRole.RoleValues.SuperUserRoleValue)
+    };
     return adminRole;
   });
 
