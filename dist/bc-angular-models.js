@@ -190,7 +190,7 @@
     adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.SuperUserRoleValue] = 'Super User';
     adminRole.DisplayRoleToRoleValueMap = {};
     angular.forEach(adminRole.RoleValueToDisplayRoleMap, function(displayRole, roleValue) {
-      return this[displayRole] = roleValue;
+      return this[displayRole] = Number(roleValue);
     }, adminRole.DisplayRoleToRoleValueMap);
     adminRole.Roles = {
       InvalidUserRole: adminRole.FromRoleValue(adminRole.RoleValues.InvalidUserRoleValue),

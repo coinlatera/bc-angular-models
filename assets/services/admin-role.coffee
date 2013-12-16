@@ -40,7 +40,7 @@ angular.module('bc.admin-role', []).service "AdminRole", ->
 
   adminRole.DisplayRoleToRoleValueMap = {}
   angular.forEach adminRole.RoleValueToDisplayRoleMap, (displayRole, roleValue) ->
-    this[displayRole] = roleValue
+    this[displayRole] = Number(roleValue)
   , adminRole.DisplayRoleToRoleValueMap
 
   adminRole.Roles =
