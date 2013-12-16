@@ -158,6 +158,7 @@
     AdminRole = (function() {
       function AdminRole(value) {
         this.value = value != null ? value : adminRole.Roles.InvalidUserRole;
+        this.value = Number(this.value);
         if (this.value >= (adminRole.MaxRoleValue << 1)) {
           this.value = 0;
         }
