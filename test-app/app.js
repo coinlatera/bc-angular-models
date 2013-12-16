@@ -1,7 +1,7 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
 app.constant('CONFIG', { debug: true });
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AccessLevel) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -127,5 +127,17 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
   angular.forEach(AccessLevel.AccessLevels, function(accessLevel, accessLevelKey) {
     this.push(AccessLevel.FromAccessLevelValue(accessLevel));
   }, $scope.allAccessLevels);
+
+  var adminMsg = {
+    _id: "1111111111111",
+    displayName: "Walter White",
+    email: "walterwhite@heisenberg.com",
+    role: 8,
+    name: {
+      familyName: "White",
+      givenName: "Walter"
+    }
+  };
+  $scope.adminAccount = AdminAccountInfo.FromMessage(adminMsg);
 });
 

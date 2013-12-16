@@ -1,6 +1,6 @@
 angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['AdminRole', (AdminRole) ->
   class AccessLevel
-    constructor: (@value) ->
+    constructor: (@value = accessLevel.AccessLevel.InvalidAccessLevel) ->
 
       @displayAccessLevel = ->
         if @value is accessLevel.AccessLevels.RestrictedOnly

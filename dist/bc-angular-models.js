@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.account-resource', 'bc.order-info', 'bc.user-account-info', 'bc.error-message', 'bc.transaction-info', 'bc.admin-role', 'bc.access-level', 'bc.logger']);
+  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.transaction-info', 'bc.user-account-info']);
 
 }).call(this);
 
@@ -9,7 +9,7 @@
       var AccessLevel, accessLevel;
       AccessLevel = (function() {
         function AccessLevel(value) {
-          this.value = value;
+          this.value = value != null ? value : accessLevel.AccessLevel.InvalidAccessLevel;
           this.displayAccessLevel = function() {
             if (this.value === accessLevel.AccessLevels.RestrictedOnly) {
               return 'Restricted Only';
@@ -134,11 +134,49 @@
 }).call(this);
 
 (function() {
+  angular.module('bc.admin-account-info', ['bc.admin-role']).service("AdminAccountInfo", [
+    'AdminRole', function(AdminRole) {
+      var AdminAccountInfo, AdminName;
+      AdminName = (function() {
+        function AdminName(givenName, familyName) {
+          this.givenName = givenName != null ? givenName : '';
+          this.familyName = familyName != null ? familyName : '';
+        }
+
+        return AdminName;
+
+      })();
+      AdminAccountInfo = (function() {
+        function AdminAccountInfo(_id, displayName, email, role, name) {
+          this._id = _id != null ? _id : '';
+          this.displayName = displayName != null ? displayName : '';
+          this.email = email != null ? email : '';
+          this.role = role;
+          this.name = name;
+        }
+
+        return AdminAccountInfo;
+
+      })();
+      return {
+        FromMessage: function(msg) {
+          var adminName, adminRole, _ref, _ref1;
+          adminRole = AdminRole.FromRoleValue(msg != null ? msg.role : void 0);
+          adminName = new AdminName(msg != null ? (_ref = msg.name) != null ? _ref.givenName : void 0 : void 0, msg != null ? (_ref1 = msg.name) != null ? _ref1.familyName : void 0 : void 0);
+          return new AdminAccountInfo(msg != null ? msg._id : void 0, msg != null ? msg.displayName : void 0, msg != null ? msg.email : void 0, adminRole, adminName);
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
   angular.module('bc.admin-role', []).service("AdminRole", function() {
     var AdminRole, adminRole;
     AdminRole = (function() {
       function AdminRole(value) {
-        this.value = value;
+        this.value = value != null ? value : adminRole.Roles.InvalidUserRole;
         if (this.value >= (adminRole.MaxRoleValue << 1)) {
           this.value = 0;
         }

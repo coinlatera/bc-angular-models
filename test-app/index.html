@@ -180,5 +180,33 @@
         </tr>
       </tbody>
     </table>
+
+    <h3>Admin Account Info</h3>
+    <table>
+      <thead>
+        <tr>
+          <td>Key</td>
+          <td>Value</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Display Name: </td>
+          <td>{{adminAccount.displayName}}</td>
+        </tr>
+        <tr>
+          <td>Full Name: </td>
+	  <td>{{adminAccount.name.familyName}}, {{adminAccount.name.givenName}}</td>
+        </tr>
+        <tr>
+          <td>Email: </td>
+          <td>{{adminAccount.email}}</td>
+        </tr>
+        <tr>
+          <td>Admin Role: </td>
+          <td>{{adminAccount.role.displayRole()}}</td>
+        </tr>
+      </tbody>
+    </table>
   </body>
 </html>
