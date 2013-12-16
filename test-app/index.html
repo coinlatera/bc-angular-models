@@ -161,11 +161,11 @@
       <tbody>
         <tr ng-repeat="role in allRoles">
           <td>Raw value: {{role.value}}</td>
-          <td>--- {{role.displayRole()}}</td>
+          <td>--- {{role.displayRole}}</td>
         </tr>
         <tr>
           <td>Invalid value: {{invalidRoleValue}}</td>
-          <td>--- {{invalidRole.displayRole()}}</td>
+          <td>--- {{invalidRole.displayRole}}</td>
         </tr>
       </tbody>
     </table>
@@ -175,7 +175,7 @@
       <tbody>
         <tr ng-repeat="level in allAccessLevels">
           <td>Raw value: {{level.value}}</td>
-          <td>--- {{level.displayAccessLevel()}}</td>
+          <td>--- {{level.displayAccessLevel}}</td>
           <td>--- {{level.displayAllowedRoles()}}</td>
         </tr>
       </tbody>
@@ -204,7 +204,7 @@
         </tr>
         <tr>
           <td>Admin Role: </td>
-          <td>{{adminAccount.role.displayRole()}}</td>
+          <td>{{adminAccount.displayRole}}</td>
         </tr>
       </tbody>
     </table>

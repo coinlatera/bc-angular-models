@@ -1,9 +1,9 @@
 angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['AdminRole', (AdminRole) ->
   class AccessLevel
     constructor: (@value = accessLevel.AccessLevel.InvalidAccessLevel) ->
-
-      @displayAccessLevel = ->
-        if @value is accessLevel.AccessLevels.RestrictedOnly
+      @displayAccessLevel = if @value is accessLevel.AccessLevels.InvalidAccessLevel
+          'Invalid Access Level'
+        else if @value is accessLevel.AccessLevels.RestrictedOnly
           'Restricted Only'
         else if @value is accessLevel.AccessLevels.StandardOnly
           'Standard Only'
@@ -30,7 +30,7 @@ angular.module('bc.access-level', ['bc.admin-role']).service "AccessLevel", ['Ad
         angular.forEach AdminRole.Roles, (roleValue) =>
           role = AdminRole.FromRoleValue(roleValue)
           if @allowedRole(role)
-            roles.push role.displayRole()
+            roles.push role.displayRole
         if roles.length is 0 then "None" else roles.join(', ')
 
   # ACCESS LEVELS

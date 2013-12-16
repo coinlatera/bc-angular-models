@@ -4,8 +4,9 @@ angular.module('bc.admin-role', []).service "AdminRole", ->
       if @value >= (adminRole.MaxRoleValue << 1)
         @value = 0
 
-      @displayRole = ->
-        if @value is adminRole.Roles.RestrictedUserRole
+      @displayRole = if @value is adminRole.Roles.InvalidUserRole
+          'Invalid Role'
+        else if @value is adminRole.Roles.RestrictedUserRole
           'Restricted User'
         else if @value is adminRole.Roles.StandardUserRole
           'Standard User'

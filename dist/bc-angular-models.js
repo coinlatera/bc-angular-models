@@ -10,27 +10,7 @@
       AccessLevel = (function() {
         function AccessLevel(value) {
           this.value = value != null ? value : accessLevel.AccessLevel.InvalidAccessLevel;
-          this.displayAccessLevel = function() {
-            if (this.value === accessLevel.AccessLevels.RestrictedOnly) {
-              return 'Restricted Only';
-            } else if (this.value === accessLevel.AccessLevels.StandardOnly) {
-              return 'Standard Only';
-            } else if (this.value === accessLevel.AccessLevels.AdminOnly) {
-              return 'Admin Only';
-            } else if (this.value === accessLevel.AccessLevels.SuperOnly) {
-              return 'Super Only';
-            } else if (this.value === accessLevel.AccessLevels.SuperOrAbove) {
-              return 'Super or Above';
-            } else if (this.value === accessLevel.AccessLevels.AdminOrAbove) {
-              return 'Admin or Above';
-            } else if (this.value === accessLevel.AccessLevels.StandardOrAbove) {
-              return 'Standard or Above';
-            } else if (this.value === accessLevel.AccessLevels.Unrestricted) {
-              return 'Unrestricted';
-            } else {
-              return 'Unknown Access Level';
-            }
-          };
+          this.displayAccessLevel = this.value === accessLevel.AccessLevels.InvalidAccessLevel ? 'Invalid Access Level' : this.value === accessLevel.AccessLevels.RestrictedOnly ? 'Restricted Only' : this.value === accessLevel.AccessLevels.StandardOnly ? 'Standard Only' : this.value === accessLevel.AccessLevels.AdminOnly ? 'Admin Only' : this.value === accessLevel.AccessLevels.SuperOnly ? 'Super Only' : this.value === accessLevel.AccessLevels.SuperOrAbove ? 'Super or Above' : this.value === accessLevel.AccessLevels.AdminOrAbove ? 'Admin or Above' : this.value === accessLevel.AccessLevels.StandardOrAbove ? 'Standard or Above' : this.value === accessLevel.AccessLevels.Unrestricted ? 'Unrestricted' : 'Unknown Access Level';
           this.allowedRole = function(role) {
             return this.value & role.value;
           };
@@ -42,7 +22,7 @@
               var role;
               role = AdminRole.FromRoleValue(roleValue);
               if (_this.allowedRole(role)) {
-                return roles.push(role.displayRole());
+                return roles.push(role.displayRole);
               }
             });
             if (roles.length === 0) {
@@ -153,6 +133,7 @@
           this.email = email != null ? email : '';
           this.role = role;
           this.name = name;
+          this.displayRole = this.role.displayRole;
         }
 
         return AdminAccountInfo;
@@ -180,19 +161,7 @@
         if (this.value >= (adminRole.MaxRoleValue << 1)) {
           this.value = 0;
         }
-        this.displayRole = function() {
-          if (this.value === adminRole.Roles.RestrictedUserRole) {
-            return 'Restricted User';
-          } else if (this.value === adminRole.Roles.StandardUserRole) {
-            return 'Standard User';
-          } else if (this.value === adminRole.Roles.AdminUserRole) {
-            return 'Admin User';
-          } else if (this.value === adminRole.Roles.SuperUserRole) {
-            return 'Super User';
-          } else {
-            return 'Unknown Role';
-          }
-        };
+        this.displayRole = this.value === adminRole.Roles.InvalidUserRole ? 'Invalid Role' : this.value === adminRole.Roles.RestrictedUserRole ? 'Restricted User' : this.value === adminRole.Roles.StandardUserRole ? 'Standard User' : this.value === adminRole.Roles.AdminUserRole ? 'Admin User' : this.value === adminRole.Roles.SuperUserRole ? 'Super User' : 'Unknown Role';
       }
 
       return AdminRole;

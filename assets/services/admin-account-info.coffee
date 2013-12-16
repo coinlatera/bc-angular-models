@@ -4,6 +4,7 @@ angular.module('bc.admin-account-info', ['bc.admin-role']).service "AdminAccount
 
   class AdminAccountInfo
     constructor: (@_id = '', @displayName = '', @email = '', @role, @name) ->
+      @displayRole = @role.displayRole
 
   FromMessage: (msg) ->
     adminRole = AdminRole.FromRoleValue msg?.role
