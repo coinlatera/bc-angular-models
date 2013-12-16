@@ -1,6 +1,7 @@
 angular.module('bc.admin-role', []).service "AdminRole", ->
   class AdminRole
     constructor: (@value = adminRole.Roles.InvalidUserRole) ->
+      @value = Number(@value)
       if @value >= (adminRole.MaxRoleValue << 1)
         @value = 0
 
