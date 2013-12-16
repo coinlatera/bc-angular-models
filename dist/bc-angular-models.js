@@ -160,7 +160,7 @@
         if (this.value >= (adminRole.MaxRoleValue << 1)) {
           this.value = 0;
         }
-        this.displayRole = this.value === adminRole.RoleValues.InvalidUserRoleValue ? 'Invalid Role' : this.value === adminRole.RoleValues.RestrictedUserRoleValue ? 'Restricted User' : this.value === adminRole.RoleValues.StandardUserRoleValue ? 'Standard User' : this.value === adminRole.RoleValues.AdminUserRoleValue ? 'Admin User' : this.value === adminRole.RoleValues.SuperUserRoleValue ? 'Super User' : 'Unknown Role';
+        this.displayRole = adminRole.RoleValueToDisplayRoleMap[this.value] || 'Unknown Role';
       }
 
       return AdminRole;
@@ -176,9 +176,22 @@
       },
       FromRoleValue: function(roleValue) {
         return new AdminRole(roleValue);
+      },
+      FromDisplayRole: function(displayRole) {
+        return adminRole.DisplayRoleToRoleValueMap[displayRole] || adminRole.RoleValues.InvalidUserRoleValue;
       }
     };
     adminRole.MaxRoleValue = adminRole.RoleValues.SuperUserRoleValue;
+    adminRole.RoleValueToDisplayRoleMap = {};
+    adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.InvalidUserRoleValue] = 'Invalid Role';
+    adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.RestrictedUserRoleValue] = 'Restricted User';
+    adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.StandardUserRoleValue] = 'Standard User';
+    adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.AdminUserRoleValue] = 'Admin User';
+    adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.SuperUserRoleValue] = 'Super User';
+    adminRole.DisplayRoleToRoleValueMap = {};
+    angular.forEach(adminRole.RoleValueToDisplayRoleMap, function(displayRole, roleValue) {
+      return this[displayRole] = roleValue;
+    }, adminRole.DisplayRoleToRoleValueMap);
     adminRole.Roles = {
       InvalidUserRole: adminRole.FromRoleValue(adminRole.RoleValues.InvalidUserRoleValue),
       RestrictedUserRole: adminRole.FromRoleValue(adminRole.RoleValues.RestrictedUserRoleValue),

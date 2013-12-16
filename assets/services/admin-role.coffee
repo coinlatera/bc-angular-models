@@ -5,18 +5,7 @@ angular.module('bc.admin-role', []).service "AdminRole", ->
       if @value >= (adminRole.MaxRoleValue << 1)
         @value = 0
 
-      @displayRole = if @value is adminRole.RoleValues.InvalidUserRoleValue
-          'Invalid Role'
-        else if @value is adminRole.RoleValues.RestrictedUserRoleValue
-          'Restricted User'
-        else if @value is adminRole.RoleValues.StandardUserRoleValue
-          'Standard User'
-        else if @value is adminRole.RoleValues.AdminUserRoleValue
-          'Admin User'
-        else if @value is adminRole.RoleValues.SuperUserRoleValue
-          'Super User'
-        else
-          'Unknown Role'
+      @displayRole = adminRole.RoleValueToDisplayRoleMap[@value] or 'Unknown Role'
 
   # ADMIN USER ROLES
   # Admin user roles are attributed to an admin user. They define a category of
@@ -37,7 +26,22 @@ angular.module('bc.admin-role', []).service "AdminRole", ->
     FromRoleValue: (roleValue) ->
       new AdminRole(roleValue)
 
+    FromDisplayRole: (displayRole) ->
+      adminRole.DisplayRoleToRoleValueMap[displayRole] or adminRole.RoleValues.InvalidUserRoleValue
+
   adminRole.MaxRoleValue = adminRole.RoleValues.SuperUserRoleValue
+
+  adminRole.RoleValueToDisplayRoleMap = {}
+  adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.InvalidUserRoleValue] = 'Invalid Role'
+  adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.RestrictedUserRoleValue] = 'Restricted User'
+  adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.StandardUserRoleValue] = 'Standard User'
+  adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.AdminUserRoleValue] = 'Admin User'
+  adminRole.RoleValueToDisplayRoleMap[adminRole.RoleValues.SuperUserRoleValue] = 'Super User'
+
+  adminRole.DisplayRoleToRoleValueMap = {}
+  angular.forEach adminRole.RoleValueToDisplayRoleMap, (displayRole, roleValue) ->
+    this[displayRole] = roleValue
+  , adminRole.DisplayRoleToRoleValueMap
 
   adminRole.Roles =
     InvalidUserRole    : adminRole.FromRoleValue(adminRole.RoleValues.InvalidUserRoleValue)
@@ -45,6 +49,7 @@ angular.module('bc.admin-role', []).service "AdminRole", ->
     StandardUserRole   : adminRole.FromRoleValue(adminRole.RoleValues.StandardUserRoleValue)
     AdminUserRole      : adminRole.FromRoleValue(adminRole.RoleValues.AdminUserRoleValue)
     SuperUserRole      : adminRole.FromRoleValue(adminRole.RoleValues.SuperUserRoleValue)
+
 
   adminRole
 
