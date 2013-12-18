@@ -3,7 +3,7 @@ angular.module('bc.account-resource', []).service "AccountResource", ->
     constructor: (@verificationType = '', @fileName = '', @docType = '', @docId = '', @docStatus = '', @userDisplayName = '', @email = '') ->
 
   class AccountResource
-    constructor: (@_id = '', @accountId = '', @awsKey = '', @createdAt = '', @verifiedAt = '', @failedStep = '', @resourceInfo) ->
+    constructor: (@_id = '', @awsKey = '', @createdAt = '', @verifiedAt = '', @failedStep = '', @resourceInfo) ->
       @actionStatus = if @resourceInfo.docStatus == 'pending'
         @resourceInfo.docStatus + '-' + @resourceInfo.verificationType
       else
@@ -32,5 +32,5 @@ angular.module('bc.account-resource', []).service "AccountResource", ->
     msgResource = msg?.resourceInfo
     resourceInfo = new ResourceInfo(msgResource?.verificationType, msgResource?.fileName, msgResource?.docType,
                                     msgResource?.docId, msgResource?.docStatus, msgResource?.userDisplayName, msgResource?.email)
-    new AccountResource(msg?._id, msg?.accountId, msg?.awsKey, msg?.createdAt, msg?.verifiedAt, msg?.failedStep, resourceInfo)
+    new AccountResource(msg?._id, msg?.awsKey, msg?.createdAt, msg?.verifiedAt, msg?.failedStep, resourceInfo)
 

@@ -74,10 +74,9 @@
 
     })();
     AccountResource = (function() {
-      function AccountResource(_id, accountId, awsKey, createdAt, verifiedAt, failedStep, resourceInfo) {
+      function AccountResource(_id, awsKey, createdAt, verifiedAt, failedStep, resourceInfo) {
         var empty;
         this._id = _id != null ? _id : '';
-        this.accountId = accountId != null ? accountId : '';
         this.awsKey = awsKey != null ? awsKey : '';
         this.createdAt = createdAt != null ? createdAt : '';
         this.verifiedAt = verifiedAt != null ? verifiedAt : '';
@@ -104,7 +103,7 @@
         var msgResource, resourceInfo;
         msgResource = msg != null ? msg.resourceInfo : void 0;
         resourceInfo = new ResourceInfo(msgResource != null ? msgResource.verificationType : void 0, msgResource != null ? msgResource.fileName : void 0, msgResource != null ? msgResource.docType : void 0, msgResource != null ? msgResource.docId : void 0, msgResource != null ? msgResource.docStatus : void 0, msgResource != null ? msgResource.userDisplayName : void 0, msgResource != null ? msgResource.email : void 0);
-        return new AccountResource(msg != null ? msg._id : void 0, msg != null ? msg.accountId : void 0, msg != null ? msg.awsKey : void 0, msg != null ? msg.createdAt : void 0, msg != null ? msg.verifiedAt : void 0, msg != null ? msg.failedStep : void 0, resourceInfo);
+        return new AccountResource(msg != null ? msg._id : void 0, msg != null ? msg.awsKey : void 0, msg != null ? msg.createdAt : void 0, msg != null ? msg.verifiedAt : void 0, msg != null ? msg.failedStep : void 0, resourceInfo);
       }
     };
   });
@@ -317,9 +316,8 @@
       }
     };
     OrderInfo = (function() {
-      function OrderInfo(id, accountId, offered, received, orderType, status, timestamp, history) {
+      function OrderInfo(id, offered, received, orderType, status, timestamp, history) {
         this.id = id;
-        this.accountId = accountId;
         this.offered = offered;
         this.received = received;
         this.orderType = orderType;
@@ -350,7 +348,7 @@
         if (((_ref = order.status) != null ? _ref.status : void 0) === 'reopened') {
           status = 'reopened';
         }
-        order = new OrderInfo(order.id, order.accountId, order.offered, order.received, order.order_type, status, order.timestamp, msg._history);
+        order = new OrderInfo(order.id, order.offered, order.received, order.order_type, status, order.timestamp, msg._history);
         return OrderInfoHelper.Upsert(order, msg);
       };
 

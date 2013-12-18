@@ -11,7 +11,7 @@ angular.module('bc.order-info', []).service "OrderInfo", ->
         OrderInfo.FromMessage(msg)
 
   class OrderInfo
-    constructor: (@id, @accountId, @offered, @received, @orderType, @status, @timestamp, @history) ->
+    constructor: (@id, @offered, @received, @orderType, @status, @timestamp, @history) ->
       @original_offered = @offered
       @original_received = @received
 
@@ -31,7 +31,7 @@ angular.module('bc.order-info', []).service "OrderInfo", ->
       if order.status?.status is 'reopened'
         status = 'reopened'
 
-      order = new OrderInfo(order.id, order.accountId, order.offered, order.received, order.order_type, status, order.timestamp, msg._history)
+      order = new OrderInfo(order.id, order.offered, order.received, order.order_type, status, order.timestamp, msg._history)
       OrderInfoHelper.Upsert(order, msg)
 
   OrderInfoHelper
