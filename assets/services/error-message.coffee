@@ -18,11 +18,11 @@ angular.module('bc.error-message', []).service "ErrorMessage", ->
     constructor: (message) ->
       @request = message?.request or {}
       if message?.result is "REQUEST_ERROR"
-        @errors = ErrorMessage.ParseErrors(message?.errors) or []
+        @errors = ErrorMessage.ParseSocketErrors(message?.errors) or []
       else
-        @errors = ErrorMessage.ParseErrors(message?.data?.errors) or []
+        @errors = ErrorMessage.ParseServerErrors(message?.data?.errors) or []
 
-    @ParseErrors = (serverErrors = []) ->
+    @ParseSocketErrors = (serverErrors = []) ->
       errorList = []
       angular.forEach serverErrors, (error) ->
         if typeof error is "string"
@@ -31,6 +31,16 @@ angular.module('bc.error-message', []).service "ErrorMessage", ->
           angular.forEach error, (fieldErrorList, fieldName) ->
             @push new FieldError(fieldName, fieldErrorList)
           , @
+      , errorList
+      errorList
+
+    @ParseServerErrors = (allErrors = []) ->
+      errorList = []
+      angular.forEach allErrors, (error) ->
+        if typeof error is "string"
+          @push new ItemError error
+        else if typeof error is "object"
+          @push new FieldError error.param, [error.msg]
       , errorList
       errorList
 
