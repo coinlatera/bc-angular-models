@@ -287,6 +287,12 @@
     return {
       FromMessage: function(msg) {
         return new ErrorMessage(msg);
+      },
+      ItemErrorFromMessage: function(msg) {
+        return new ItemError(msg);
+      },
+      FieldErrorFromMessage: function(name, errors) {
+        return new FieldError(name, errors);
       }
     };
   });

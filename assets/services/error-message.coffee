@@ -45,4 +45,8 @@ angular.module('bc.error-message', []).service "ErrorMessage", ->
       errorList
 
   FromMessage: (msg) ->
-    new ErrorMessage(msg)
+    new ErrorMessage msg
+  ItemErrorFromMessage: (msg) ->
+    new ItemError msg
+  FieldErrorFromMessage: (name, errors) ->
+    new FieldError name, errors
