@@ -20,7 +20,7 @@ angular.module('bc.error-message', []).service "ErrorMessage", ->
       if message?.result is "REQUEST_ERROR"
         @errors = ErrorMessage.ParseSocketErrors(message?.errors) or []
       else
-        @errors = ErrorMessage.ParseServerErrors(message?.errors) or []
+        @errors = ErrorMessage.ParseServerErrors(message?.data?.errors or message?.errors) or []
 
     @ParseSocketErrors = (serverErrors = []) ->
       errorList = []

@@ -239,11 +239,12 @@
     })();
     ErrorMessage = (function() {
       function ErrorMessage(message) {
+        var _ref;
         this.request = (message != null ? message.request : void 0) || {};
         if ((message != null ? message.result : void 0) === "REQUEST_ERROR") {
           this.errors = ErrorMessage.ParseSocketErrors(message != null ? message.errors : void 0) || [];
         } else {
-          this.errors = ErrorMessage.ParseServerErrors(message != null ? message.errors : void 0) || [];
+          this.errors = ErrorMessage.ParseServerErrors((message != null ? (_ref = message.data) != null ? _ref.errors : void 0 : void 0) || (message != null ? message.errors : void 0)) || [];
         }
       }
 
