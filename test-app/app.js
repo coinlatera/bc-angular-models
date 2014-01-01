@@ -77,12 +77,6 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
       contact: {
         newsletters: true,
         promotions: false
-      },
-      autoWithdrawal: {
-        saleAutoWithdrawalSource: {
-          id: '11111111-1111-1111-1111-111111111111'
-        },
-        purchaseAutoTransferAddress: ''
       }
     },
     accountResources: [resourceMsg1, resourceMsg2, resourceMsg3]

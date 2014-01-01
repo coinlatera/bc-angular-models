@@ -592,7 +592,7 @@
 
 (function() {
   angular.module('bc.user-account-settings', []).service("UserAccountSettings", function() {
-    var AutoWithdrawalSettings, ContactSettings, NotificationsSettings, SecuritySettings, UserAccountSettings;
+    var ContactSettings, NotificationsSettings, SecuritySettings, UserAccountSettings;
     SecuritySettings = (function() {
       function SecuritySettings(fiatWithdrawalConfirmation, btcWithdrawalConfirmation) {
         this.fiatWithdrawalConfirmation = fiatWithdrawalConfirmation != null ? fiatWithdrawalConfirmation : true;
@@ -635,33 +635,11 @@
       return ContactSettings;
 
     })();
-    AutoWithdrawalSettings = (function() {
-      function AutoWithdrawalSettings(saleAutoWithdrawalSource, purchaseAutoTransferAddress) {
-        this.saleAutoWithdrawalSource = saleAutoWithdrawalSource != null ? saleAutoWithdrawalSource : {};
-        this.purchaseAutoTransferAddress = purchaseAutoTransferAddress != null ? purchaseAutoTransferAddress : '';
-      }
-
-      AutoWithdrawalSettings.prototype.shouldAutoWithdrawSale = function() {
-        return this.saleAutoWithdrawalSource.id != null;
-      };
-
-      AutoWithdrawalSettings.prototype.shouldAutoTransferPurchase = function() {
-        return this.purchaseAutoTransferAddress !== '';
-      };
-
-      AutoWithdrawalSettings.FromMessage = function(msg) {
-        return new AutoWithdrawalSettings(msg != null ? msg.saleAutoWithdrawalSource : void 0, msg != null ? msg.purchaseAutoTransferAddress : void 0);
-      };
-
-      return AutoWithdrawalSettings;
-
-    })();
     UserAccountSettings = (function() {
-      function UserAccountSettings(security, notifications, contact, autoWithdrawal) {
+      function UserAccountSettings(security, notifications, contact) {
         this.security = security != null ? security : {};
         this.notifications = notifications != null ? notifications : {};
         this.contact = contact != null ? contact : {};
-        this.autoWithdrawal = autoWithdrawal != null ? autoWithdrawal : {};
       }
 
       return UserAccountSettings;
@@ -669,12 +647,11 @@
     })();
     return {
       FromMessage: function(msg) {
-        var autoWithdrawalSettings, contactSettings, notificationsSettings, securitySettings;
+        var contactSettings, notificationsSettings, securitySettings;
         securitySettings = SecuritySettings.FromMessage(msg != null ? msg.security : void 0);
         notificationsSettings = NotificationsSettings.FromMessage(msg != null ? msg.notifications : void 0);
         contactSettings = ContactSettings.FromMessage(msg != null ? msg.contact : void 0);
-        autoWithdrawalSettings = AutoWithdrawalSettings.FromMessage(msg != null ? msg.autoWithdrawal : void 0);
-        return new UserAccountSettings(securitySettings, notificationsSettings, contactSettings, autoWithdrawalSettings);
+        return new UserAccountSettings(securitySettings, notificationsSettings, contactSettings);
       }
     };
   });

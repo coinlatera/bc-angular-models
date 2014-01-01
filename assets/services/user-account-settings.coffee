@@ -17,25 +17,12 @@ angular.module('bc.user-account-settings', []).service "UserAccountSettings", ->
     @FromMessage: (msg) ->
       new ContactSettings(msg?.newsletters, msg?.promotions)
 
-  class AutoWithdrawalSettings
-    constructor: (@saleAutoWithdrawalSource = {}, @purchaseAutoTransferAddress = '') ->
-
-    shouldAutoWithdrawSale: ->
-      @saleAutoWithdrawalSource.id?
-
-    shouldAutoTransferPurchase: ->
-      @purchaseAutoTransferAddress isnt ''
-
-    @FromMessage: (msg) ->
-      new AutoWithdrawalSettings(msg?.saleAutoWithdrawalSource, msg?.purchaseAutoTransferAddress)
-
   class UserAccountSettings
-    constructor: (@security = {}, @notifications = {}, @contact = {}, @autoWithdrawal = {}) ->
+    constructor: (@security = {}, @notifications = {}, @contact = {}) ->
 
   FromMessage: (msg) ->
     securitySettings = SecuritySettings.FromMessage(msg?.security)
     notificationsSettings = NotificationsSettings.FromMessage(msg?.notifications)
     contactSettings = ContactSettings.FromMessage(msg?.contact)
-    autoWithdrawalSettings = AutoWithdrawalSettings.FromMessage(msg?.autoWithdrawal)
-    new UserAccountSettings(securitySettings, notificationsSettings, contactSettings, autoWithdrawalSettings)
+    new UserAccountSettings(securitySettings, notificationsSettings, contactSettings)
 
