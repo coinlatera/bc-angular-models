@@ -1,7 +1,7 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
 app.constant('CONFIG', { debug: true });
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -135,5 +135,30 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
     }
   };
   $scope.adminAccount = AdminAccountInfo.FromMessage(adminMsg);
+
+  var settingsMsg = {
+    security: {
+      fiatWithdrawalConfirmation: false,
+      btcWithdrawalConfirmation: true
+    },
+    notifications: {
+      fiatDepositComplete: false,
+      btcDepositComplete: true,
+      pendingOrderComplete: false,
+      bankAccountAdded: false,
+      fundsWithdrawn: true
+    },
+    contact: {
+      newsletters: true,
+      promotions: false
+    },
+    autoWithdrawal: {
+      saleAutoWithdrawalSource: {
+        id: '11111111-1111-1111-1111-111111111111'
+      },
+      purchaseAutoTransferAddress: ''
+    }
+  };
+  $scope.userAccountSettings = UserAccountSettings.FromMessage(settingsMsg);
 });
 

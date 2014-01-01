@@ -204,5 +204,67 @@
         </tr>
       </tbody>
     </table>
+
+    <h3>User Account Settings</h3>
+    <table>
+      <tbody>
+        <tr>
+          <td colspan="2"><strong>Security Settings</strong></td>
+        </tr>
+        <tr>
+          <td>Fiat Withdrawal Confirmation: </td>
+          <td>{{userAccountSettings.security.fiatWithdrawalConfirmation}}</td>
+        </tr>
+        <tr>
+          <td>Bitcoin Withdrawal Confirmation: </td>
+	  <td>{{userAccountSettings.security.btcWithdrawalConfirmation}}</td>
+        </tr>
+        <tr>
+          <td colspan="2"><strong>Notifications Settings</strong></td>
+        </tr>
+        <tr>
+          <td>Fiat Deposit Complete: </td>
+          <td>{{userAccountSettings.notifications.fiatDepositComplete}}</td>
+        </tr>
+        <tr>
+          <td>Bitcoin Deposit Complete: </td>
+          <td>{{userAccountSettings.notifications.btcDepositComplete}}</td>
+        </tr>
+        <tr>
+          <td>Pending Order Complete: </td>
+          <td>{{userAccountSettings.notifications.pendingOrderComplete}}</td>
+        </tr>
+        <tr>
+          <td>Bank Account Added: </td>
+          <td>{{userAccountSettings.notifications.bankAccountAdded}}</td>
+        </tr>
+        <tr>
+          <td>Funds Withdrawn: </td>
+          <td>{{userAccountSettings.notifications.fundsWithdrawn}}</td>
+        </tr>
+        <tr>
+          <td colspan="2"><strong>Contact Settings</strong></td>
+        </tr>
+        <tr>
+          <td>Newsletters: </td>
+          <td>{{userAccountSettings.contact.newsletters}}</td>
+        </tr>
+        <tr>
+          <td>Promotions: </td>
+          <td>{{userAccountSettings.contact.promotions}}</td>
+        </tr>
+        <tr>
+          <td colspan="2"><strong>Auto Withdrawal Setting</strong>s</td>
+        </tr>
+        <tr>
+          <td>Auto Withdraw Funds after Sale: </td>
+          <td>{{userAccountSettings.autoWithdrawal.shouldAutoWithdrawSale()}}</td>
+        </tr>
+        <tr>
+          <td>Auto Transfer BTC after Purchase: </td>
+          <td>{{userAccountSettings.autoWithdrawal.shouldAutoTransferPurchase()}}</td>
+        </tr>
+      </tbody>
+    </table>
   </body>
 </html>

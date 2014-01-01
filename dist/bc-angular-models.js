@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.transaction-info', 'bc.user-account-info']);
+  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
 
 }).call(this);
 
@@ -585,5 +585,96 @@
       };
     }
   ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.user-account-settings', []).service("UserAccountSettings", function() {
+    var AutoWithdrawalSettings, ContactSettings, NotificationsSettings, SecuritySettings, UserAccountSettings;
+    SecuritySettings = (function() {
+      function SecuritySettings(fiatWithdrawalConfirmation, btcWithdrawalConfirmation) {
+        this.fiatWithdrawalConfirmation = fiatWithdrawalConfirmation != null ? fiatWithdrawalConfirmation : true;
+        this.btcWithdrawalConfirmation = btcWithdrawalConfirmation != null ? btcWithdrawalConfirmation : true;
+      }
+
+      SecuritySettings.FromMessage = function(msg) {
+        return new SecuritySettings(msg != null ? msg.fiatWithdrawalConfirmation : void 0, msg != null ? msg.btcWithdrawalConfirmation : void 0);
+      };
+
+      return SecuritySettings;
+
+    })();
+    NotificationsSettings = (function() {
+      function NotificationsSettings(fiatDepositComplete, btcDepositComplete, pendingOrderComplete, bankAccountAdded, fundsWithdrawn) {
+        this.fiatDepositComplete = fiatDepositComplete != null ? fiatDepositComplete : true;
+        this.btcDepositComplete = btcDepositComplete != null ? btcDepositComplete : true;
+        this.pendingOrderComplete = pendingOrderComplete != null ? pendingOrderComplete : true;
+        this.bankAccountAdded = bankAccountAdded != null ? bankAccountAdded : true;
+        this.fundsWithdrawn = fundsWithdrawn != null ? fundsWithdrawn : true;
+      }
+
+      NotificationsSettings.FromMessage = function(msg) {
+        return new NotificationsSettings(msg != null ? msg.fiatDepositComplete : void 0, msg != null ? msg.btcDepositComplete : void 0, msg != null ? msg.pendingOrderComplete : void 0, msg != null ? msg.bankAccountAdded : void 0, msg != null ? msg.fundsWithdrawn : void 0);
+      };
+
+      return NotificationsSettings;
+
+    })();
+    ContactSettings = (function() {
+      function ContactSettings(newsletters, promotions) {
+        this.newsletters = newsletters != null ? newsletters : false;
+        this.promotions = promotions != null ? promotions : false;
+      }
+
+      ContactSettings.FromMessage = function(msg) {
+        return new ContactSettings(msg != null ? msg.newsletters : void 0, msg != null ? msg.promotions : void 0);
+      };
+
+      return ContactSettings;
+
+    })();
+    AutoWithdrawalSettings = (function() {
+      function AutoWithdrawalSettings(saleAutoWithdrawalSource, purchaseAutoTransferAddress) {
+        this.saleAutoWithdrawalSource = saleAutoWithdrawalSource != null ? saleAutoWithdrawalSource : {};
+        this.purchaseAutoTransferAddress = purchaseAutoTransferAddress != null ? purchaseAutoTransferAddress : '';
+      }
+
+      AutoWithdrawalSettings.prototype.shouldAutoWithdrawSale = function() {
+        return this.saleAutoWithdrawalSource.id != null;
+      };
+
+      AutoWithdrawalSettings.prototype.shouldAutoTransferPurchase = function() {
+        return this.purchaseAutoTransferAddress !== '';
+      };
+
+      AutoWithdrawalSettings.FromMessage = function(msg) {
+        return new AutoWithdrawalSettings(msg != null ? msg.saleAutoWithdrawalSource : void 0, msg != null ? msg.purchaseAutoTransferAddress : void 0);
+      };
+
+      return AutoWithdrawalSettings;
+
+    })();
+    UserAccountSettings = (function() {
+      function UserAccountSettings(security, notifications, contact, autoWithdrawal) {
+        this.security = security != null ? security : {};
+        this.notifications = notifications != null ? notifications : {};
+        this.contact = contact != null ? contact : {};
+        this.autoWithdrawal = autoWithdrawal != null ? autoWithdrawal : {};
+      }
+
+      return UserAccountSettings;
+
+    })();
+    return {
+      FromMessage: function(msg) {
+        var autoWithdrawalSettings, contactSettings, notificationsSettings, securitySettings;
+        securitySettings = SecuritySettings.FromMessage(msg != null ? msg.security : void 0);
+        notificationsSettings = NotificationsSettings.FromMessage(msg != null ? msg.notifications : void 0);
+        contactSettings = ContactSettings.FromMessage(msg != null ? msg.contact : void 0);
+        autoWithdrawalSettings = AutoWithdrawalSettings.FromMessage(msg != null ? msg.autoWithdrawal : void 0);
+        return new UserAccountSettings(securitySettings, notificationsSettings, contactSettings, autoWithdrawalSettings);
+      }
+    };
+  });
 
 }).call(this);
