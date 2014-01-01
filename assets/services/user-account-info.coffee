@@ -1,4 +1,4 @@
-angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAccountInfo", ['AccountResource', (AccountResource) ->
+angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAccountInfo", ['AccountResource', 'UserAccountSettings', (AccountResource, UserAccountSettings) ->
   class Address
     constructor: (@addressLine1 = '', @addressLine2 = '', @city = '', @region = '', @zipCode = '', @country = '') ->
 
@@ -43,7 +43,7 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       new UserDetails(msg?.firstName, msg?.middleName, msg?.lastName, msg?.dateOfBirth, msg?.birthCountry, address)
 
   class UserAccountInfo
-    constructor: (@userDetails, @accountResources = {}) ->
+    constructor: (@userDetails, @accountSettings = {}, @accountResources = {}) ->
       @ensureVerificationStatus()
 
     ensureVerificationStatus : ->
@@ -108,11 +108,12 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
 
   FromMessage: (msg) ->
     userDetails = UserDetails.FromMessage(msg?.userDetails)
+    accountSettings = UserAccountSettings.FromMessage(msg?.accountSettings)
     accountResources = {}
     angular.forEach msg?.accountResources or [], (resource) ->
       @[resource._id] = AccountResource.FromMessage(resource)
     , accountResources
-    new UserAccountInfo(userDetails, accountResources)
+    new UserAccountInfo(userDetails, accountSettings, accountResources)
 
   Empty: ->
     this.FromMessage()

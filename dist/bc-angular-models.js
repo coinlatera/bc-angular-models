@@ -426,7 +426,7 @@
 
 (function() {
   angular.module('bc.user-account-info', ['bc.account-resource']).service("UserAccountInfo", [
-    'AccountResource', function(AccountResource) {
+    'AccountResource', 'UserAccountSettings', function(AccountResource, UserAccountSettings) {
       var Address, UserAccountInfo, UserDetails;
       Address = (function() {
         function Address(addressLine1, addressLine2, city, region, zipCode, country) {
@@ -510,8 +510,9 @@
 
       })();
       UserAccountInfo = (function() {
-        function UserAccountInfo(userDetails, accountResources) {
+        function UserAccountInfo(userDetails, accountSettings, accountResources) {
           this.userDetails = userDetails;
+          this.accountSettings = accountSettings != null ? accountSettings : {};
           this.accountResources = accountResources != null ? accountResources : {};
           this.ensureVerificationStatus();
         }
@@ -571,13 +572,14 @@
       })();
       return {
         FromMessage: function(msg) {
-          var accountResources, userDetails;
+          var accountResources, accountSettings, userDetails;
           userDetails = UserDetails.FromMessage(msg != null ? msg.userDetails : void 0);
+          accountSettings = UserAccountSettings.FromMessage(msg != null ? msg.accountSettings : void 0);
           accountResources = {};
           angular.forEach((msg != null ? msg.accountResources : void 0) || [], function(resource) {
             return this[resource._id] = AccountResource.FromMessage(resource);
           }, accountResources);
-          return new UserAccountInfo(userDetails, accountResources);
+          return new UserAccountInfo(userDetails, accountSettings, accountResources);
         },
         Empty: function() {
           return this.FromMessage();

@@ -62,6 +62,29 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
         country: "United States"
       }
     },
+    accountSettings: {
+      security: {
+        fiatWithdrawalConfirmation: false,
+        btcWithdrawalConfirmation: true
+      },
+      notifications: {
+        fiatDepositComplete: false,
+        btcDepositComplete: true,
+        pendingOrderComplete: false,
+        bankAccountAdded: false,
+        fundsWithdrawn: true
+      },
+      contact: {
+        newsletters: true,
+        promotions: false
+      },
+      autoWithdrawal: {
+        saleAutoWithdrawalSource: {
+          id: '11111111-1111-1111-1111-111111111111'
+        },
+        purchaseAutoTransferAddress: ''
+      }
+    },
     accountResources: [resourceMsg1, resourceMsg2, resourceMsg3]
   };
   $scope.userAccount = UserAccountInfo.FromMessage(userMsg);
@@ -135,30 +158,5 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
     }
   };
   $scope.adminAccount = AdminAccountInfo.FromMessage(adminMsg);
-
-  var settingsMsg = {
-    security: {
-      fiatWithdrawalConfirmation: false,
-      btcWithdrawalConfirmation: true
-    },
-    notifications: {
-      fiatDepositComplete: false,
-      btcDepositComplete: true,
-      pendingOrderComplete: false,
-      bankAccountAdded: false,
-      fundsWithdrawn: true
-    },
-    contact: {
-      newsletters: true,
-      promotions: false
-    },
-    autoWithdrawal: {
-      saleAutoWithdrawalSource: {
-        id: '11111111-1111-1111-1111-111111111111'
-      },
-      purchaseAutoTransferAddress: ''
-    }
-  };
-  $scope.userAccountSettings = UserAccountSettings.FromMessage(settingsMsg);
 });
 
