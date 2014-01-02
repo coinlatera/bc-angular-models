@@ -35,6 +35,8 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
     _id: "33333333333333",
     awsKey: "12345678-abcd-efgh-ijkl-09876543_randomdigits_fail.pdf",
     createdAt: new Date().getTime(),
+    failedStep: 2,
+    verifiedAt: new Date().getTime(),
     resourceInfo: {
       verificationType: "residency",
       fileName: "fail.pdf",

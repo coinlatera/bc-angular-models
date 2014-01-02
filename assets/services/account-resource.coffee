@@ -2,6 +2,23 @@ angular.module('bc.account-resource', []).service "AccountResource", ->
   class ResourceInfo
     constructor: (@verificationType = '', @fileName = '', @docType = '', @docId = '', @docStatus = '', @userDisplayName = '', @email = '') ->
 
+  IdentityErrorMessages = [
+    "Document is not an allowed ID type",
+    "Document is not in full color",
+    "Document has been modified",
+    "Document is not clearly legible",
+    "Document is no longer current or valid",
+    "Document doesn't match personal details"
+  ]
+
+  ResidencyErrorMessages = [
+    "Document is not accepted document type",
+    "Document has been modified",
+    "Document is not clearly legible",
+    "Document is no longer current or valid",
+    "Document doesn't match residency details"
+  ]
+
   class AccountResource
     constructor: (@_id = '', @awsKey = '', @createdAt = '', @verifiedAt = '', @failedStep = '', @resourceInfo) ->
       @actionStatus = if @resourceInfo.docStatus == 'pending'
@@ -27,6 +44,8 @@ angular.module('bc.account-resource', []).service "AccountResource", ->
       else if @resourceInfo.docStatus is 'denied' then 'Denied'
       else if @resourceInfo.docStatus is 'denied-final' then 'Denied (Final)'
       else 'Unknown'
+
+      @displayErrorMessage = (if @identity then IdentityErrorMessages[@failedStep] else ResidencyErrorMessages[@failedStep]) or ''
 
   FromMessage: (msg) ->
     msgResource = msg?.resourceInfo

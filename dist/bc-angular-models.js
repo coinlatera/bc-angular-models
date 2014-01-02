@@ -58,7 +58,7 @@
 
 (function() {
   angular.module('bc.account-resource', []).service("AccountResource", function() {
-    var AccountResource, ResourceInfo;
+    var AccountResource, IdentityErrorMessages, ResidencyErrorMessages, ResourceInfo;
     ResourceInfo = (function() {
       function ResourceInfo(verificationType, fileName, docType, docId, docStatus, userDisplayName, email) {
         this.verificationType = verificationType != null ? verificationType : '';
@@ -73,6 +73,8 @@
       return ResourceInfo;
 
     })();
+    IdentityErrorMessages = ["Document is not an allowed ID type", "Document is not in full color", "Document has been modified", "Document is not clearly legible", "Document is no longer current or valid", "Document doesn't match personal details"];
+    ResidencyErrorMessages = ["Document is not accepted document type", "Document has been modified", "Document is not clearly legible", "Document is no longer current or valid", "Document doesn't match residency details"];
     AccountResource = (function() {
       function AccountResource(_id, awsKey, createdAt, verifiedAt, failedStep, resourceInfo) {
         var empty;
@@ -93,6 +95,7 @@
         this.denied = this.resourceInfo.docStatus === 'denied' || this.resourceInfo.docStatus === 'denied-final';
         this.verified = this.approved || this.denied;
         this.displayStatus = this.resourceInfo.docStatus === 'pending' ? 'Pending' : this.resourceInfo.docStatus === 'approved' ? 'Approved' : this.resourceInfo.docStatus === 'denied' ? 'Denied' : this.resourceInfo.docStatus === 'denied-final' ? 'Denied (Final)' : 'Unknown';
+        this.displayErrorMessage = (this.identity ? IdentityErrorMessages[this.failedStep] : ResidencyErrorMessages[this.failedStep]) || '';
       }
 
       return AccountResource;
