@@ -76,9 +76,10 @@
     IdentityErrorMessages = ["Document is not an allowed ID type", "Document is not in full color", "Document has been modified", "Document is not clearly legible", "Document is no longer current or valid", "Document doesn't match personal details"];
     ResidencyErrorMessages = ["Document is not accepted document type", "Document has been modified", "Document is not clearly legible", "Document is no longer current or valid", "Document doesn't match residency details"];
     AccountResource = (function() {
-      function AccountResource(_id, awsKey, createdAt, verifiedAt, failedStep, resourceInfo) {
+      function AccountResource(_id, accountId, awsKey, createdAt, verifiedAt, failedStep, resourceInfo) {
         var empty;
         this._id = _id != null ? _id : '';
+        this.accountId = accountId != null ? accountId : '';
         this.awsKey = awsKey != null ? awsKey : '';
         this.createdAt = createdAt != null ? createdAt : '';
         this.verifiedAt = verifiedAt != null ? verifiedAt : '';
@@ -106,7 +107,7 @@
         var msgResource, resourceInfo;
         msgResource = msg != null ? msg.resourceInfo : void 0;
         resourceInfo = new ResourceInfo(msgResource != null ? msgResource.verificationType : void 0, msgResource != null ? msgResource.fileName : void 0, msgResource != null ? msgResource.docType : void 0, msgResource != null ? msgResource.docId : void 0, msgResource != null ? msgResource.docStatus : void 0, msgResource != null ? msgResource.userDisplayName : void 0, msgResource != null ? msgResource.email : void 0);
-        return new AccountResource(msg != null ? msg._id : void 0, msg != null ? msg.awsKey : void 0, msg != null ? msg.createdAt : void 0, msg != null ? msg.verifiedAt : void 0, msg != null ? msg.failedStep : void 0, resourceInfo);
+        return new AccountResource(msg != null ? msg._id : void 0, msg != null ? msg.accountId : void 0, msg != null ? msg.awsKey : void 0, msg != null ? msg.createdAt : void 0, msg != null ? msg.verifiedAt : void 0, msg != null ? msg.failedStep : void 0, resourceInfo);
       }
     };
   });

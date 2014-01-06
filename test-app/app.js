@@ -5,6 +5,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
 
   var resourceMsg1 = {
     _id: "11111111111111",
+    accountId: "12345678-abcd-efgh-ijkl-09876543",
     awsKey: "12345678-abcd-efgh-ijkl-09876543_randomdigits_file.jpg",
     createdAt: new Date().getTime(),
     resourceInfo: {
@@ -19,6 +20,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
   };
   var resourceMsg2 = {
     _id: "22222222222222",
+    accountId: "12345678-abcd-efgh-ijkl-09876543",
     awsKey: "12345678-abcd-efgh-ijkl-09876543_randomdigits_doc.pdf",
     createdAt: new Date().getTime(),
     resourceInfo: {
@@ -33,6 +35,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
   };
   var resourceMsg3 = {
     _id: "33333333333333",
+    accountId: "12345678-abcd-efgh-ijkl-09876543",
     awsKey: "12345678-abcd-efgh-ijkl-09876543_randomdigits_fail.pdf",
     createdAt: new Date().getTime(),
     failedStep: 2,
