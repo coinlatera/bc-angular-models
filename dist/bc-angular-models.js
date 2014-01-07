@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
+  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
 
 }).call(this);
 
@@ -382,6 +382,38 @@
 
     }).call(this);
     return OrderInfoHelper;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.trade-fee', []).service("TradeFee", function() {
+    var TradeFee, TradeFeeHelper,
+      _this = this;
+    TradeFeeHelper = {
+      Upsert: function(obj, msg) {
+        return TradeFee.FromMessage(msg);
+      }
+    };
+    TradeFee = (function() {
+      function TradeFee(id, createdAt, feeAmount, feeRate, fundedAmount, orderId, tradeType) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.feeAmount = feeAmount;
+        this.feeRate = feeRate;
+        this.fundedAmount = fundedAmount;
+        this.orderId = orderId;
+        this.tradeType = tradeType;
+      }
+
+      TradeFee.FromMessage = function(msg) {
+        return new TradeFee(msg._id, msg.createdAt, msg.feeAmount, msg.feeRate, msg.fundedAmount, msg.orderId, msg.tradeType);
+      };
+
+      return TradeFee;
+
+    }).call(this);
+    return TradeFeeHelper;
   });
 
 }).call(this);

@@ -1,7 +1,7 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
 app.constant('CONFIG', { debug: true });
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -157,5 +157,23 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, AccountResource
     }
   };
   $scope.adminAccount = AdminAccountInfo.FromMessage(adminMsg);
+
+  var tradeFeeMsg = {
+    _id: "52cb40644dca69450053481b",
+    createdAt: 1389052004000,
+    feeAmount: {
+      amount: "0.00002488",
+      currency: "BTC"
+    },
+    feeRate: 0.005,
+    fundedAmount: {
+      amount: "0.00495024",
+      currency: "BTC"
+    },
+    orderId: "72bab9bb-17a2-411a-a984-3175419ad9fc",
+    result: "TRADE_FEE",
+    tradeType: "LiquidityTaker"
+  };
+  $scope.tradeFee = TradeFee.Upsert(undefined, tradeFeeMsg);
 });
 

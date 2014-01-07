@@ -1,1 +1,1 @@
-angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings'])
+angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings'])
