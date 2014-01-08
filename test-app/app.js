@@ -75,13 +75,8 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, TradeFee, Accou
       notifications: {
         fiatDepositComplete: false,
         btcDepositComplete: true,
-        pendingOrderComplete: false,
         bankAccountAdded: false,
         fundsWithdrawn: true
-      },
-      contact: {
-        newsletters: true,
-        promotions: false
       }
     },
     accountResources: [resourceMsg1, resourceMsg2, resourceMsg3]

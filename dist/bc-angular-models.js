@@ -628,7 +628,7 @@
 
 (function() {
   angular.module('bc.user-account-settings', []).service("UserAccountSettings", function() {
-    var ContactSettings, NotificationsSettings, SecuritySettings, UserAccountSettings;
+    var NotificationsSettings, SecuritySettings, UserAccountSettings;
     SecuritySettings = (function() {
       function SecuritySettings(fiatWithdrawalConfirmation, btcWithdrawalConfirmation) {
         this.fiatWithdrawalConfirmation = fiatWithdrawalConfirmation != null ? fiatWithdrawalConfirmation : true;
@@ -643,39 +643,24 @@
 
     })();
     NotificationsSettings = (function() {
-      function NotificationsSettings(fiatDepositComplete, btcDepositComplete, pendingOrderComplete, bankAccountAdded, fundsWithdrawn) {
+      function NotificationsSettings(fiatDepositComplete, btcDepositComplete, bankAccountAdded, fundsWithdrawn) {
         this.fiatDepositComplete = fiatDepositComplete != null ? fiatDepositComplete : true;
         this.btcDepositComplete = btcDepositComplete != null ? btcDepositComplete : true;
-        this.pendingOrderComplete = pendingOrderComplete != null ? pendingOrderComplete : true;
         this.bankAccountAdded = bankAccountAdded != null ? bankAccountAdded : true;
         this.fundsWithdrawn = fundsWithdrawn != null ? fundsWithdrawn : true;
       }
 
       NotificationsSettings.FromMessage = function(msg) {
-        return new NotificationsSettings(msg != null ? msg.fiatDepositComplete : void 0, msg != null ? msg.btcDepositComplete : void 0, msg != null ? msg.pendingOrderComplete : void 0, msg != null ? msg.bankAccountAdded : void 0, msg != null ? msg.fundsWithdrawn : void 0);
+        return new NotificationsSettings(msg != null ? msg.fiatDepositComplete : void 0, msg != null ? msg.btcDepositComplete : void 0, msg != null ? msg.bankAccountAdded : void 0, msg != null ? msg.fundsWithdrawn : void 0);
       };
 
       return NotificationsSettings;
 
     })();
-    ContactSettings = (function() {
-      function ContactSettings(newsletters, promotions) {
-        this.newsletters = newsletters != null ? newsletters : false;
-        this.promotions = promotions != null ? promotions : false;
-      }
-
-      ContactSettings.FromMessage = function(msg) {
-        return new ContactSettings(msg != null ? msg.newsletters : void 0, msg != null ? msg.promotions : void 0);
-      };
-
-      return ContactSettings;
-
-    })();
     UserAccountSettings = (function() {
-      function UserAccountSettings(security, notifications, contact) {
+      function UserAccountSettings(security, notifications) {
         this.security = security != null ? security : {};
         this.notifications = notifications != null ? notifications : {};
-        this.contact = contact != null ? contact : {};
       }
 
       return UserAccountSettings;
@@ -683,11 +668,10 @@
     })();
     return {
       FromMessage: function(msg) {
-        var contactSettings, notificationsSettings, securitySettings;
+        var notificationsSettings, securitySettings;
         securitySettings = SecuritySettings.FromMessage(msg != null ? msg.security : void 0);
         notificationsSettings = NotificationsSettings.FromMessage(msg != null ? msg.notifications : void 0);
-        contactSettings = ContactSettings.FromMessage(msg != null ? msg.contact : void 0);
-        return new UserAccountSettings(securitySettings, notificationsSettings, contactSettings);
+        return new UserAccountSettings(securitySettings, notificationsSettings);
       }
     };
   });
