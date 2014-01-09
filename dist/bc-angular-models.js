@@ -438,8 +438,6 @@
       }
     };
     TransactionInfo = (function() {
-      var updateStatus;
-
       function TransactionInfo(id, type, fundingSourceId, orderType, status, history) {
         this.id = id;
         this.type = type;
@@ -450,7 +448,7 @@
         this.updateStatus();
       }
 
-      updateStatus = function() {
+      TransactionInfo.prototype.updateStatus = function() {
         var _ref, _ref1;
         this.isFunded = this.status === "Funded";
         this.isDeposit = this.type === "Deposit";
