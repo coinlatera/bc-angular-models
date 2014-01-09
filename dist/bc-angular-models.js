@@ -430,6 +430,7 @@
             event: msg.status,
             timestamp: new Date().getTime
           });
+          obj.updateStatus();
           return obj;
         } else {
           return TransactionInfo.FromMessage(msg);
@@ -437,6 +438,8 @@
       }
     };
     TransactionInfo = (function() {
+      var updateStatus;
+
       function TransactionInfo(id, type, fundingSourceId, orderType, status, history) {
         this.id = id;
         this.type = type;
@@ -444,7 +447,17 @@
         this.orderType = orderType;
         this.status = status;
         this.history = history;
+        this.updateStatus();
       }
+
+      updateStatus = function() {
+        var _ref, _ref1;
+        this.isFunded = this.status === "Funded";
+        this.isDeposit = this.type === "Deposit";
+        this.isWithdrawal = this.type === "Withdrawal";
+        this.isFiat = ((_ref = this.orderType) != null ? _ref.currency : void 0) !== "BTC";
+        return this.isBitcoin = ((_ref1 = this.orderType) != null ? _ref1.currency : void 0) === "BTC";
+      };
 
       TransactionInfo.FromMessage = function(msg) {
         var transaction;
