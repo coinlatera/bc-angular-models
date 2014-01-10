@@ -1,7 +1,7 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
 app.constant('CONFIG', { debug: true });
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings, TransactionInfo, logger) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -170,5 +170,8 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, TradeFee, Accou
     tradeType: "LiquidityTaker"
   };
   $scope.tradeFee = TradeFee.Upsert(undefined, tradeFeeMsg);
+
+  logger.log('Logger working.');
+
 });
 
