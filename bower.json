@@ -21,7 +21,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.0.8",
+    "angular": "1.2.7",
     "underscore": "1.4.4",
     "moment": "~2.1.0"
   },
