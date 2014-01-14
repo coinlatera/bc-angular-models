@@ -324,64 +324,96 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  angular.module('bc.order-info', []).service("OrderInfo", function() {
-    var OrderInfo, OrderInfoHelper,
-      _this = this;
-    OrderInfoHelper = {
-      Upsert: function(obj, msg) {
-        if (obj) {
-          obj.set_status(msg.order.status);
-          obj.history = _(obj.history || []).concat({
-            event: msg.order.status,
-            timestamp: new Date().getTime
-          });
-          return obj;
-        } else {
-          return OrderInfo.FromMessage(msg);
-        }
-      }
-    };
-    OrderInfo = (function() {
-      function OrderInfo(id, offered, received, orderType, status, timestamp, history) {
+  angular.module('bc.order-info', []).factory("OrderInfo", function() {
+    var OrderInfo;
+    return OrderInfo = (function() {
+      function OrderInfo(id, offered, orderType, parity, createdAt, history) {
         this.id = id;
         this.offered = offered;
-        this.received = received;
-        this.orderType = orderType;
-        this.status = status;
-        this.timestamp = timestamp;
+        this.parity = parity;
+        this.createdAt = createdAt;
         this.history = history;
-        this.set_status = __bind(this.set_status, this);
-        this.original_offered = this.offered;
-        this.original_received = this.received;
+        this.getPrice = __bind(this.getPrice, this);
+        this.getRemaining = __bind(this.getRemaining, this);
+        this.handleEvent = __bind(this.handleEvent, this);
+        this.processHistory = __bind(this.processHistory, this);
+        this.processEvent = __bind(this.processEvent, this);
+        this.parseType = __bind(this.parseType, this);
+        this.parseType(orderType);
+        this.processHistory(_(this.history).reverse());
       }
 
-      OrderInfo.prototype.set_status = function(stat) {
-        this.status = stat;
-        if ((stat != null ? stat.status : void 0) === 'reopened') {
-          this.status = 'reopened';
-          this.offered = stat.offered;
-          return this.received = stat.received;
+      OrderInfo.prototype.parseType = function(type) {
+        if (type._kind === 'market') {
+          this.received = type.received;
+        } else if (type._kind === 'limit') {
+          this.price = type.price;
+          this.quantity = type.quantity;
         } else {
-          this.offered = this.original_offered;
-          return this.received = this.original_received;
+          throw "Invalid OrderType: " + type;
+        }
+        this.offered.amount = this.offered.amount;
+        return this.orderType = type._kind;
+      };
+
+      OrderInfo.prototype.processEvent = function(evt, timestamp) {
+        var _base, _base1;
+        this.updatedAt = timestamp;
+        this.status = evt._kind || evt;
+        if (evt._kind === 'reopened' || evt._kind === 'filled') {
+          (_base = this.spent).currency || (_base.currency = evt.spent.currency);
+          (_base1 = this.earned).currency || (_base1.currency = evt.earned.currency);
+          this.spent.amount += Number(evt.spent.amount);
+          return this.earned.amount += Number(evt.earned.amount);
         }
       };
 
+      OrderInfo.prototype.processHistory = function() {
+        var _this = this;
+        this.spent = {
+          amount: 0
+        };
+        this.earned = {
+          amount: 0
+        };
+        return _(this.history).each(function(e) {
+          return _this.processEvent(e.event, e.timestamp);
+        });
+      };
+
+      OrderInfo.prototype.handleEvent = function(e) {
+        var timestamp;
+        timestamp = new Date().getTime();
+        this.history.unshift({
+          event: e,
+          timestamp: timestamp
+        });
+        return this.processEvent(e, timestamp);
+      };
+
+      OrderInfo.prototype.getRemaining = function() {
+        return {
+          currency: this.offered.currency,
+          amount: Number(this.offered.amount) - this.spent.amount
+        };
+      };
+
+      OrderInfo.prototype.getPrice = function() {
+        return this.price || (this.earned.amount > 0 && this.spent.amount > 0 ? {
+          currency: this.earned.currency,
+          amount: this.earned.amount / this.spent.amount
+        } : void 0);
+      };
+
       OrderInfo.FromMessage = function(msg) {
-        var order, status, _ref;
+        var order;
         order = msg.order;
-        status = order.status;
-        if (((_ref = order.status) != null ? _ref.status : void 0) === 'reopened') {
-          status = 'reopened';
-        }
-        order = new OrderInfo(order.id, order.offered, order.received, order.order_type, status, order.timestamp, msg._history);
-        return OrderInfoHelper.Upsert(order, msg);
+        return new OrderInfo(order.orderId, order.offered, order.orderType, order.parity, order.createdAt, msg._history);
       };
 
       return OrderInfo;
 
     }).call(this);
-    return OrderInfoHelper;
   });
 
 }).call(this);

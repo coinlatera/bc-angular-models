@@ -170,5 +170,42 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, TradeFee, Accou
     tradeType: "LiquidityTaker"
   };
   $scope.tradeFee = TradeFee.Upsert(undefined, tradeFeeMsg);
+
+  var orderEventMsg = { 
+    "result": "ORDER_EVENT",
+    "orderId": "ca4a2a66-80be-4b8c-aa37-c71d35f752fe",
+    "status": {
+      "spent": {"currency":"USD", "amount":"50.00000"},
+      "earned": {"currency":"BTC", "amount":"0.50000000"},
+      "_kind":"reopened"
+    }
+  };
+
+  var orderInfoMsg = {
+    "result": "ORDER_INFO",
+    "order": {
+      "orderId": "ca4a2a66-80be-4b8c-aa37-c71d35f752fe",
+      "offered": {"currency":"USD", "amount":"100.50251"},
+      "orderType": {
+        "price": {"currency": "USD", "amount": "100.00000"},
+        "quantity": {"currency":"BTC", "amount":"1.00502513"},
+        "_kind":"limit"
+      },
+      "parity": "bid",
+      "createdAt": 1389650482040
+    }, 
+    "_history": [
+      { "event": {
+          "quantity": {"currency":"BTC", "amount":"1.00502513"},
+          "_kind":"opened"
+        },
+        "timestamp": 1389650482156
+      },
+      { "event": "pending", "timestamp": 1389650482080}
+    ]
+  };
+  $scope.orderInfo = OrderInfo.FromMessage(orderInfoMsg);
+  $scope.orderInfo.handleEvent(orderEventMsg.status);
+
 });
 

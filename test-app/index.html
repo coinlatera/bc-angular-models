@@ -251,5 +251,20 @@
 
     <h3>Trade Fee</h3>
     <pre>{{tradeFee}}</pre>
+
+    <h3>Order Info</h3>
+    <ul>
+      <li>ID: {{orderInfo.id}}</li>
+      <li>type: {{orderInfo.orderType}}</li>
+      <li>parity: {{orderInfo.parity}}</li>
+      <li>status: {{orderInfo.status}}</li>
+      <li>spent: {{orderInfo.spent}}</li>
+      <li>earned: {{orderInfo.earned}}</li>
+      <li>offered: {{orderInfo.offered}}</li>
+      <li>getRemaining(): {{orderInfo.getRemaining()}}</li>
+      <li>getPrice(): {{orderInfo.getPrice()}}</li>
+      <li>createdAt: {{orderInfo.createdAt}}</li>
+      <li>updatedAt: {{orderInfo.updatedAt}}</li>
+    </ul>
   </body>
 </html>
