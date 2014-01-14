@@ -43,8 +43,12 @@ angular.module('bc.order-info', []).factory "OrderInfo", ->
     getPrice: =>
       @price ||
         if @earned.amount > 0 and @spent.amount > 0
-          currency: @earned.currency
-          amount: @earned.amount / @spent.amount
+          if @parity is 'bid'
+            currency: @spent.currency
+            amount: @spent.amount / @earned.amount
+          else
+            currency: @earned.currency
+            amount: @earned.amount / @spent.amount
         else
           undefined
 

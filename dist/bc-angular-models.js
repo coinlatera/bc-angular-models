@@ -399,7 +399,10 @@
       };
 
       OrderInfo.prototype.getPrice = function() {
-        return this.price || (this.earned.amount > 0 && this.spent.amount > 0 ? {
+        return this.price || (this.earned.amount > 0 && this.spent.amount > 0 ? this.parity === 'bid' ? {
+          currency: this.spent.currency,
+          amount: this.spent.amount / this.earned.amount
+        } : {
           currency: this.earned.currency,
           amount: this.earned.amount / this.spent.amount
         } : void 0);
