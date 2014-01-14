@@ -266,5 +266,12 @@
       <li>createdAt: {{orderInfo.createdAt}}</li>
       <li>updatedAt: {{orderInfo.updatedAt}}</li>
     </ul>
+
+    <h3>Market Info</h3>
+    <ul>
+      <li>Accepts message: {{marketInfo.acceptMessage(marketDepthMsg) != undefined}}</li>
+      <li>Bids: {{marketInfo.bidLevels}}</li>
+      <li>Asks: {{marketInfo.askLevels}}</li>
+    </ul>
   </body>
 </html>

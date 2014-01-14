@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
+  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.market-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
 
 }).call(this);
 
@@ -318,6 +318,85 @@
       };
     }
   ]);
+
+}).call(this);
+
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  angular.module('bc.market-info', []).factory("MarketInfo", function() {
+    var Market, builder, markets, mkKey;
+    markets = {};
+    Market = (function() {
+      function Market(priceCurrency, quantityCurrency) {
+        this.priceCurrency = priceCurrency;
+        this.quantityCurrency = quantityCurrency;
+        this.handleMarketDepthInfo = __bind(this.handleMarketDepthInfo, this);
+        this.acceptMessage = __bind(this.acceptMessage, this);
+        this.bidLevels = [];
+        this.askLevels = [];
+      }
+
+      Market.prototype.acceptMessage = function(message) {
+        if (message.result === 'MARKET_DEPTH_INFO' && message.price.currency === this.priceCurrency && message.quantity.currency === this.quantityCurrency) {
+          return this.handleMarketDepthInfo;
+        } else {
+          return void 0;
+        }
+      };
+
+      Market.prototype.handleMarketDepthInfo = function(message) {
+        var idx, levels, lvl, sort, _ref, _ref1, _ref2, _ref3, _ref4;
+        console.log("Handling market depth:", message);
+        lvl = {
+          price: Number(message.price.amount),
+          quantity: message.quantity
+        };
+        _ref = message.parity === 'bid' ? [
+          this.bidLevels, function(x) {
+            return -x.price;
+          }
+        ] : [this.askLevels, 'price'], levels = _ref[0], sort = _ref[1];
+        if (Number(lvl.quantity.amount) > 0) {
+          idx = _(levels).sortedIndex(lvl, sort);
+          if (((_ref1 = levels[idx]) != null ? _ref1.price : void 0) === lvl.price) {
+            return levels[idx].quantity = lvl.quantity;
+          } else if (((_ref2 = levels[idx - 1]) != null ? _ref2.price : void 0) === lvl.price) {
+            return levels[idx - 1].quantity = lvl.quantity;
+          } else {
+            return levels.splice(idx, 0, lvl);
+          }
+        } else {
+          idx = _(levels).sortedIndex(lvl, sort);
+          if (((_ref3 = levels[idx]) != null ? _ref3.price : void 0) === lvl.price) {
+            return levels.splice(idx, 1);
+          } else if (((_ref4 = levels[idx - 1]) != null ? _ref4.price : void 0) === lvl.price) {
+            return levels.splice(idx - 1, 1);
+          }
+        }
+      };
+
+      return Market;
+
+    })();
+    mkKey = function(priceCurrency, quantityCurrency) {
+      return "" + priceCurrency + "|" + quantityCurrency;
+    };
+    builder = function(priceCurrency, quantityCurrency) {
+      var key;
+      key = mkKey(priceCurrency, quantityCurrency);
+      if (!markets[key]) {
+        markets[key] = new Market(priceCurrency, quantityCurrency);
+      }
+      return markets[key];
+    };
+    builder.clear = function(priceCurrency, quantityCurrency) {
+      var key;
+      key = mkKey(priceCurrency, quantityCurrency);
+      return delete markets[key];
+    };
+    return builder;
+  });
 
 }).call(this);
 

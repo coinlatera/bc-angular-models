@@ -1,7 +1,7 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
 app.constant('CONFIG', { debug: true });
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -207,5 +207,44 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, TradeFee, Accou
   $scope.orderInfo = OrderInfo.FromMessage(orderInfoMsg);
   $scope.orderInfo.handleEvent(orderEventMsg.status);
 
+  var marketDepthMsg = {
+    result: "MARKET_DEPTH_INFO",
+    parity: "bid",
+    price: {
+      currency: "USD",
+      amount: "1000.00000"},
+    quantity: {
+      currency: "BTC",
+      amount: "1.00000000"}
+  };
+
+  var marketDepthMsg2 = {
+    result: "MARKET_DEPTH_INFO",
+    parity: "bid",
+    price: {
+      currency: "USD",
+      amount: "900.00000"},
+    quantity: {
+      currency: "BTC",
+      amount: "1.00000000"}
+  };
+
+  var marketDepthMsg3 = {
+    result: "MARKET_DEPTH_INFO",
+    parity: "bid",
+    price: {
+      currency: "USD",
+      amount: "900.00000"},
+    quantity: {
+      currency: "BTC",
+      amount: "0.00000000"}
+  };
+
+  $scope.marketDepthMsg = marketDepthMsg;
+  MarketInfo.clear("USD", "BTC");
+  $scope.marketInfo = MarketInfo("USD", "BTC");
+  $scope.marketInfo.handleMarketDepthInfo(marketDepthMsg);
+  $scope.marketInfo.handleMarketDepthInfo(marketDepthMsg2);
+  $scope.marketInfo.handleMarketDepthInfo(marketDepthMsg3);
 });
 
