@@ -36,6 +36,7 @@ angular.module('bc.account-resource', []).service "AccountResource", ->
       @pending = @resourceInfo.docStatus is 'pending'
       @approved = @resourceInfo.docStatus is 'approved'
       @denied = @resourceInfo.docStatus is 'denied' or @resourceInfo.docStatus is 'denied-final'
+      @deniedFinal = @resourceInfo.docStatus is 'denied-final'
 
       @verified = @approved or @denied
 

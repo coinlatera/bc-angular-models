@@ -94,6 +94,7 @@
         this.pending = this.resourceInfo.docStatus === 'pending';
         this.approved = this.resourceInfo.docStatus === 'approved';
         this.denied = this.resourceInfo.docStatus === 'denied' || this.resourceInfo.docStatus === 'denied-final';
+        this.deniedFinal = this.resourceInfo.docStatus === 'denied-final';
         this.verified = this.approved || this.denied;
         this.displayStatus = this.resourceInfo.docStatus === 'pending' ? 'Pending' : this.resourceInfo.docStatus === 'approved' ? 'Approved' : this.resourceInfo.docStatus === 'denied' ? 'Denied' : this.resourceInfo.docStatus === 'denied-final' ? 'Denied (Final)' : 'Unknown';
         this.displayErrorMessage = (this.identity ? IdentityErrorMessages[this.failedStep] : ResidencyErrorMessages[this.failedStep]) || '';
