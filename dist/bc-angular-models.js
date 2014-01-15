@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
+  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.market-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
 
 }).call(this);
 
@@ -325,64 +325,177 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  angular.module('bc.order-info', []).service("OrderInfo", function() {
-    var OrderInfo, OrderInfoHelper,
-      _this = this;
-    OrderInfoHelper = {
-      Upsert: function(obj, msg) {
-        if (obj) {
-          obj.set_status(msg.order.status);
-          obj.history = _(obj.history || []).concat({
-            event: msg.order.status,
-            timestamp: new Date().getTime
-          });
-          return obj;
-        } else {
-          return OrderInfo.FromMessage(msg);
-        }
-      }
-    };
-    OrderInfo = (function() {
-      function OrderInfo(id, offered, received, orderType, status, timestamp, history) {
-        this.id = id;
-        this.offered = offered;
-        this.received = received;
-        this.orderType = orderType;
-        this.status = status;
-        this.timestamp = timestamp;
-        this.history = history;
-        this.set_status = __bind(this.set_status, this);
-        this.original_offered = this.offered;
-        this.original_received = this.received;
+  angular.module('bc.market-info', []).factory("MarketInfo", function() {
+    var Market, builder, markets, mkKey;
+    markets = {};
+    Market = (function() {
+      function Market(priceCurrency, quantityCurrency) {
+        this.priceCurrency = priceCurrency;
+        this.quantityCurrency = quantityCurrency;
+        this.handleMarketDepthInfo = __bind(this.handleMarketDepthInfo, this);
+        this.acceptMessage = __bind(this.acceptMessage, this);
+        this.bidLevels = [];
+        this.askLevels = [];
       }
 
-      OrderInfo.prototype.set_status = function(stat) {
-        this.status = stat;
-        if ((stat != null ? stat.status : void 0) === 'reopened') {
-          this.status = 'reopened';
-          this.offered = stat.offered;
-          return this.received = stat.received;
+      Market.prototype.acceptMessage = function(message) {
+        if (message.result === 'MARKET_DEPTH_INFO' && message.price.currency === this.priceCurrency && message.quantity.currency === this.quantityCurrency) {
+          return this.handleMarketDepthInfo;
         } else {
-          this.offered = this.original_offered;
-          return this.received = this.original_received;
+          return void 0;
         }
       };
 
-      OrderInfo.FromMessage = function(msg) {
-        var order, status, _ref;
-        order = msg.order;
-        status = order.status;
-        if (((_ref = order.status) != null ? _ref.status : void 0) === 'reopened') {
-          status = 'reopened';
+      Market.prototype.handleMarketDepthInfo = function(message) {
+        var idx, levels, lvl, sort, _ref, _ref1, _ref2, _ref3, _ref4;
+        lvl = {
+          price: Number(message.price.amount),
+          quantity: message.quantity
+        };
+        _ref = message.parity === 'bid' ? [
+          this.bidLevels, function(x) {
+            return -x.price;
+          }
+        ] : [this.askLevels, 'price'], levels = _ref[0], sort = _ref[1];
+        if (Number(lvl.quantity.amount) > 0) {
+          idx = _(levels).sortedIndex(lvl, sort);
+          if (((_ref1 = levels[idx]) != null ? _ref1.price : void 0) === lvl.price) {
+            return levels[idx].quantity = lvl.quantity;
+          } else if (((_ref2 = levels[idx - 1]) != null ? _ref2.price : void 0) === lvl.price) {
+            return levels[idx - 1].quantity = lvl.quantity;
+          } else {
+            return levels.splice(idx, 0, lvl);
+          }
+        } else {
+          idx = _(levels).sortedIndex(lvl, sort);
+          if (((_ref3 = levels[idx]) != null ? _ref3.price : void 0) === lvl.price) {
+            return levels.splice(idx, 1);
+          } else if (((_ref4 = levels[idx - 1]) != null ? _ref4.price : void 0) === lvl.price) {
+            return levels.splice(idx - 1, 1);
+          }
         }
-        order = new OrderInfo(order.id, order.offered, order.received, order.order_type, status, order.timestamp, msg._history);
-        return OrderInfoHelper.Upsert(order, msg);
+      };
+
+      return Market;
+
+    })();
+    mkKey = function(priceCurrency, quantityCurrency) {
+      return "" + priceCurrency + "|" + quantityCurrency;
+    };
+    builder = function(priceCurrency, quantityCurrency) {
+      var key;
+      key = mkKey(priceCurrency, quantityCurrency);
+      if (!markets[key]) {
+        markets[key] = new Market(priceCurrency, quantityCurrency);
+      }
+      return markets[key];
+    };
+    builder.clear = function(priceCurrency, quantityCurrency) {
+      var key;
+      key = mkKey(priceCurrency, quantityCurrency);
+      return delete markets[key];
+    };
+    return builder;
+  });
+
+}).call(this);
+
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  angular.module('bc.order-info', []).factory("OrderInfo", function() {
+    var OrderInfo;
+    return OrderInfo = (function() {
+      function OrderInfo(id, offered, orderType, parity, createdAt, history) {
+        this.id = id;
+        this.offered = offered;
+        this.parity = parity;
+        this.createdAt = createdAt;
+        this.history = history;
+        this.getPrice = __bind(this.getPrice, this);
+        this.getRemaining = __bind(this.getRemaining, this);
+        this.handleEvent = __bind(this.handleEvent, this);
+        this.processHistory = __bind(this.processHistory, this);
+        this.processEvent = __bind(this.processEvent, this);
+        this.parseType = __bind(this.parseType, this);
+        this.parseType(orderType);
+        this.processHistory(_(this.history).reverse());
+      }
+
+      OrderInfo.prototype.parseType = function(type) {
+        if (type._kind === 'market') {
+          this.received = type.received;
+        } else if (type._kind === 'limit') {
+          this.price = type.price;
+          this.quantity = type.quantity;
+        } else {
+          throw "Invalid OrderType: " + type;
+        }
+        this.offered.amount = this.offered.amount;
+        return this.orderType = type._kind;
+      };
+
+      OrderInfo.prototype.processEvent = function(evt, timestamp) {
+        var _base, _base1;
+        this.updatedAt = timestamp;
+        this.status = evt._kind || evt;
+        if (evt._kind === 'reopened' || evt._kind === 'filled') {
+          (_base = this.spent).currency || (_base.currency = evt.spent.currency);
+          (_base1 = this.earned).currency || (_base1.currency = evt.earned.currency);
+          this.spent.amount += Number(evt.spent.amount);
+          return this.earned.amount += Number(evt.earned.amount);
+        }
+      };
+
+      OrderInfo.prototype.processHistory = function() {
+        var _this = this;
+        this.spent = {
+          amount: 0
+        };
+        this.earned = {
+          amount: 0
+        };
+        return _(this.history).each(function(e) {
+          return _this.processEvent(e.event, e.timestamp);
+        });
+      };
+
+      OrderInfo.prototype.handleEvent = function(e) {
+        var timestamp;
+        timestamp = new Date().getTime();
+        this.history.unshift({
+          event: e,
+          timestamp: timestamp
+        });
+        return this.processEvent(e, timestamp);
+      };
+
+      OrderInfo.prototype.getRemaining = function() {
+        return {
+          currency: this.offered.currency,
+          amount: Number(this.offered.amount) - this.spent.amount
+        };
+      };
+
+      OrderInfo.prototype.getPrice = function() {
+        return this.price || (this.earned.amount > 0 && this.spent.amount > 0 ? this.parity === 'bid' ? {
+          currency: this.spent.currency,
+          amount: this.spent.amount / this.earned.amount
+        } : {
+          currency: this.earned.currency,
+          amount: this.earned.amount / this.spent.amount
+        } : void 0);
+      };
+
+      OrderInfo.FromMessage = function(msg) {
+        var order;
+        order = msg.order;
+        return new OrderInfo(order.orderId, order.offered, order.orderType, order.parity, order.createdAt, msg._history);
       };
 
       return OrderInfo;
 
     }).call(this);
-    return OrderInfoHelper;
   });
 
 }).call(this);
