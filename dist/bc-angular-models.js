@@ -309,13 +309,14 @@
 
   angular.module('bc.logger', []).service('logger', [
     'CONFIG', function(CONFIG) {
-      return this.log = function() {
+      this.log = function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         if (CONFIG.debug) {
           return console.log(args);
         }
       };
+      return this;
     }
   ]);
 

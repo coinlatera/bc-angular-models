@@ -1,7 +1,7 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
 app.constant('CONFIG', { debug: true });
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings, TransactionInfo, logger) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -246,5 +246,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, Tra
   $scope.marketInfo.handleMarketDepthInfo(marketDepthMsg);
   $scope.marketInfo.handleMarketDepthInfo(marketDepthMsg2);
   $scope.marketInfo.handleMarketDepthInfo(marketDepthMsg3);
+
+  logger.log('Logger working.');
 });
 
