@@ -15,7 +15,6 @@ angular.module('bc.market-info', []).factory "MarketInfo", ->
         undefined
 
     handleMarketDepthInfo: (message) =>
-      console.log "Handling market depth:", message
       lvl = {price: Number(message.price.amount), quantity: message.quantity}
 
       [levels, sort] = if message.parity is 'bid'

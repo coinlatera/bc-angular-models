@@ -347,7 +347,6 @@
 
       Market.prototype.handleMarketDepthInfo = function(message) {
         var idx, levels, lvl, sort, _ref, _ref1, _ref2, _ref3, _ref4;
-        console.log("Handling market depth:", message);
         lvl = {
           price: Number(message.price.amount),
           quantity: message.quantity
