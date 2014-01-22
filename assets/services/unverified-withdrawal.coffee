@@ -1,10 +1,12 @@
 angular.module('bc.unverified-withdrawal', []).service "UnverifiedWithdrawal", ->
   class UnverifiedFiatWithdrawal
     constructor: (@id = '', @fundingSourceId = '', @amount = 0, createdAt = moment()) ->
+      @status = "Unconfirmed"
       @createdAt = moment(createdAt)
 
   class UnverifiedBtcWithdrawal
     constructor: (@id = '', @destination = '', @amount = 0, createdAt = moment()) ->
+      @status = "Unconfirmed"
       @createdAt = moment(createdAt)
 
   FromMessage: (msg) ->

@@ -597,6 +597,7 @@
         if (createdAt == null) {
           createdAt = moment();
         }
+        this.status = "Unconfirmed";
         this.createdAt = moment(createdAt);
       }
 
@@ -611,6 +612,7 @@
         if (createdAt == null) {
           createdAt = moment();
         }
+        this.status = "Unconfirmed";
         this.createdAt = moment(createdAt);
       }
 
