@@ -597,8 +597,15 @@
         if (createdAt == null) {
           createdAt = moment();
         }
+        this.type = "Withdrawal";
         this.status = "Unconfirmed";
         this.createdAt = moment(createdAt);
+        this.history = [
+          {
+            event: "Unconfirmed",
+            timestamp: createdAt
+          }
+        ];
       }
 
       return UnverifiedFiatWithdrawal;
@@ -612,8 +619,15 @@
         if (createdAt == null) {
           createdAt = moment();
         }
+        this.type = "Withdrawal";
         this.status = "Unconfirmed";
         this.createdAt = moment(createdAt);
+        this.history = [
+          {
+            event: "Unconfirmed",
+            timestamp: createdAt
+          }
+        ];
       }
 
       return UnverifiedBtcWithdrawal;
