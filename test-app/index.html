@@ -273,5 +273,42 @@
       <li>Bids: {{marketInfo.bidLevels}}</li>
       <li>Asks: {{marketInfo.askLevels}}</li>
     </ul>
+
+    <h3>Unverified Transactions</h3>
+    <table>
+      <tbody>
+        <tr>
+          <td colspan="2"><strong>BTC Withdrawal</strong></td>
+        </tr>
+        <tr>
+          <td>Destination Address: </td>
+          <td>{{unverifiedBtc.destination}}</td>
+        </tr>
+        <tr>
+          <td>Bitcoin Amount: </td>
+          <td>{{unverifiedBtc.amount}}</td>
+        </tr>
+        <tr>
+          <td>Created Time: </td>
+	  <td>{{unverifiedBtc.createdAt.format("MMMM Do YYYY, h:mm:ss a")}}</td>
+        </tr>
+        <tr>
+          <td colspan="2"><strong>Fiat Withdrawal</strong></td>
+        </tr>
+        <tr>
+          <td>Funding Source ID: </td>
+          <td>{{unverifiedFiat.fundingSourceId}}</td>
+        </tr>
+        <tr>
+          <td>USD Amount: </td>
+          <td>{{unverifiedFiat.amount}}</td>
+        </tr>
+        <tr>
+          <td>Created Time: </td>
+	  <td>{{unverifiedFiat.createdAt.format("MMMM Do YYYY, h:mm:ss a")}}</td>
+        </tr>
+      </tbody>
+    </table>
+
   </body>
 </html>

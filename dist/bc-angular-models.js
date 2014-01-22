@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.market-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
+  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.market-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.unverified-withdrawal', 'bc.user-account-info', 'bc.user-account-settings']);
 
 }).call(this);
 
@@ -582,6 +582,50 @@
 
     }).call(this);
     return TransactionInfoHelper;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.unverified-withdrawal', []).service("UnverifiedWithdrawal", function() {
+    var UnverifiedBtcWithdrawal, UnverifiedFiatWithdrawal;
+    UnverifiedFiatWithdrawal = (function() {
+      function UnverifiedFiatWithdrawal(id, fundingSourceId, amount, createdAt) {
+        this.id = id != null ? id : '';
+        this.fundingSourceId = fundingSourceId != null ? fundingSourceId : '';
+        this.amount = amount != null ? amount : 0;
+        if (createdAt == null) {
+          createdAt = moment();
+        }
+        this.createdAt = moment(createdAt);
+      }
+
+      return UnverifiedFiatWithdrawal;
+
+    })();
+    UnverifiedBtcWithdrawal = (function() {
+      function UnverifiedBtcWithdrawal(id, destination, amount, createdAt) {
+        this.id = id != null ? id : '';
+        this.destination = destination != null ? destination : '';
+        this.amount = amount != null ? amount : 0;
+        if (createdAt == null) {
+          createdAt = moment();
+        }
+        this.createdAt = moment(createdAt);
+      }
+
+      return UnverifiedBtcWithdrawal;
+
+    })();
+    return {
+      FromMessage: function(msg) {
+        if ((msg != null ? msg.result : void 0) === "UNVERIFIED_FIAT_WITHDRAWAL") {
+          return new UnverifiedFiatWithdrawal(msg != null ? msg._id : void 0, msg != null ? msg.fundingSourceId : void 0, msg != null ? msg.amount : void 0, msg != null ? msg.createdAt : void 0);
+        } else if ((msg != null ? msg.result : void 0) === "UNVERIFIED_BTC_WITHDRAWAL") {
+          return new UnverifiedBtcWithdrawal(msg != null ? msg._id : void 0, msg != null ? msg.destination : void 0, msg != null ? msg.amount : void 0, msg != null ? msg.createdAt : void 0);
+        }
+      }
+    };
   });
 
 }).call(this);
