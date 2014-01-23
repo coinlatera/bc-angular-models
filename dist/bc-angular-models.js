@@ -565,6 +565,7 @@
 
       TransactionInfo.prototype.updateStatus = function() {
         var _ref, _ref1;
+        this.isUnconfirmed = this.status === "Unconfirmed";
         this.isFunded = this.status === "Funded";
         this.isDeposit = this.type === "Deposit";
         this.isWithdrawal = this.type === "Withdrawal";

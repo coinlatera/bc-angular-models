@@ -16,6 +16,7 @@ angular.module('bc.transaction-info', []).service "TransactionInfo", ->
       @updateStatus()
 
     updateStatus: ->
+      @isUnconfirmed = @status is "Unconfirmed"
       @isFunded = @status is "Funded"
 
       @isDeposit = @type is "Deposit"
