@@ -282,7 +282,7 @@
         </tr>
         <tr>
           <td>Destination Address: </td>
-          <td>{{unverifiedBtc.destination}}</td>
+          <td>{{unverifiedBtc.fundingSourceId}}</td>
         </tr>
         <tr>
           <td>Bitcoin Amount: </td>
@@ -290,7 +290,7 @@
         </tr>
         <tr>
           <td>Created Time: </td>
-	  <td>{{unverifiedBtc.createdAt.format("MMMM Do YYYY, h:mm:ss a")}}</td>
+	  <td>{{unverifiedBtc.createdDate().format("MMMM Do YYYY, h:mm:ss a")}}</td>
         </tr>
         <tr>
           <td colspan="2"><strong>Fiat Withdrawal</strong></td>
@@ -305,7 +305,7 @@
         </tr>
         <tr>
           <td>Created Time: </td>
-	  <td>{{unverifiedFiat.createdAt.format("MMMM Do YYYY, h:mm:ss a")}}</td>
+	  <td>{{unverifiedFiat.createdDate().format("MMMM Do YYYY, h:mm:ss a")}}</td>
         </tr>
       </tbody>
     </table>
