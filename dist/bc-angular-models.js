@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.market-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.unverified-withdrawal', 'bc.user-account-info', 'bc.user-account-settings']);
+  angular.module('bc.angular-models', ['bc.access-level', 'bc.account-resource', 'bc.admin-account-info', 'bc.admin-role', 'bc.error-message', 'bc.logger', 'bc.order-info', 'bc.market-info', 'bc.trade-fee', 'bc.transaction-info', 'bc.user-account-info', 'bc.user-account-settings']);
 
 }).call(this);
 
@@ -582,70 +582,6 @@
 
     }).call(this);
     return TransactionInfoHelper;
-  });
-
-}).call(this);
-
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  angular.module('bc.unverified-withdrawal', []).service("UnverifiedWithdrawal", function() {
-    var UnverifiedBtcWithdrawal, UnverifiedFiatWithdrawal, UnverifiedWithdrawal, _ref, _ref1;
-    UnverifiedWithdrawal = (function() {
-      function UnverifiedWithdrawal(id, fundingSourceId, amount, createdAt) {
-        this.id = id != null ? id : '';
-        this.fundingSourceId = fundingSourceId != null ? fundingSourceId : '';
-        this.amount = amount != null ? amount : 0;
-        this.createdAt = createdAt != null ? createdAt : '';
-        this.type = "Withdrawal";
-        this.status = "Unconfirmed";
-        this.history = [
-          {
-            event: "Unconfirmed",
-            timestamp: createdAt
-          }
-        ];
-      }
-
-      UnverifiedWithdrawal.prototype.createdDate = function() {
-        return moment(this.createdAt);
-      };
-
-      return UnverifiedWithdrawal;
-
-    })();
-    UnverifiedFiatWithdrawal = (function(_super) {
-      __extends(UnverifiedFiatWithdrawal, _super);
-
-      function UnverifiedFiatWithdrawal() {
-        _ref = UnverifiedFiatWithdrawal.__super__.constructor.apply(this, arguments);
-        return _ref;
-      }
-
-      return UnverifiedFiatWithdrawal;
-
-    })(UnverifiedWithdrawal);
-    UnverifiedBtcWithdrawal = (function(_super) {
-      __extends(UnverifiedBtcWithdrawal, _super);
-
-      function UnverifiedBtcWithdrawal() {
-        _ref1 = UnverifiedBtcWithdrawal.__super__.constructor.apply(this, arguments);
-        return _ref1;
-      }
-
-      return UnverifiedBtcWithdrawal;
-
-    })(UnverifiedWithdrawal);
-    return {
-      FromMessage: function(msg) {
-        if ((msg != null ? msg.result : void 0) === "UNVERIFIED_FIAT_WITHDRAWAL") {
-          return new UnverifiedFiatWithdrawal(msg != null ? msg._id : void 0, msg != null ? msg.fundingSourceId : void 0, msg != null ? msg.amount : void 0, msg != null ? msg.createdAt : void 0);
-        } else if ((msg != null ? msg.result : void 0) === "UNVERIFIED_BTC_WITHDRAWAL") {
-          return new UnverifiedBtcWithdrawal(msg != null ? msg._id : void 0, msg != null ? msg.destination : void 0, msg != null ? msg.amount : void 0, msg != null ? msg.createdAt : void 0);
-        }
-      }
-    };
   });
 
 }).call(this);

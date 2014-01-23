@@ -1,7 +1,7 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
 app.constant('CONFIG', { debug: true });
-app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings, TransactionInfo, UnverifiedWithdrawal, logger) {
+app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings, TransactionInfo, logger) {
 
   var resourceMsg1 = {
     _id: "11111111111111",
@@ -248,22 +248,5 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, Tra
   $scope.marketInfo.handleMarketDepthInfo(marketDepthMsg3);
 
   logger.log('Logger working.');
-
-  var unverifiedBtc = {
-    result: "UNVERIFIED_BTC_WITHDRAWAL",
-    _id: "123412341234123412341234",
-    amount: 0.1234,
-    createdAt: 1390387916309,
-    destination: "mg6WMPFoKAMa3rUBzahCL8kPKndzh3NfRr"
-  };
-  $scope.unverifiedBtc = UnverifiedWithdrawal.FromMessage(unverifiedBtc);
-  var unverifiedFiat = {
-    result: "UNVERIFIED_FIAT_WITHDRAWAL",
-    _id: "234523452345234523452345",
-    amount: 123.45,
-    createdAt: 1390388207188,
-    fundingSourceId: "12345678-ABCD-CDEF-6789-1234567890AB"
-  };
-  $scope.unverifiedFiat = UnverifiedWithdrawal.FromMessage(unverifiedFiat);
 });
 
