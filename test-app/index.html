@@ -4,6 +4,7 @@
     <script src="../bower_components/underscore/underscore.js"></script>
     <script src="../bower_components/moment/moment.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/bignumber.js/bignumber.js"></script>
     <script src="../dist/bc-angular-models.js"></script>
     <script src="app.js"></script>
   </head>
@@ -272,6 +273,15 @@
       <li>Accepts message: {{marketInfo.acceptMessage(marketDepthMsg) != undefined}}</li>
       <li>Bids: {{marketInfo.bidLevels}}</li>
       <li>Asks: {{marketInfo.askLevels}}</li>
+    </ul>
+
+    <h3>TransactionLimit</h3>
+    <ul>
+      <li>Amount: {{transactionLimit.amount.toString()}}</li>
+      <li>10x Amount: {{transactionLimit.amount.times(10).toString()}}</li>
+      <li>Currency: {{transactionLimit.currency}}</li>
+      <li>Time: {{transactionLimit.time}} {{transactionLimit.timeUnit}}</li>
+      <li>User Status: {{transactionLimit.userStatus}}</li>
     </ul>
 
   </body>

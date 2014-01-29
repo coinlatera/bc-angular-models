@@ -23,7 +23,8 @@
   "dependencies": {
     "angular": "1.2.8",
     "underscore": "1.4.4",
-    "moment": "~2.1.0"
+    "moment": "~2.1.0",
+    "bignumber.js": "https://github.com/buttercoin/bignumber.js.git#7d721f9894a0f3afe82b967b707c4d736fa5b422"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",

@@ -591,12 +591,15 @@
   angular.module('bc.transaction-limit', []).service('TransactionLimit', function() {
     var TransactionLimit;
     TransactionLimit = (function() {
-      function TransactionLimit(amount, currency, time, timeUnit, unverified) {
-        this.amount = amount != null ? amount : '';
+      function TransactionLimit(amount, currency, time, timeUnit, userStatus) {
+        if (amount == null) {
+          amount = '';
+        }
         this.currency = currency != null ? currency : '';
         this.time = time != null ? time : '';
         this.timeUnit = timeUnit != null ? timeUnit : '';
-        this.unverified = unverified != null ? unverified : true;
+        this.userStatus = userStatus != null ? userStatus : '';
+        this.amount = BigNumber(amount);
       }
 
       return TransactionLimit;
@@ -604,7 +607,7 @@
     })();
     return {
       FromMessage: function(msg) {
-        return new TransactionLimit(msg.amount, msg.currency, msg.time, msg.timeUnit, msg.unverified);
+        return new TransactionLimit(msg.amount, msg.currency, msg.time, msg.timeUnit, msg.userStatus);
       }
     };
   });
