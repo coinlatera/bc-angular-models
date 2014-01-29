@@ -588,7 +588,7 @@
 }).call(this);
 
 (function() {
-  angular.modules('bc.transaction-limit', []).service('TransactionLimit', function() {
+  angular.module('bc.transaction-limit', []).service('TransactionLimit', function() {
     var TransactionLimit;
     TransactionLimit = (function() {
       function TransactionLimit(amount, currency, time, timeUnit, unverified) {

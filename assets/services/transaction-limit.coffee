@@ -1,4 +1,4 @@
-angular.modules('bc.transaction-limit', []).service 'TransactionLimit', ->
+angular.module('bc.transaction-limit', []).service 'TransactionLimit', ->
   class TransactionLimit
     constructor: (@amount = '', @currency = '', @time = '', @timeUnit = '', @unverified = true) ->
 
