@@ -89,6 +89,10 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       else if @denied then "Denied"
       else "Unverified"
 
+      @transactionUserStatus = if @confirmed then "confirmed"
+      else if @verified then "verified"
+      else "unverified"
+
     addAccountResource: (resource) ->
       @accountResources[resource._id] = resource
       @ensureVerificationStatus()

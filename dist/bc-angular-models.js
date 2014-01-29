@@ -729,7 +729,8 @@
           this.unverified = this.idUnverified || this.residencyUnverified;
           this.denied = !this.unverified && (this.idDenied || this.residencyDenied);
           this.pending = !this.verified && !this.unverified && !this.denied;
-          return this.displayVerificationStatus = this.verified ? "Verified" : this.pending ? "Pending" : this.denied ? "Denied" : "Unverified";
+          this.displayVerificationStatus = this.verified ? "Verified" : this.pending ? "Pending" : this.denied ? "Denied" : "Unverified";
+          return this.transactionUserStatus = this.confirmed ? "confirmed" : this.verified ? "verified" : "unverified";
         };
 
         UserAccountInfo.prototype.addAccountResource = function(resource) {
