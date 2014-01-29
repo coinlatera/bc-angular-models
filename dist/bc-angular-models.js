@@ -588,31 +588,29 @@
 }).call(this);
 
 (function() {
-  angular.module('bc.transaction-limit', []).service('TransactionLimit', [
-    'BigNumber', function(BigNumber) {
-      var TransactionLimit;
-      TransactionLimit = (function() {
-        function TransactionLimit(amount, currency, time, timeUnit, userStatus) {
-          if (amount == null) {
-            amount = '';
-          }
-          this.currency = currency != null ? currency : '';
-          this.time = time != null ? time : '';
-          this.timeUnit = timeUnit != null ? timeUnit : '';
-          this.userStatus = userStatus != null ? userStatus : '';
-          this.amount = BigNumber(amount);
+  angular.module('bc.transaction-limit', []).service('TransactionLimit', function() {
+    var TransactionLimit;
+    TransactionLimit = (function() {
+      function TransactionLimit(amount, currency, time, timeUnit, userStatus) {
+        if (amount == null) {
+          amount = '';
         }
+        this.currency = currency != null ? currency : '';
+        this.time = time != null ? time : '';
+        this.timeUnit = timeUnit != null ? timeUnit : '';
+        this.userStatus = userStatus != null ? userStatus : '';
+        this.amount = BigNumber(amount);
+      }
 
-        return TransactionLimit;
+      return TransactionLimit;
 
-      })();
-      return {
-        FromMessage: function(msg) {
-          return new TransactionLimit(msg.amount, msg.currency, msg.time, msg.timeUnit, msg.userStatus);
-        }
-      };
-    }
-  ]);
+    })();
+    return {
+      FromMessage: function(msg) {
+        return new TransactionLimit(msg.amount, msg.currency, msg.time, msg.timeUnit, msg.userStatus);
+      }
+    };
+  });
 
 }).call(this);
 
