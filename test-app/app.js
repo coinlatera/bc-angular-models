@@ -250,7 +250,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, Tra
   logger.log('Logger working.');
 
   var transactionLimit = {
-    amount: 1000,
+    amount: BigNumber("1000"),
     currency: "USD",
     time: 1,
     timeUnit: "day",

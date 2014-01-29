@@ -592,14 +592,11 @@
     var TransactionLimit;
     TransactionLimit = (function() {
       function TransactionLimit(amount, currency, time, timeUnit, userStatus) {
-        if (amount == null) {
-          amount = '';
-        }
+        this.amount = amount != null ? amount : '';
         this.currency = currency != null ? currency : '';
         this.time = time != null ? time : '';
         this.timeUnit = timeUnit != null ? timeUnit : '';
         this.userStatus = userStatus != null ? userStatus : '';
-        this.amount = BigNumber(amount);
       }
 
       return TransactionLimit;
