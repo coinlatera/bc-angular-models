@@ -588,6 +588,30 @@
 }).call(this);
 
 (function() {
+  angular.modules('bc.transaction-limit', []).service('TransactionLimit', function() {
+    var TransactionLimit;
+    TransactionLimit = (function() {
+      function TransactionLimit(amount, currency, time, timeUnit, unverified) {
+        this.amount = amount != null ? amount : '';
+        this.currency = currency != null ? currency : '';
+        this.time = time != null ? time : '';
+        this.timeUnit = timeUnit != null ? timeUnit : '';
+        this.unverified = unverified != null ? unverified : true;
+      }
+
+      return TransactionLimit;
+
+    })();
+    return {
+      FromMessage: function(msg) {
+        return new TransactionLimit(msg.amount, msg.currency, msg.time, msg.timeUnit, msg.unverified);
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
   angular.module('bc.user-account-info', ['bc.account-resource']).service("UserAccountInfo", [
     'AccountResource', 'UserAccountSettings', function(AccountResource, UserAccountSettings) {
       var Address, UserAccountInfo, UserDetails;
