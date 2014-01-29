@@ -1,5 +1,6 @@
 var app = angular.module('test-app', ['bc.angular-models']);
 
+app.constant('BigNumber', BigNumber);
 app.constant('CONFIG', { debug: true });
 app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, TradeFee, AccountResource, UserAccountInfo, ErrorMessage, AdminRole, AdminAccountInfo, AccessLevel, UserAccountSettings, TransactionInfo, TransactionLimit, logger) {
 
