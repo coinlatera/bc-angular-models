@@ -543,12 +543,12 @@
           obj.status = msg.status;
           obj.history = _(obj.history || []).concat({
             event: msg.status,
-            timestamp: new Date().getTime
+            timestamp: new Date().getTime()
           });
           obj.updateStatus();
           return obj;
         } else {
-          return TransactionInfo.FromMessage(msg);
+          return new TransactionInfo(msg._id, msg._type, msg.fundingSourceId, msg.amount, msg.status, msg._history);
         }
       }
     };
@@ -573,15 +573,9 @@
         return this.isBitcoin = ((_ref1 = this.orderType) != null ? _ref1.currency : void 0) === "BTC";
       };
 
-      TransactionInfo.FromMessage = function(msg) {
-        var transaction;
-        transaction = new TransactionInfo(msg._id, msg._type, msg.fundingSourceId, msg.amount, msg.status, msg._history);
-        return TransactionInfoHelper.Upsert(transaction, msg);
-      };
-
       return TransactionInfo;
 
-    }).call(this);
+    })();
     return TransactionInfoHelper;
   });
 

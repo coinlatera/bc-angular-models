@@ -5,11 +5,11 @@ angular.module('bc.transaction-info', []).service "TransactionInfo", ->
         obj.status = msg.status
         obj.history = _(obj.history || []).concat
           event: msg.status
-          timestamp: (new Date().getTime)
+          timestamp: (new Date().getTime())
         obj.updateStatus()
         obj
       else
-        TransactionInfo.FromMessage(msg)
+        new TransactionInfo(msg._id, msg._type, msg.fundingSourceId, msg.amount, msg.status, msg._history)
 
   class TransactionInfo
     constructor: (@id, @type, @fundingSourceId, @orderType, @status, @history) ->
@@ -25,9 +25,5 @@ angular.module('bc.transaction-info', []).service "TransactionInfo", ->
       @isFiat = @orderType?.currency isnt "BTC"
       @isBitcoin = @orderType?.currency is "BTC"
 
-
-    @FromMessage: (msg) =>
-      transaction = new TransactionInfo(msg._id, msg._type, msg.fundingSourceId, msg.amount, msg.status, msg._history)
-      TransactionInfoHelper.Upsert(transaction, msg)
 
   TransactionInfoHelper
