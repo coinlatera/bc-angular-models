@@ -643,6 +643,7 @@
           this.dateOfBirth = dateOfBirth != null ? dateOfBirth : '';
           this.birthCountry = birthCountry != null ? birthCountry : '';
           this.residencyAddress = residencyAddress;
+          this.isEmpty = this.firstName === '' || this.lastName === '' || this.dateOfBirth === '' || this.birthCountry === '';
         }
 
         UserDetails.prototype.day = function() {
@@ -724,7 +725,7 @@
           this.denied = !this.unverified && (this.idDenied || this.residencyDenied);
           this.pending = !this.verified && !this.unverified && !this.denied;
           this.displayVerificationStatus = this.verified ? "Verified" : this.pending ? "Pending" : this.denied ? "Denied" : "Unverified";
-          return this.transactionUserStatus = this.confirmed ? "confirmed" : this.verified ? "verified" : "unverified";
+          return this.transactionUserStatus = this.confirmed ? "accountConfirmed" : this.verified ? "detailsApproved" : this.userDetails.isEmpty ? "unverified" : "detailsPending";
         };
 
         UserAccountInfo.prototype.addAccountResource = function(resource) {

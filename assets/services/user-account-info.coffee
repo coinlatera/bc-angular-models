@@ -13,6 +13,7 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
 
   class UserDetails
     constructor: (@firstName = '', @middleName = '', @lastName = '', @dateOfBirth = '', @birthCountry = '', @residencyAddress) ->
+      @isEmpty = @firstName is '' or @lastName is '' or @dateOfBirth is '' or @birthCountry is ''
 
     day: ->
       birthMoment = moment(@dateOfBirth)
@@ -89,9 +90,11 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       else if @denied then "Denied"
       else "Unverified"
 
-      @transactionUserStatus = if @confirmed then "confirmed"
-      else if @verified then "verified"
-      else "unverified"
+      @transactionUserStatus = if @confirmed then "accountConfirmed"
+      else if @verified then "detailsApproved"
+      else if @userDetails.isEmpty then "unverified"
+      else "detailsPending"
+
 
     addAccountResource: (resource) ->
       @accountResources[resource._id] = resource
