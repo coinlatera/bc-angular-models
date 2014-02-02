@@ -12,8 +12,9 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
       new Address(msg?.addressLine1, msg?.addressLine2, msg?.city, msg?.region, msg?.zipCode, msg?.country)
 
   class UserDetails
-    constructor: (@firstName = '', @middleName = '', @lastName = '', @dateOfBirth = '', @birthCountry = '', @residencyAddress) ->
+    constructor: (@prefix = '', @firstName = '', @middleName = '', @lastName = '', @dateOfBirth = '', @birthCountry = '', @occupation = '', @idType = '', @idNumber = '', @residencyAddress) ->
       @isEmpty = @firstName is '' or @lastName is '' or @dateOfBirth is '' or @birthCountry is ''
+      @displayIdType = if @idType is "SIN" then 'Social Insurance Number' else 'Driver\' License Number'
 
     day: ->
       birthMoment = moment(@dateOfBirth)
@@ -41,7 +42,7 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
 
     @FromMessage: (msg) ->
       address = Address.FromMessage(msg?.residencyAddress)
-      new UserDetails(msg?.firstName, msg?.middleName, msg?.lastName, msg?.dateOfBirth, msg?.birthCountry, address)
+      new UserDetails(msg?.prefix, msg?.firstName, msg?.middleName, msg?.lastName, msg?.dateOfBirth, msg?.birthCountry, msg?.occupation, msg?.idType, msg?.idNumber, address)
 
   class UserAccountInfo
     constructor: (@userDetails, @accountSettings = {}, @accountResources = {}) ->
@@ -109,9 +110,9 @@ angular.module('bc.user-account-info', ['bc.account-resource']).service "UserAcc
 
     fullName: ->
       if @userDetails.middleName is ''
-        @displayName()
+        @userDetails.prefix + " " + @displayName()
       else
-        @userDetails.firstName + " " + @userDetails.middleName + " " + @userDetails.lastName
+        @userDetails.prefix + " " + @userDetails.firstName + " " + @userDetails.middleName + " " + @userDetails.lastName
 
   FromMessage: (msg) ->
     userDetails = UserDetails.FromMessage(msg?.userDetails)

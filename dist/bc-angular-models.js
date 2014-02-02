@@ -636,14 +636,19 @@
 
       })();
       UserDetails = (function() {
-        function UserDetails(firstName, middleName, lastName, dateOfBirth, birthCountry, residencyAddress) {
+        function UserDetails(prefix, firstName, middleName, lastName, dateOfBirth, birthCountry, occupation, idType, idNumber, residencyAddress) {
+          this.prefix = prefix != null ? prefix : '';
           this.firstName = firstName != null ? firstName : '';
           this.middleName = middleName != null ? middleName : '';
           this.lastName = lastName != null ? lastName : '';
           this.dateOfBirth = dateOfBirth != null ? dateOfBirth : '';
           this.birthCountry = birthCountry != null ? birthCountry : '';
+          this.occupation = occupation != null ? occupation : '';
+          this.idType = idType != null ? idType : '';
+          this.idNumber = idNumber != null ? idNumber : '';
           this.residencyAddress = residencyAddress;
           this.isEmpty = this.firstName === '' || this.lastName === '' || this.dateOfBirth === '' || this.birthCountry === '';
+          this.displayIdType = this.idType === "SIN" ? 'Social Insurance Number' : 'Driver\' License Number';
         }
 
         UserDetails.prototype.day = function() {
@@ -685,7 +690,7 @@
         UserDetails.FromMessage = function(msg) {
           var address;
           address = Address.FromMessage(msg != null ? msg.residencyAddress : void 0);
-          return new UserDetails(msg != null ? msg.firstName : void 0, msg != null ? msg.middleName : void 0, msg != null ? msg.lastName : void 0, msg != null ? msg.dateOfBirth : void 0, msg != null ? msg.birthCountry : void 0, address);
+          return new UserDetails(msg != null ? msg.prefix : void 0, msg != null ? msg.firstName : void 0, msg != null ? msg.middleName : void 0, msg != null ? msg.lastName : void 0, msg != null ? msg.dateOfBirth : void 0, msg != null ? msg.birthCountry : void 0, msg != null ? msg.occupation : void 0, msg != null ? msg.idType : void 0, msg != null ? msg.idNumber : void 0, address);
         };
 
         return UserDetails;
@@ -744,9 +749,9 @@
 
         UserAccountInfo.prototype.fullName = function() {
           if (this.userDetails.middleName === '') {
-            return this.displayName();
+            return this.userDetails.prefix + " " + this.displayName();
           } else {
-            return this.userDetails.firstName + " " + this.userDetails.middleName + " " + this.userDetails.lastName;
+            return this.userDetails.prefix + " " + this.userDetails.firstName + " " + this.userDetails.middleName + " " + this.userDetails.lastName;
           }
         };
 

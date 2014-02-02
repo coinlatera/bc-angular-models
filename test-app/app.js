@@ -53,11 +53,15 @@ app.controller('MainCtrl', function MainCtrl ($scope, OrderInfo, MarketInfo, Tra
 
   var userMsg = {
     userDetails: {
+      prefix: "Mr.",
       firstName: "Walter",
       middleName: "Heisenberg",
       lastName: "White",
       dateOfBirth: new Date().getTime(),
       birthCountry: "United States",
+      occupation: "Chemistry Teacher",
+      idType: "DLN",
+      idNumber: "ABCDEFGHI-1234567890",
       residencyAddress: {
         addressLine1: "1234 High St",
         addressLine2: "",
